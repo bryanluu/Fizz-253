@@ -10,10 +10,30 @@ void setup()
   RCServo1.attach(RCServo1Output) ;
   RCServo2.attach(RCServo2Output) ;
    
+   LCD.clear();
+   LCD.home();
+   Serial.begin(9600);
  //can insert any other desired commands for the setup loop here.
 }
 
 void loop()
 {
+   LCD.clear();
+   LCD.home();
+   
+   if(digitalRead(0))
+   {
+     LCD.print("White detected.");
+     Serial.println("White detected.");
+   }
+   else
+   {
+     LCD.print("Black detected.");
+     Serial.println("Black detected.");
+   }
+   
+   delay(50);
+  
+  
 
 }

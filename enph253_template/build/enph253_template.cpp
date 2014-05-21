@@ -2,6 +2,10 @@
 #include <LiquidCrystal.h> //   ***** from 253 template file
 #include <Servo253.h>      //   ***** from 253 template file 
 
+#include "WProgram.h"
+#include <HardwareSerial.h>
+void setup();
+void loop();
 void setup()
 {
   portMode(0, INPUT) ;      //   ***** from 253 template file
@@ -17,3 +21,4 @@ void loop()
 {
 
 }
+
