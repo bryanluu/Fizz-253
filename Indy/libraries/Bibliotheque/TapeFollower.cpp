@@ -20,8 +20,8 @@ double TapeFollower::Compute()
 	if (fixedSampleRate == true && timeChange < SampleTime)
 	{
 		// Don't update the PID loop
-		return;
-	}
+		return *Output;
+	} //Else, uses the time since last update to calculate PID
 
 	// Error control
 	double left = *leftInput;
@@ -37,8 +37,18 @@ double TapeFollower::Compute()
 
 	*Output = PTerm + DTerm + ITerm;
 
+
+
 	// Output is useful for testing
 	return *Output;
+}
+
+void TapeFollower::updateOldData()
+{
+	lastError3 = lastError2;
+	lastError2 = lastError;
+	lastError = error;
+	lastTime = millis();
 }
 
 double TapeFollower::calculateError()
