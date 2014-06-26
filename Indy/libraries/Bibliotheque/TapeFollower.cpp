@@ -11,6 +11,9 @@ TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output
 
 	lastTime = millis() - SampleTime;
 	lastError = 0.0;
+
+	outMax = 2;
+	outMin = -2;
 }
 
 double TapeFollower::Compute()
@@ -35,7 +38,7 @@ double TapeFollower::Compute()
 
 	boundValueBetween(&ITerm, outMin, outMax);
 
-	*Output = PTerm + DTerm + ITerm;
+	*Output = PTerm + ITerm + DTerm;
 
 
 
@@ -53,7 +56,6 @@ void TapeFollower::updateOldData()
 
 double TapeFollower::calculateError()
 {
-	double error;
 	if (goingStraight())
 	{
 		error = 0.0;
@@ -153,3 +155,8 @@ void TapeFollower::SetSampleTime(int sampleTimeInMilliseconds)
 
 inline void TapeFollower::AutoSample() { fixedSampleRate = false; }
 
+void TapeFollower::setBounds(double newOutputMin, double newOutputMax)
+{
+	outMax = newOutputMax;
+	outMin = newOutputMin;
+}
