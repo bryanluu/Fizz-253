@@ -11,8 +11,8 @@ class TapeFollower
 	#define BASE_SPEED 200 
 
 	//commonly used functions **************************************************************************
-	// Takes a pointer to the two sensor values, adjusts the output pointer
-	TapeFollower(int*, int*, double*);
+	// Takes a pointer to the two sensor values, adjusts the utput pointer
+	TapeFollower(int* leftInputVar, int* rightInputVar, double* output);
 
 	double Compute();                       // * performs the PID calculation.  it should be
 	//   called every time loop() cycles. ON/OFF and
@@ -56,9 +56,7 @@ private:
 	unsigned long lastTime;
 	double ITerm, PTerm, DTerm, lastInput;
 
-	int* leftInput;
-	int* rightInput;
-	double* Output;
+	int *leftInput, *rightInput, *Output;
 
 	double error, lastError, lastError2, lastError3;
 

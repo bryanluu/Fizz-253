@@ -14,6 +14,11 @@ TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output
 
 	outMax = 2;
 	outMin = -2;
+
+	kp = new double(0);
+	ki = new double(0);
+	kd = new double(0);
+
 }
 
 double TapeFollower::Compute()
@@ -36,9 +41,9 @@ double TapeFollower::Compute()
 	DTerm = *kd*(error - lastError) / timeChange;
 	ITerm += *ki*(error)*timeChange;
 
-	boundValueBetween(&ITerm, outMin, outMax);
+	StandardCalc::boundValueBetween(&ITerm, outMin, outMax);
 
-	*Output = PTerm + ITerm + DTerm;
+	*Output = int(PTerm + ITerm + DTerm);
 
 
 
@@ -112,16 +117,19 @@ inline bool TapeFollower::tooMuchOnRight()
 
 void TapeFollower::attach_Kd_To(double* newKd)
 {
+	delete kd;
 	kd = newKd;
 }
 
 void TapeFollower::attach_Kp_To(double* newKp)
 {
+	delete kp;
 	kp = newKp;
 }
 
 void TapeFollower::attach_Ki_To(double* newKi)
 {
+	delete ki;
 	ki = newKi;
 }
 
@@ -142,6 +150,7 @@ void TapeFollower::setKp(double newKp)
 
 void TapeFollower::tune(double newKp, double newKi, double newKd)
 {
+	delete kp, ki, kd;
 	*kp = newKp;
 	*ki = newKi;
 	*kd = newKd;

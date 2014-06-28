@@ -24,14 +24,17 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\Bibliotheque\StandardCalc.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\libraries\Bibliotheque\TapeFollower.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\Bibliotheque\WProgram.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="..\..\libraries\Bibliotheque\StandardCalc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardCalcTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WProgram.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -47,5 +50,16 @@
     <ClCompile Include="..\..\libraries\Bibliotheque\TapeFollower.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StandardCalcTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="indi.wav">
+      <Filter>Source Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>
