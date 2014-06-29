@@ -24,8 +24,8 @@ class TapeFollower
 	void setKd(double);
 	void setKi(double);
 
-	void tune(double, double, double);
-	void setBounds(double, double);
+	void tune(double newKp, double newKi, double newKd);
+	void setBounds(double outMin, double outMax);
 
 	/* Attachs a value to the Kp term*/
 	void attach_Kp_To(double*);

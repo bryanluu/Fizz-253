@@ -11,6 +11,8 @@ public:
 	// Represents the elapsed time in millis.
 	static long time;
 	friend long millis();
+	static long sampleTime;
+	static void update();
 };
 
 #endif

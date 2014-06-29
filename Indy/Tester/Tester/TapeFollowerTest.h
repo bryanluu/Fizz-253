@@ -12,8 +12,11 @@ class TapeFollowerTest : public CppUnit::TestFixture
 	CPPUNIT_TEST(testGoingStraight);
 	CPPUNIT_TEST(testOnLeft);
 	CPPUNIT_TEST(testOnRight);
+	CPPUNIT_TEST(testOffTape);
 	CPPUNIT_TEST(testTooLeft);
 	CPPUNIT_TEST(testTooRight);
+	CPPUNIT_TEST(testTuning);
+	CPPUNIT_TEST(testOutput);
 
 	CPPUNIT_TEST_SUITE_END();
 
@@ -22,10 +25,17 @@ public:
 	void setUp();
 	void tearDown();
 	void testConstructor();
+
+	//Testing error calcs
 	void testGoingStraight();
 	void testOnLeft();
 	void testOnRight();
+	void testOffTape();
 	void testTooLeft();
 	void testTooRight();
+
+
+	void testTuning();
+	void testOutput();
 };
 

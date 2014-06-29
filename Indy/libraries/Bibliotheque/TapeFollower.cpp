@@ -9,11 +9,12 @@ TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output
 
 	fixedSampleRate = false;
 
-	lastTime = millis() - SampleTime;
+	lastTime = millis();
 	lastError = 0.0;
+	error = 0.0;
 
-	outMax = 2;
-	outMin = -2;
+	outMax = 100;
+	outMin = -100;
 
 	kp = new double(0);
 	ki = new double(0);
@@ -31,9 +32,8 @@ double TapeFollower::Compute()
 		return *Output;
 	} //Else, uses the time since last update to calculate PID
 
-	// Error control
-	double left = *leftInput;
-	double right = *rightInput;
+
+	updateOldData();
 
 	error = calculateError();
 
@@ -86,42 +86,26 @@ double TapeFollower::calculateError()
 
 
 
-void TapeFollower::attach_Kd_To(double* newKd)
-{
-	delete kd;
-	kd = newKd;
-}
+void TapeFollower::attach_Kd_To(double* newKd) { delete kd; kd = newKd; }
 
-void TapeFollower::attach_Kp_To(double* newKp)
-{
-	delete kp;
-	kp = newKp;
-}
+void TapeFollower::attach_Kp_To(double* newKp) { delete kp;	kp = newKp; }
 
-void TapeFollower::attach_Ki_To(double* newKi)
-{
-	delete ki;
-	ki = newKi;
-}
+void TapeFollower::attach_Ki_To(double* newKi) { delete ki; ki = newKi; }
 
-void TapeFollower::setKd(double newKd)
-{
-	*kd = newKd;
-}
+void TapeFollower::setKp(double newKp) { *kp = newKp; }
 
-void TapeFollower::setKi(double newKi)
-{
-	*ki = newKi;
-}
+void TapeFollower::setKd(double newKd) { *kd = newKd; }
 
-void TapeFollower::setKp(double newKp)
-{
-	*kp = newKp;
-}
+void TapeFollower::setKi(double newKi) { *ki = newKi; }
+
+double TapeFollower::GetKp() { return *kp; }
+
+double TapeFollower::GetKi() { return *ki; }
+
+double TapeFollower::GetKd() { return *kd; }
 
 void TapeFollower::tune(double newKp, double newKi, double newKd)
 {
-	delete kp, ki, kd;
 	*kp = newKp;
 	*ki = newKi;
 	*kd = newKd;
@@ -143,12 +127,12 @@ void TapeFollower::setBounds(double newOutputMin, double newOutputMax)
 
 bool TapeFollower::goingStraight() { return (*leftInput >= THRESHOLD) && (*rightInput >= THRESHOLD + 50); }
 
-bool TapeFollower::slightlyLeft() { return ((*leftInput < THRESHOLD) && (*rightInput > THRESHOLD + 50)); }
+bool TapeFollower::slightlyLeft() { return ((*leftInput < THRESHOLD) && (*rightInput >= THRESHOLD + 50)); }
 
-bool TapeFollower::slightlyRight() { return ((*leftInput > THRESHOLD) && (*rightInput < THRESHOLD + 50)); }
+bool TapeFollower::slightlyRight() { return ((*leftInput >= THRESHOLD) && (*rightInput < THRESHOLD + 50)); }
 
 bool TapeFollower::offTape() { return ((*leftInput < THRESHOLD) && (*rightInput < THRESHOLD + 50)); }
 
-bool TapeFollower::tooMuchOnLeft() { return offTape() && (lastError >= 0 && lastError2 >= 0 && lastError3 >= 0); }
+bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError > 0 && lastError2 > 0 && lastError3 > 0); }
 
-bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError < 0 && lastError2 < 0 && lastError3 < 0); }
+bool TapeFollower::tooMuchOnLeft() { return offTape() && (lastError < 0 && lastError2 < 0 && lastError3 < 0); }
