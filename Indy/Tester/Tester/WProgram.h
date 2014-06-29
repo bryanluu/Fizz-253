@@ -1,6 +1,7 @@
 // Allows compile without error. It simulates the Wiring IDE environment.
 #ifndef WProgram_h
 #define WProgram_h
+#define TESTING 1
 
 long millis();
 

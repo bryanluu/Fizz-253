@@ -1,4 +1,3 @@
-#include "WProgram.h"
 #include "TapeFollower.h"
 #include "StandardCalc.h"
 
@@ -6,6 +5,7 @@ TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output
 {
 	leftInput = leftInputVar;
 	rightInput = rightInputVar;
+	Output = output;
 
 	fixedSampleRate = false;
 
@@ -43,7 +43,7 @@ double TapeFollower::Compute()
 
 	StandardCalc::boundValueBetween(&ITerm, outMin, outMax);
 
-	*Output = int(PTerm + ITerm + DTerm);
+	*Output = PTerm + ITerm + DTerm;
 
 
 
@@ -85,35 +85,6 @@ double TapeFollower::calculateError()
 }
 
 
-inline bool TapeFollower::goingStraight()
-{
-	return (*leftInput >= THRESHOLD) && (*rightInput >= THRESHOLD + 50);
-}
-
-inline bool TapeFollower::slightlyLeft()
-{
-	return ((*leftInput < THRESHOLD) && (*rightInput > THRESHOLD + 50));
-}
-
-inline bool TapeFollower::slightlyRight()
-{
-	return ((*leftInput > THRESHOLD) && (*rightInput < THRESHOLD + 50));
-}
-
-inline bool TapeFollower::offTape()
-{
-	return ((*leftInput < THRESHOLD) && (*rightInput < THRESHOLD + 50));
-}
-
-inline bool TapeFollower::tooMuchOnLeft()
-{
-	return offTape() && (lastError >= 0 && lastError2 >= 0 && lastError3 >= 0);
-}
-
-inline bool TapeFollower::tooMuchOnRight()
-{
-	return offTape() && (lastError < 0 && lastError2 < 0 && lastError3 < 0);
-}
 
 void TapeFollower::attach_Kd_To(double* newKd)
 {
@@ -169,3 +140,15 @@ void TapeFollower::setBounds(double newOutputMin, double newOutputMax)
 	outMax = newOutputMax;
 	outMin = newOutputMin;
 }
+
+bool TapeFollower::goingStraight() { return (*leftInput >= THRESHOLD) && (*rightInput >= THRESHOLD + 50); }
+
+bool TapeFollower::slightlyLeft() { return ((*leftInput < THRESHOLD) && (*rightInput > THRESHOLD + 50)); }
+
+bool TapeFollower::slightlyRight() { return ((*leftInput > THRESHOLD) && (*rightInput < THRESHOLD + 50)); }
+
+bool TapeFollower::offTape() { return ((*leftInput < THRESHOLD) && (*rightInput < THRESHOLD + 50)); }
+
+bool TapeFollower::tooMuchOnLeft() { return offTape() && (lastError >= 0 && lastError2 >= 0 && lastError3 >= 0); }
+
+bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError < 0 && lastError2 < 0 && lastError3 < 0); }

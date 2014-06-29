@@ -1,5 +1,6 @@
 #ifndef tapefollower_h
 #define tapefollower_h
+#include "WProgram.h"
 
 /*
 	PID-like implementation of a tape follower, based on the PID_v1 library on the Arduino site. 
@@ -45,9 +46,11 @@ class TapeFollower
 	double GetKi();	
 	double GetKd();
 
-
-
+#ifndef TESTING
 private:
+#endif
+
+
 
 	double* kp;                  // * (P)roportional Tuning Parameter
 	double* ki;                  // * (I)ntegral Tuning Parameter
@@ -56,7 +59,8 @@ private:
 	unsigned long lastTime;
 	double ITerm, PTerm, DTerm, lastInput;
 
-	int *leftInput, *rightInput, *Output;
+	int *leftInput, *rightInput;
+	double *Output;
 
 	double error, lastError, lastError2, lastError3;
 
@@ -66,16 +70,18 @@ private:
 	bool fixedSampleRate;
 	double outMin, outMax;
 
-	inline bool goingStraight();
-	inline bool slightlyLeft();
-	inline bool slightlyRight();
-	inline bool tooMuchOnLeft();
-	inline bool tooMuchOnRight();
-	inline bool offTape();
+
 
 	double calculateError();
 
 	void updateOldData();
+
+	bool goingStraight();
+	bool slightlyLeft();
+	bool slightlyRight();
+	bool tooMuchOnLeft();
+	bool tooMuchOnRight();
+	bool offTape();
 };
 
 #endif

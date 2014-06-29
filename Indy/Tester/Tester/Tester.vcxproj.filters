@@ -36,6 +36,9 @@
     <ClInclude Include="WProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TapeFollowerTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -56,10 +59,8 @@
     <ClCompile Include="WProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="indi.wav">
+    <ClCompile Include="TapeFollowerTest.cpp">
       <Filter>Source Files</Filter>
-    </Media>
+    </ClCompile>
   </ItemGroup>
 </Project>
