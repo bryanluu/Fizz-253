@@ -39,6 +39,7 @@ void IseeYou(){
     RCServo0.write(i);
     delay(10);
   }
+  RCServo1.write(100);
    delay(2000);
   RCServo1.write( 0);
     delay(2000);   
