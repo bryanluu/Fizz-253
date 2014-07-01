@@ -10,6 +10,8 @@
 
 #define LEFT_QRD_PIN 1
 #define RIGHT_QRD_PIN 0
+#define LEFT_MOTOR 3
+#define RIGHT_MOTOR 0
 
 const int baseSpeed = 200;
 
@@ -22,9 +24,10 @@ TapeFollower controller(&leftQRD, &rightQRD, &steerOutput);
 double kP = 0;
 double kD = 0;
 
-int LCDcounter = 0;
+double leftSpeed = 0;
+double rightSpeed = 0;
 
-double* test = &steerOutput;
+int LCDcounter = 0;
 
 void setup() 
 {
@@ -56,28 +59,50 @@ kD = knob(7);
 
 controller.Compute();
 
-Serial.print(leftQRD);
-Serial.print(",");
-Serial.print(rightQRD);
-Serial.print(",");
-Serial.print(kP);
-Serial.print(",");
-Serial.print(kD);
-Serial.print(",");
-Serial.print(steerOutput);
-Serial.print('\n');
+//Serial.print(leftQRD);
+//Serial.print(",");
+//Serial.print(rightQRD);
+//Serial.print(",");
+//Serial.print(kP);
+//Serial.print(",");
+//Serial.print(kD);
+//Serial.print(",");
+//Serial.print(controller.GetError());
+//Serial.print(",");
+//Serial.print(steerOutput);
+//Serial.print(",");
+//Serial.print(leftSpeed);
+//Serial.print(",");
+//Serial.print(rightSpeed);
+//Serial.print(",");
+//Serial.print('\n');
 
 
+rightSpeed = baseSpeed+100+steerOutput;
+leftSpeed = -baseSpeed+steerOutput;
+
+StandardCalc::boundValueBetween(&leftSpeed, -1023, 0);
+StandardCalc::boundValueBetween(&rightSpeed, 0, 1023);
+
+leftSpeed = abs(leftSpeed);
+rightSpeed = abs(rightSpeed);
+
+motor.speed(LEFT_MOTOR, leftSpeed);
+motor.speed(RIGHT_MOTOR, rightSpeed);
 
 if (LCDcounter > 10)
 {
-  *test++;
   LCDcounter = 0;
+  
+  LCD.clear();LCD.home();
+       LCD.setCursor(0,0);LCD.print("Error: ");LCD.print(controller.GetError());
+       LCD.setCursor(0,1);LCD.print("kP: ");LCD.print(kP);
+       LCD.setCursor(8,1);LCD.print("kD: ");LCD.print(kD);
 }
 
 LCDcounter++;
 
-delay(100);
+delay(10);
 
 }
 

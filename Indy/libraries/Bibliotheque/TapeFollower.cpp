@@ -104,6 +104,8 @@ double TapeFollower::GetKi() { return *ki; }
 
 double TapeFollower::GetKd() { return *kd; }
 
+double TapeFollower::GetError() { return error; }
+
 void TapeFollower::tune(double newKp, double newKi, double newKd)
 {
 	*kp = newKp;

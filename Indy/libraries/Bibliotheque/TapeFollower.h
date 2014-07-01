@@ -45,6 +45,7 @@ class TapeFollower
 	double GetKp();
 	double GetKi();	
 	double GetKd();
+	double GetError();
 
 #ifndef TESTING
 private:
