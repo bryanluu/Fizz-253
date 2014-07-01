@@ -11,6 +11,9 @@ void setup()
   pinMode(pin,INPUT);
   LCD.home();
   RCServo0.attach(RCServo0Output);  
+  RCServo1.attach(RCServo1Output);
+  RCServo0.write(0);
+  RCServo1.write(90);
 }
 
 
@@ -36,10 +39,15 @@ void IseeYou(){
     RCServo0.write(i);
     delay(10);
   }
-  delay(4000);
+   delay(2000);
+  RCServo1.write( 0);
+    delay(2000);   
   
   for(i=115;i>=0;i--){
     RCServo0.write(i);
   }
+  
+  delay(1000);
+  RCServo1.write(90);
 
 }
