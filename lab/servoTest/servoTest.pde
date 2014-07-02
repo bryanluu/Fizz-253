@@ -22,10 +22,10 @@ void loop()
     LCD.clear();
     if(digitalRead(pin) == HIGH){ LCD.print("HIGH"); flag = true;}
     else if(digitalRead(pin) == LOW && flag){
-    delay(200);
-    IseeYou();
-    flag = false;
-  }
+      delay(200);
+      IseeYou();
+      flag = false;
+    }
     delay(50);
   }
 
