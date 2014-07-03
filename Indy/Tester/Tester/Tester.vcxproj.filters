@@ -39,6 +39,12 @@
     <ClInclude Include="TapeFollowerTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libraries\Bibliotheque\IndyPID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndyPidTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +66,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TapeFollowerTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\Bibliotheque\IndyPID.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IndyPidTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

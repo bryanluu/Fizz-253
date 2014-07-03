@@ -37,7 +37,7 @@ int main()
 	if (wasSucessful)
 	{
 		
-		cout << "TESTS PASSED! FUCK YEAH" << endl;
+		cout << "ALL TESTS PASSED! FUCK YEAH" << endl;
 
 //#ifdef _WIN32
 //		cout << "Cue Indiana Jones Theme Song..." << endl;

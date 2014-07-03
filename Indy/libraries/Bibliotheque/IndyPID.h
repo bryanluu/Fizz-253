@@ -1,19 +1,17 @@
-#ifndef tapefollower_h
-#define tapefollower_h
+#ifndef indy_pid
+#define indy_pid
 #include "WProgram.h"
 
 /*
-	PID-like implementation of a tape follower, based on the PID_v1 library on the Arduino site. 
+	PID, based on the PID_v1 library on the Arduino site. 
 */
-class TapeFollower
+class PID
 {
 	public:
-	#define THRESHOLD 250
-	#define BASE_SPEED 200 
 
 	//commonly used functions **************************************************************************
 	// Takes a pointer to the two sensor values, adjusts the Output pointer
-	TapeFollower(int* leftInputVar, int* rightInputVar, double* output);
+	PID(double* input, double* setpoint, double* output);
 
 	double Compute();                       // * performs the PID calculation.  it should be
 	//   called every time loop() cycles. ON/OFF and
@@ -48,7 +46,7 @@ class TapeFollower
 	double GetError();
 
 #ifndef TESTING
-private:
+protected:
 #endif
 
 
@@ -60,14 +58,13 @@ private:
 	unsigned long lastTime;
 	double ITerm, PTerm, DTerm, lastInput;
 
-	int *leftInput, *rightInput;
-	double *Output;
+	double *Input, *Setpoint, *Output;
 
-	double error, lastError, lastError2, lastError3;
+	double error, lastError;
 
 	int timeChange;
 
-	int SampleTime;
+	int sampleTime;
 	bool fixedSampleRate;
 	double outMin, outMax;
 
@@ -76,13 +73,6 @@ private:
 	double calculateError();
 
 	void updateOldData();
-
-	bool goingStraight();
-	bool slightlyLeft();
-	bool slightlyRight();
-	bool tooMuchOnLeft();
-	bool tooMuchOnRight();
-	bool offTape();
 };
 
 #endif

@@ -53,7 +53,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\fabratory\Desktop\cppunit-1.12.1.tar\cppunit-1.12.1\cppunit-1.12.1\include;C:\Users\fabratory\Documents\GitHub\Fizz-253\Indy\libraries\Bibliotheque;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\fabratory\Documents\GitHub\Fizz-253\Indy\Tester\Tester;C:\Users\fabratory\Desktop\cppunit-1.12.1.tar\cppunit-1.12.1\cppunit-1.12.1\include;C:\Users\fabratory\Documents\GitHub\Fizz-253\Indy\libraries\Bibliotheque;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -89,8 +89,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\libraries\Bibliotheque\IndyPID.h" />
     <ClInclude Include="..\..\libraries\Bibliotheque\StandardCalc.h" />
     <ClInclude Include="..\..\libraries\Bibliotheque\TapeFollower.h" />
+    <ClInclude Include="IndyPidTest.h" />
     <ClInclude Include="StandardCalcTest.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TapeFollowerTest.h" />
@@ -98,10 +100,12 @@
     <ClInclude Include="WProgram.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\libraries\Bibliotheque\IndyPID.cpp" />
     <ClCompile Include="..\..\libraries\Bibliotheque\StandardCalc.cpp" />
     <ClCompile Include="..\..\libraries\Bibliotheque\TapeFollower.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\fabratory\Documents\GitHub\Fizz-253\Indy\Tester\Tester;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="IndyPidTest.cpp" />
     <ClCompile Include="StandardCalcTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
