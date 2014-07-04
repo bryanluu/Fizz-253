@@ -12,8 +12,8 @@ void setup()
   LCD.home();
   RCServo0.attach(RCServo0Output);  
   RCServo1.attach(RCServo1Output);
-  RCServo0.write(0);
-  RCServo1.write(90);
+  RCServo0.write(45);
+  RCServo1.write(180);
 }
 
 
@@ -30,25 +30,68 @@ void loop()
   }
 
 void IseeYou(){
-  int i; 
   
   LCD.clear();
   LCD.print("YEEEE");
   
-  for(i=0;i<105;i++){
-    RCServo0.write(i);
-    delay(10);
-  }
-  RCServo1.write(100);
-   delay(2000);
-  RCServo1.write( 0);
+   pickUp();
+   
+}
+
+void pickUp(){
+
+   int i; 
+   
+   for(i=45;i<180;i++){
+      RCServo0.write(i);
+       delay(10);
+    }
+
+    RCServo1.write(180);
+    delay(2000);
+    RCServo1.write(70);
     delay(2000);   
   
-  for(i=115;i>=0;i--){
+  for(i=180;i>=45;i--){
     RCServo0.write(i);
   }
   
   delay(1000);
-  RCServo1.write(90);
+  
+  shakeOff();
 
+  delay(1000);
+  
+  RCServo1.write(180);
+  
+}
+
+void shakeOff(){
+  int i;
+  
+  for(i=0;i<4;i++){
+  RCServo0.write(45);
+  delay(100);
+  RCServo0.write(110); 
+  delay(100);
+  RCServo1.write(80);
+  delay(100);
+  RCServo1.write(55);
+}
+  
+  while(digitalRead(pin) == LOW){
+  
+  for(i=0;i<4;i++){
+  RCServo0.write(45);
+  delay(100);
+  RCServo0.write(110); 
+  delay(100);
+  RCServo1.write(80);
+  delay(100);
+  RCServo1.write(55);
+  }
+}
+  
+  RCServo0.write(45);
+  RCServo1.write(180);
 }
