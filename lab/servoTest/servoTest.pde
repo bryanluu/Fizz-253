@@ -13,7 +13,7 @@ void setup()
   RCServo0.attach(RCServo0Output);  
   RCServo1.attach(RCServo1Output);
   RCServo0.write(45);
-  RCServo1.write(180);
+  RCServo1.write(160);
 }
 
 
@@ -47,9 +47,9 @@ void pickUp(){
        delay(10);
     }
 
-    RCServo1.write(180);
+    RCServo1.write(175);
     delay(2000);
-    RCServo1.write(70);
+    RCServo1.write(45);
     delay(2000);   
   
   for(i=180;i>=45;i--){
@@ -57,15 +57,15 @@ void pickUp(){
   }
   
   delay(1000);
-  
-  shakeOff();
 
-  delay(1000);
-  
-  RCServo1.write(180);
+  RCServo1.write(160);
   
 }
 
+
+
+
+//ignore this shit
 void shakeOff(){
   int i;
   
@@ -93,5 +93,5 @@ void shakeOff(){
 }
   
   RCServo0.write(45);
-  RCServo1.write(180);
+  RCServo1.write(160);
 }
