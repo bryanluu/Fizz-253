@@ -1,0 +1,262 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C3B475B3196B584100A29895 /* AppleTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B475B1196B584100A29895 /* AppleTester.cpp */; };
+		C3B475B6196B5B0500A29895 /* TapeFollower.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B475B4196B5B0500A29895 /* TapeFollower.cpp */; };
+		C3B475B7196B5B0500A29895 /* TapeFollower.h in Sources */ = {isa = PBXBuildFile; fileRef = C3B475B5196B5B0500A29895 /* TapeFollower.h */; };
+		C3BD8D17196B505A00EB5110 /* cppunit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3BD8D16196B505A00EB5110 /* cppunit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C3465E6C196B4B5500AF6A9B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C3465E6E196B4B5500AF6A9B /* Tester */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tester; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3B475B0196B560A00A29895 /* Bibliotheque */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Bibliotheque; path = ../libraries/Bibliotheque; sourceTree = "<group>"; };
+		C3B475B1196B584100A29895 /* AppleTester.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppleTester.cpp; path = Tester/AppleTester.cpp; sourceTree = "<group>"; };
+		C3B475B4196B5B0500A29895 /* TapeFollower.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TapeFollower.cpp; path = ../libraries/Bibliotheque/TapeFollower.cpp; sourceTree = "<group>"; };
+		C3B475B5196B5B0500A29895 /* TapeFollower.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TapeFollower.h; path = ../libraries/Bibliotheque/TapeFollower.h; sourceTree = "<group>"; };
+		C3BD8D15196B4DE500EB5110 /* Tester */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Tester; sourceTree = "<group>"; };
+		C3BD8D16196B505A00EB5110 /* cppunit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = cppunit.framework; path = "../../../../Sailbots/automake-1.14/cppunit-1.12.1/cppunit.framework"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C3465E6B196B4B5500AF6A9B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3BD8D17196B505A00EB5110 /* cppunit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C3465E65196B4B5500AF6A9B = {
+			isa = PBXGroup;
+			children = (
+				C3B475B4196B5B0500A29895 /* TapeFollower.cpp */,
+				C3B475B5196B5B0500A29895 /* TapeFollower.h */,
+				C3BD8D16196B505A00EB5110 /* cppunit.framework */,
+				C3BD8D14196B4DCF00EB5110 /* Source */,
+				C3465E6F196B4B5500AF6A9B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C3465E6F196B4B5500AF6A9B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C3465E6E196B4B5500AF6A9B /* Tester */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3BD8D14196B4DCF00EB5110 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				C3B475B0196B560A00A29895 /* Bibliotheque */,
+				C3BD8D15196B4DE500EB5110 /* Tester */,
+				C3B475B1196B584100A29895 /* AppleTester.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C3465E6D196B4B5500AF6A9B /* Tester */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3465E77196B4B5500AF6A9B /* Build configuration list for PBXNativeTarget "Tester" */;
+			buildPhases = (
+				C3465E6A196B4B5500AF6A9B /* Sources */,
+				C3465E6B196B4B5500AF6A9B /* Frameworks */,
+				C3465E6C196B4B5500AF6A9B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tester;
+			productName = Tester;
+			productReference = C3465E6E196B4B5500AF6A9B /* Tester */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C3465E66196B4B5500AF6A9B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Bryan Luu";
+			};
+			buildConfigurationList = C3465E69196B4B5500AF6A9B /* Build configuration list for PBXProject "Tester" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C3465E65196B4B5500AF6A9B;
+			productRefGroup = C3465E6F196B4B5500AF6A9B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C3465E6D196B4B5500AF6A9B /* Tester */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C3465E6A196B4B5500AF6A9B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3B475B6196B5B0500A29895 /* TapeFollower.cpp in Sources */,
+				C3B475B7196B5B0500A29895 /* TapeFollower.h in Sources */,
+				C3B475B3196B584100A29895 /* AppleTester.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C3465E75196B4B5500AF6A9B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C3465E76196B4B5500AF6A9B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C3465E78196B4B5500AF6A9B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/bryan_luu30794/Documents/Programming/Sailbots/automake-1.14/cppunit-1.12.1",
+				);
+				"HEADER_SEARCH_PATHS[arch=*]" = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Users/bryan_luu30794/Documents/Programming/Sailbots/automake-1.14/cppunit-1.12.1/include",
+					"/Users/bryan_luu30794/Documents/Programming/Fizz/Fizz-253/Indy/libraries/Bibliotheque",
+				);
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/../../../../Sailbots/automake-1.14/cppunit-1.12.1/lib\"";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C3465E79196B4B5500AF6A9B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/bryan_luu30794/Documents/Programming/Sailbots/automake-1.14/cppunit-1.12.1",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C3465E69196B4B5500AF6A9B /* Build configuration list for PBXProject "Tester" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3465E75196B4B5500AF6A9B /* Debug */,
+				C3465E76196B4B5500AF6A9B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3465E77196B4B5500AF6A9B /* Build configuration list for PBXNativeTarget "Tester" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3465E78196B4B5500AF6A9B /* Debug */,
+				C3465E79196B4B5500AF6A9B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C3465E66196B4B5500AF6A9B /* Project object */;
+}

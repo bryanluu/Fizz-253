@@ -8,12 +8,11 @@
 class TapeFollower
 {
 	public:
-	#define THRESHOLD 250
-	#define BASE_SPEED 200 
 
 	//commonly used functions **************************************************************************
 	// Takes a pointer to the two sensor values, adjusts the Output pointer
 	TapeFollower(int* leftInputVar, int* rightInputVar, double* output);
+    TapeFollower(int* leftInputVar, int* rightInputVar, double* output, double threshold, double leftOffset, double rightOffset);
 
 	double Compute();                       // * performs the PID calculation.  it should be
 	//   called every time loop() cycles. ON/OFF and
@@ -40,6 +39,10 @@ class TapeFollower
 	//   the PID calculation is performed.  default is 100
 
 	void AutoSample();
+    
+    void SetThreshold(double newThresh);
+    
+    void SetOffsets(double left, double right);
 
 	//Display functions ****************************************************************
 	double GetKp();
@@ -50,8 +53,9 @@ class TapeFollower
 #ifndef TESTING
 private:
 #endif
-
-
+	double THRESHOLD;
+    double LeftOffset;
+    double RightOffset;
 
 	double* kp;                  // * (P)roportional Tuning Parameter
 	double* ki;                  // * (I)ntegral Tuning Parameter

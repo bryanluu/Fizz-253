@@ -10,8 +10,8 @@
 
 #define LEFT_QRD_PIN 1
 #define RIGHT_QRD_PIN 0
-#define LEFT_MOTOR 3
-#define RIGHT_MOTOR 0
+#define LEFT_MOTOR 0
+#define RIGHT_MOTOR 1
 
 const int baseSpeed = 200;
 
@@ -46,7 +46,8 @@ controller.attach_Kd_To(&kD);
 
 Serial.begin(9600);
 
-
+//controller.SetThreshold(250);
+//controller.SetOffsets(0, 50);
 }
 
 void loop() 
@@ -58,24 +59,6 @@ kP = knob(6);
 kD = knob(7);
 
 controller.Compute();
-
-//Serial.print(leftQRD);
-//Serial.print(",");
-//Serial.print(rightQRD);
-//Serial.print(",");
-//Serial.print(kP);
-//Serial.print(",");
-//Serial.print(kD);
-//Serial.print(",");
-//Serial.print(controller.GetError());
-//Serial.print(",");
-//Serial.print(steerOutput);
-//Serial.print(",");
-//Serial.print(leftSpeed);
-//Serial.print(",");
-//Serial.print(rightSpeed);
-//Serial.print(",");
-//Serial.print('\n');
 
 
 rightSpeed = baseSpeed+100+steerOutput;
@@ -101,6 +84,24 @@ if (LCDcounter > 10)
 }
 
 LCDcounter++;
+
+Serial.print(leftQRD);
+Serial.print(",");
+Serial.print(rightQRD);
+Serial.print(",");
+Serial.print(kP);
+Serial.print(",");
+Serial.print(kD);
+Serial.print(",");
+Serial.print(controller.GetError());
+Serial.print(",");
+Serial.print(steerOutput);
+Serial.print(",");
+Serial.print(leftSpeed);
+Serial.print(",");
+Serial.print(rightSpeed);
+Serial.print(",");
+Serial.print('\n');
 
 delay(10);
 

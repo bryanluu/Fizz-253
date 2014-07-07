@@ -20,6 +20,33 @@ TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output
 	ki = new double(0);
 	kd = new double(0);
 
+    THRESHOLD = 250;
+    LeftOffset = 0;
+    RightOffset = 50;
+}
+
+TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output, double newThreshold, double newLeftOffset, double newRightOffset)
+{
+	leftInput = leftInputVar;
+	rightInput = rightInputVar;
+	Output = output;
+    
+	fixedSampleRate = false;
+    
+	lastTime = millis();
+	lastError = 0.0;
+	error = 0.0;
+    
+	outMax = 100;
+	outMin = -100;
+    
+	kp = new double(0);
+	ki = new double(0);
+	kd = new double(0);
+    
+    THRESHOLD = newThreshold;
+    LeftOffset = newLeftOffset;
+    RightOffset = newRightOffset;
 }
 
 double TapeFollower::Compute()
@@ -127,13 +154,25 @@ void TapeFollower::setBounds(double newOutputMin, double newOutputMax)
 	outMin = newOutputMin;
 }
 
-bool TapeFollower::goingStraight() { return (*leftInput >= THRESHOLD) && (*rightInput >= THRESHOLD + 50); }
 
-bool TapeFollower::slightlyLeft() { return ((*leftInput < THRESHOLD) && (*rightInput >= THRESHOLD + 50)); }
+void TapeFollower::SetThreshold(double newThreshold)
+{
+    THRESHOLD = newThreshold;
+}
 
-bool TapeFollower::slightlyRight() { return ((*leftInput >= THRESHOLD) && (*rightInput < THRESHOLD + 50)); }
+void TapeFollower::SetOffsets(double left, double right)
+{
+    LeftOffset = left;
+    RightOffset = right;
+}
 
-bool TapeFollower::offTape() { return ((*leftInput < THRESHOLD) && (*rightInput < THRESHOLD + 50)); }
+bool TapeFollower::goingStraight() { return (*leftInput >= THRESHOLD + LeftOffset) && (*rightInput >= THRESHOLD + RightOffset); }
+
+bool TapeFollower::slightlyLeft() { return ((*leftInput < THRESHOLD + LeftOffset) && (*rightInput >= THRESHOLD + RightOffset)); }
+
+bool TapeFollower::slightlyRight() { return ((*leftInput >= THRESHOLD + LeftOffset) && (*rightInput < THRESHOLD + RightOffset)); }
+
+bool TapeFollower::offTape() { return ((*leftInput < THRESHOLD + LeftOffset) && (*rightInput < THRESHOLD + RightOffset)); }
 
 bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError > 0 && lastError2 > 0 && lastError3 > 0); }
 
