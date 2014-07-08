@@ -13,7 +13,7 @@
 #define LEFT_MOTOR 0
 #define RIGHT_MOTOR 1
 
-const int baseSpeed = 200;
+const int baseSpeed = 500;
 
 int leftQRD = 0;
 int rightQRD = 0;
@@ -46,8 +46,8 @@ controller.attach_Kd_To(&kD);
 
 Serial.begin(9600);
 
-//controller.SetThreshold(250);
-//controller.SetOffsets(0, 50);
+controller.SetThreshold(250);
+controller.SetOffsets(0, 50);
 }
 
 void loop() 
@@ -62,13 +62,11 @@ controller.Compute();
 
 
 rightSpeed = baseSpeed+100+steerOutput;
-leftSpeed = -baseSpeed+steerOutput;
+leftSpeed = baseSpeed-steerOutput;
 
-StandardCalc::boundValueBetween(&leftSpeed, -1023, 0);
-StandardCalc::boundValueBetween(&rightSpeed, 0, 1023);
+StandardCalc::boundValueBetween(&leftSpeed, -1023, 1023);
+StandardCalc::boundValueBetween(&rightSpeed, -1023, 1023);
 
-leftSpeed = abs(leftSpeed);
-rightSpeed = abs(rightSpeed);
 
 motor.speed(LEFT_MOTOR, leftSpeed);
 motor.speed(RIGHT_MOTOR, rightSpeed);
@@ -85,25 +83,45 @@ if (LCDcounter > 10)
 
 LCDcounter++;
 
-Serial.print(leftQRD);
-Serial.print(",");
-Serial.print(rightQRD);
-Serial.print(",");
-Serial.print(kP);
-Serial.print(",");
-Serial.print(kD);
-Serial.print(",");
-Serial.print(controller.GetError());
-Serial.print(",");
-Serial.print(steerOutput);
-Serial.print(",");
-Serial.print(leftSpeed);
-Serial.print(",");
-Serial.print(rightSpeed);
-Serial.print(",");
-Serial.print('\n');
+printDebug();
 
 delay(10);
 
 }
+
+void printDebug()
+{
+  Serial.print("======TIME: ");
+  Serial.print(millis());
+  Serial.print("======\n");
+  
+  Serial.print("Left QRD: ");
+  Serial.print(leftQRD);
+  Serial.print(", ");
+  Serial.print("Right QRD: ");
+  Serial.print(rightQRD);
+  Serial.print("\n");
+  
+  Serial.print("kP: ");
+  Serial.print(kP);
+  Serial.print(", ");
+  Serial.print("kD: ");
+  Serial.print(kD);
+  Serial.print("\n");
+  
+  Serial.print("Error: ");
+  Serial.print(controller.GetError());
+  Serial.print(", ");
+  Serial.print("Steer Output: ");
+  Serial.print(steerOutput);
+  Serial.print("\n");
+  
+  Serial.print("Left Speed: ");
+  Serial.print(leftSpeed);
+  Serial.print(", ");
+  Serial.print("Right Speed: ");
+  Serial.print(rightSpeed);
+  Serial.print("\n");
+}
+
 
