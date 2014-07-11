@@ -35,6 +35,7 @@ void printLCD()
       case COLLECT_ITEM:
         break;
       case CLIMB_HILL:
+        tapeFollowingLCD();
         break;
       case ROCKPIT:
         break;

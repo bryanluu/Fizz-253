@@ -37,6 +37,13 @@ RobotState lastState = INITIALIZING;
 #define OFF_HILL (5.5) // off hill threshold
 #define DURATION (350.0) //1000 ms
 
+//collector arm
+#define RETRIEVER_WITHDRAWN (10)
+#define RETRIEVER_EXTEND (145)
+#define COLLECTOR_DOWN (115)
+#define COLLECTOR_DROP (123)
+#define COLLECTOR_TOP (10)
+
 //LCD
 #define LCD_FREQ (1)
 #define LCD_STATE_FREQ (100)
@@ -65,6 +72,9 @@ int LCDcounter = 0;
 
 double duration, distance, startTime, endTime; // can be found in HILL.pde
 
+//This is a one-shot variable -> it only happens once in the runtime.
+bool passedHill = false;
+
 
 //============================================================
 //===========================SETUP============================
@@ -88,8 +98,8 @@ void setup()
   RCServo2.attach(RCServo2Output) ;	
 
 // initialize servo positions
-  RCServo0.write(45);
-  RCServo1.write(115);
+  setRetrieverTo(RETRIEVER_WITHDRAWN);
+  setCollectorTo(COLLECTOR_DOWN);
 
 // something that bryan's libraries need
   controller.attach_Kp_To(&kP);
@@ -127,7 +137,10 @@ void loop()
       readTape();
       followTape();
       checkCollectorArm();
-      checkOnHill();
+      if(!passedHill)
+      {
+        checkOnHill();
+      }
       break;
       //======================
     case COLLECT_ITEM:
@@ -140,7 +153,6 @@ void loop()
       readTape();
       followTape();
       checkOffHill();
-      ChangeToState(lastState);
       break;
       //======================
     case FINISHED:

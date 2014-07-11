@@ -10,14 +10,19 @@ void checkOnHill()
 void checkOffHill()
 {
   distance = senseHeight();
-  if(distance >= OFF_HILL)
+  if(!passedHill && distance >= OFF_HILL)
   {
+    passedHill = true;
     startTime = millis();    
-    while((endTime-startTime) < DURATION)
+  }
+  
+  if(passedHill)
+  {
+    if(millis() - startTime > DURATION)
     {
-      endTime = millis();
+      ChangeToState(FOLLOW_TAPE);
+      collect();
     }
-    ChangeToState(FOLLOW_TAPE);
   }
 }
 
@@ -26,7 +31,7 @@ void checkDanger()
    distance = senseHeight();
   if(distance >= DANGER_HEIGHT)
   {
-    ChangeToState();
+//    ChangeToState();
   }
 }
 
@@ -40,7 +45,8 @@ double senseHeight()
   delayMicroseconds(10);
   
   digitalWrite(TRIGGER,LOW);
-  duration = pulseIn(ECHO,HIGH);
+//  duration = pulseIn(ECHO,HIGH);
+  duration = 1000; //for testing
   
   return (duration/58.2);
 }

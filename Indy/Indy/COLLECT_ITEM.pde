@@ -20,13 +20,23 @@ void collect()
   LCD.setCursor(0,0); LCD.print("Picking Up!");
   
   
-  RCServo0.write(180);
+  setRetrieverTo(RETRIEVER_EXTEND);
   delay(10);
-  RCServo1.write(125);
+  setCollectorTo(COLLECTOR_DROP);
   delay(2000);
-  RCServo1.write(10);
+  setCollectorTo(COLLECTOR_TOP);
   delay(2000);
-  RCServo0.write(45)
+  setRetrieverTo(RETRIEVER_WITHDRAWN);
   delay(1000);
-  RCServo1.write(115);
+  setCollectorTo(COLLECTOR_DOWN);
+}
+
+void setRetrieverTo(int angle)
+{
+  RCServo0.write(angle);
+}
+
+void setCollectorTo(int angle)
+{
+  RCServo1.write(angle); 
 }
