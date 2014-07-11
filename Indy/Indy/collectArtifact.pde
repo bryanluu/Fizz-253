@@ -26,14 +26,14 @@ void collect()
     delay(10);
   }
   
-  RCServo1.write(230);
+  RCServo1.write(125);
   delay(2000);
-  RCServo1.write(65);
+  RCServo1.write(10);
   delay(2000);
   
   for(i=180; i>44; i--){
       RCServo0.write(i);
   }
   delay(1000);
-  RCServo1.write(175);
+  RCServo1.write(115);
 }

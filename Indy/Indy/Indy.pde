@@ -50,7 +50,7 @@ void setup()
 
 // initialize servo positions
   RCServo0.write(45);
-  RCServo1.write(175);
+  RCServo1.write(115);
 
 // something that bryan's libraries need
   controller.attach_Kp_To(&kP);
