@@ -1,11 +1,9 @@
-void collectArtifact()
+void checkCollectorArm()
 {
-    if (digitalRead(COLLECTOR_PIN) == LOW && collect_flag)
+    if (digitalRead(COLLECTOR_PIN) == LOW)
     {
-    collect();
-    collect_flag = false;
+      ChangeToState(COLLECT_ITEM);
     }
-    collect_flag = true;
 }
 
 // method to physically pick up
@@ -21,7 +19,8 @@ void collect()
   LCD.clear(); LCD.home();
   LCD.setCursor(0,0); LCD.print("Picking Up!");
   
-  for(i=45; i<181;i++){
+  for(i=45; i<181;i++)
+  {
     RCServo0.write(i);
     delay(10);
   }
@@ -31,7 +30,8 @@ void collect()
   RCServo1.write(10);
   delay(2000);
   
-  for(i=180; i>44; i--){
+  for(i=180; i>44; i--)
+  {
       RCServo0.write(i);
   }
   delay(1000);
