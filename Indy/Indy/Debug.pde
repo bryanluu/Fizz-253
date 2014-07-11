@@ -1,7 +1,11 @@
 void printDebug()
 {
-  Serial.print(GetStateName(currentState));  Serial.print(", ");
-  Serial.print(GetStateName(lastState));  Serial.print(", ");
+  Serial.print("Current: ");
+  Serial.print(GetStateName(currentState));  
+  Serial.print(", ");
+  Serial.print("Last: ");
+  Serial.print(GetStateName(lastState));  
+  Serial.print(", ");
   
   Serial.print("Left QRD: ");
   Serial.print(leftQRD);

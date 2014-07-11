@@ -42,6 +42,9 @@ void printLCD()
         break;
       case FINISHED:
         break;
+      case MENU:
+        menuLCD();
+        break;
       default:
         break;
     }

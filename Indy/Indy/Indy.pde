@@ -8,10 +8,11 @@
 #include <StandardCalc.h>
 #include <TapeFollower.h>
 
-enum RobotState {INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ESCAPING, FINISHED};
+enum RobotState {INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ESCAPING, FINISHED, MENU};
 
-RobotState currentState = FOLLOW_TAPE;
+RobotState currentState = INITIALIZING;
 RobotState lastState = INITIALIZING;
+
 
 // ==================PIN SETTINGS====================
 #define LEFT_QRD_PIN 1
@@ -91,6 +92,7 @@ void setup()
 
 void loop() 
 {
+  
   switch (currentState)
   {
       //======================
@@ -120,8 +122,18 @@ void loop()
       //======================
     case FINISHED:
       break;
+      //======================
+    case MENU:
+      updateMenu();
+      break;
     default:
       break;
+  }
+  
+  //Check for Stopbutton to trigger the MENU
+  if(currentState != MENU && stopbutton())
+  {
+    ChangeToState(MENU);
   }
 
   printLCD();
@@ -136,7 +148,10 @@ void ChangeToState(int newStateAsInt)
   RobotState newState = (RobotState)newStateAsInt;
   if(newState != currentState)
   {
-    lastState = currentState;
+    if(currentState != MENU)
+    {
+      lastState = currentState;
+    }
     currentState = newState;
     LCDcounter = LCD_STATE_FREQ; //so that it displays the new state first
   }
@@ -163,6 +178,8 @@ String GetStateName(int stateAsInt)
       return "ESC";
     case FINISHED:
       return "FIN";
+    case MENU:
+      return "MENU";
     default:
       return "INVALID";
   }
