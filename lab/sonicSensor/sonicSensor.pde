@@ -2,8 +2,8 @@
 #include <servo253.h>
 #include <LiquidCrystal.h>
 
-#define TRIGGER 7
-#define ECHO 8
+#define TRIGGER 8
+#define ECHO 7
 
 int maxRange = 35; //max distance in centimeters
 double onHill = 3.6;
@@ -12,8 +12,8 @@ double duration;
 
 void setup() 
 {
-  portMode(0, OUTPUT) ;      	 	
-  portMode(1, INPUT);   
+  portMode(1, OUTPUT) ;      	 	
+  portMode(0, INPUT);   
 
   pinMode(TRIGGER, OUTPUT);
   pinMode(ECHO, INPUT);

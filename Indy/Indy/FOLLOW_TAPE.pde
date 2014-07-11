@@ -1,5 +1,3 @@
-
-
 void readTape()
 {
   leftQRD = analogRead(LEFT_QRD_PIN);
@@ -28,7 +26,6 @@ void followTape()
 
 void tapeFollowingLCD()
 {
-    LCD.print("Error: ");
     LCD.print((int)controller.GetError());
     LCD.setCursor(5,0);LCD.print(leftQRD);
     LCD.setCursor(11,0);LCD.print(rightQRD);

@@ -22,11 +22,19 @@ RobotState lastState = INITIALIZING;
 #define COLLECTOR_SERVO 1
 #define COLLECTOR_PIN 0
 #define EXTERNAL_INTERRUPT0 0
+#define TRIGGER 8
+#define ECHO 7
 
 //====================SETTINGS========================
 #define FLAT_SPEED (280)
 #define HILL_SPEED (700)
 #define ROCK_SPEED (500)
+
+//level sensor
+#define DANGER_HEIGHT (35) // max distance in centimeters
+#define ON_HILL  (3.6) // on hill threshold
+#define OFF_HILL (5.5) // off hill threshold
+#define DURATION (350.0) //1000 ms
 
 //LCD
 #define LCD_FREQ (1)
@@ -52,6 +60,11 @@ double rightSpeed = 0;
 // LCD
 int LCDcounter = 0;
 
+// HEIGHT SENSOR
+
+double duration, distance, startTime, endTime; // can be found in HILL.pde
+
+
 //============================================================
 //===========================SETUP============================
 //============================================================
@@ -59,7 +72,12 @@ void setup()
 {
 // intialize ports
   portMode(0, INPUT) ;      	 	
-  portMode(1, INPUT) ;
+  portMode(1, OUTPUT) ;
+  
+// initialize pins
+  pinMode(TRIGGER, OUTPUT);
+  pinMode(ECHO, INPUT);
+  
 // initialize LCD screen on TINAH
   LCD.clear();
   LCD.home();
@@ -83,6 +101,7 @@ void setup()
 
 // attach the interrupts
   //attachInterrupt(EXTERNAL_INTERRUPT0, collectArtifact, FALLING);
+
 }
 
 //============================================================
@@ -102,9 +121,11 @@ void loop()
       break;
       //======================
     case FOLLOW_TAPE:
+      baseSpeed = FLAT_SPEED;
       readTape();
       followTape();
       checkCollectorArm();
+      checkOnHill();
       break;
       //======================
     case COLLECT_ITEM:
@@ -116,6 +137,8 @@ void loop()
       baseSpeed = HILL_SPEED;
       readTape();
       followTape();
+      checkOffHill();
+      ChangeToState(lastState);
       break;
       //======================
     case FINISHED:
