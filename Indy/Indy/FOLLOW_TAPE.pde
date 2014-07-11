@@ -1,5 +1,3 @@
-
-
 void readTape()
 {
   leftQRD = analogRead(LEFT_QRD_PIN);
