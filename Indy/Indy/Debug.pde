@@ -14,18 +14,11 @@ void printDebug()
   Serial.print(rightQRD);
   Serial.print(", ");
   
-  Serial.print("kP: ");
-  Serial.print(kP);
+  Serial.print("Left IR: ");
+  Serial.print(leftIR);
   Serial.print(", ");
-  Serial.print("kD: ");
-  Serial.print(kD);
-  Serial.print(", ");
-  
-  Serial.print("Error: ");
-  Serial.print(controller.GetError());
-  Serial.print(", ");
-  Serial.print("Steer Output: ");
-  Serial.print(steerOutput);
+  Serial.print("Right IR: ");
+  Serial.print(rightIR);
   Serial.print(", ");
   
   Serial.print("Left Speed: ");

@@ -4,7 +4,8 @@ void readTape()
   rightQRD = analogRead(RIGHT_QRD_PIN);
 
   kP = knob(6);
-  baseSpeed= knob(7);
+  kD = knob(7);
+  //baseSpeed= knob(7);
 }
 
 void followTape()
@@ -29,6 +30,7 @@ void tapeFollowingLCD()
     LCD.print((int)controller.GetError());
     LCD.setCursor(5,0);LCD.print(leftQRD);
     LCD.setCursor(11,0);LCD.print(rightQRD);
-    LCD.setCursor(0,1);LCD.print("kP: ");LCD.print((int)kP);
-    LCD.setCursor(8,1);LCD.print("bS: ");LCD.print(baseSpeed);
+    LCD.setCursor(0,1);LCD.print((int)kP);
+    LCD.setCursor(5,1);LCD.print((int)kD);
+    LCD.setCursor(11,1);LCD.print(distance);
 }

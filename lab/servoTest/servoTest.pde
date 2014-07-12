@@ -11,9 +11,9 @@ void setup()
   pinMode(pin,INPUT);
   LCD.home();
   RCServo0.attach(RCServo0Output);  
-  RCServo1.attach(RCServo1Output);
-  RCServo0.write(45);
-  RCServo1.write(160);
+  RCServo2.attach(RCServo2Output);
+  RCServo0.write(0);
+  RCServo2.write(115);
 }
 
 
@@ -42,23 +42,23 @@ void pickUp(){
 
    int i; 
    
-   for(i=45;i<180;i++){
+   for(i=0;i<145;i++){
       RCServo0.write(i);
        delay(10);
     }
 
-    RCServo1.write(175);
+    RCServo2.write(123);
     delay(2000);
-    RCServo1.write(45);
+    RCServo2.write(10);
     delay(2000);   
   
-  for(i=180;i>=45;i--){
+  for(i=145;i>=0;i--){
     RCServo0.write(i);
   }
   
   delay(1000);
 
-  RCServo1.write(160);
+  RCServo2.write(115);
   
 }
 
@@ -74,9 +74,9 @@ void shakeOff(){
   delay(100);
   RCServo0.write(110); 
   delay(100);
-  RCServo1.write(80);
+  RCServo2.write(80);
   delay(100);
-  RCServo1.write(55);
+  RCServo2.write(55);
 }
   
   while(digitalRead(pin) == LOW){
@@ -86,12 +86,12 @@ void shakeOff(){
   delay(100);
   RCServo0.write(110); 
   delay(100);
-  RCServo1.write(80);
+  RCServo2.write(80);
   delay(100);
-  RCServo1.write(55);
+  RCServo2.write(55);
   }
 }
   
   RCServo0.write(45);
-  RCServo1.write(160);
+  RCServo2.write(160);
 }

@@ -45,8 +45,8 @@ double senseHeight()
   delayMicroseconds(10);
   
   digitalWrite(TRIGGER,LOW);
-//  duration = pulseIn(ECHO,HIGH);
-  duration = 1000; //for testing
+  duration = pulseIn(ECHO,HIGH);
+  //duration = 1000; //for testing
   
   return (duration/58.2);
 }

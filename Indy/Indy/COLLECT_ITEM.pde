@@ -29,6 +29,7 @@ void collect()
   setRetrieverTo(RETRIEVER_WITHDRAWN);
   delay(1000);
   setCollectorTo(COLLECTOR_DOWN);
+
 }
 
 void setRetrieverTo(int angle)

@@ -38,6 +38,7 @@ void printLCD()
         tapeFollowingLCD();
         break;
       case ROCKPIT:
+        rockpit_LCD();
         break;
       case ESCAPING:
         break;

@@ -7,6 +7,7 @@
 //Indy's Libraries
 #include <StandardCalc.h>
 #include <TapeFollower.h>
+#include <IndyPID.h>
 
 enum RobotState {INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ESCAPING, FINISHED, MENU};
 
@@ -25,6 +26,8 @@ RobotState lastState = INITIALIZING;
 #define EXTERNAL_INTERRUPT0 0
 #define TRIGGER 8
 #define ECHO 7
+#define LEFT_IR 2
+#define RIGHT_IR 3
 
 //====================SETTINGS========================
 #define FLAT_SPEED (280)
@@ -33,47 +36,60 @@ RobotState lastState = INITIALIZING;
 
 //level sensor
 #define DANGER_HEIGHT (35) // max distance in centimeters
-#define ON_HILL  (3.6) // on hill threshold
+#define ON_HILL  (3.25) // on hill threshold
 #define OFF_HILL (5.5) // off hill threshold
-#define DURATION (350.0) //1000 ms
+#define DURATION (900.0) //1000 ms
 
 //collector arm
-#define RETRIEVER_WITHDRAWN (10)
+#define RETRIEVER_WITHDRAWN (0)
 #define RETRIEVER_EXTEND (145)
 #define COLLECTOR_DOWN (115)
 #define COLLECTOR_DROP (123)
 #define COLLECTOR_TOP (10)
 
 //LCD
-#define LCD_FREQ (1)
+#define LCD_FREQ (8)
 #define LCD_STATE_FREQ (100)
 #define LCD_STATE_DUR (5)
 
+//====================VARIABLES=======================
+
 int baseSpeed = FLAT_SPEED;
+
+//DRIVING
+
+double leftSpeed = 0;
+double rightSpeed = 0;
+double steerOutput = 0;
 
 //TAPEFOLLOWING
 
 int leftQRD = 0;
 int rightQRD = 0;
 
-double steerOutput = 0;
+
 TapeFollower controller(&leftQRD, &rightQRD, &steerOutput);
 
 double kP = 0;
 double kD = 0;
 
-double leftSpeed = 0;
-double rightSpeed = 0;
-
-// LCD
-int LCDcounter = 0;
 
 // HEIGHT SENSOR
 
 double duration, distance, startTime, endTime; // can be found in HILL.pde
 
 //This is a one-shot variable -> it only happens once in the runtime.
-bool passedHill = false;
+boolean passedHill = false;
+
+//ROCKPIT BEACON SENSING
+double leftIR = 0;
+double rightIR = 0;
+PID beaconAim(&leftIR, &rightIR, &steerOutput);
+double beacon_kP = 0;
+double beacon_kD = 0;
+
+// LCD
+int LCDcounter = 0;
 
 
 //============================================================
@@ -104,8 +120,11 @@ void setup()
 // something that bryan's libraries need
   controller.attach_Kp_To(&kP);
   controller.attach_Kd_To(&kD);
-  controller.SetThreshold(75);
+  controller.SetThreshold(70);
   controller.SetOffsets(0, 0);
+  
+  beaconAim.attach_Kp_To(&beacon_kP);
+  beaconAim.attach_Kd_To(&beacon_kD);
 
 // initialize the serial port
   Serial.begin(9600);
@@ -155,6 +174,10 @@ void loop()
       checkOffHill();
       break;
       //======================
+    case ROCKPIT:
+      lookForBeacon();
+      break;
+      //======================
     case FINISHED:
       break;
       //======================
@@ -173,11 +196,11 @@ void loop()
 
   printLCD();
   printDebug();
-  delay(1);
 }
 
 /* Changes the current State to the specified state (as one of the enums), updating the last state.
-However, state will remain the same if newState = currentState.*/
+However, state will remain the same if newState = currentState. Also, lastState does not update if
+currentState == MENU (to prevent history errors).*/
 void ChangeToState(int newStateAsInt)
 {
   RobotState newState = (RobotState)newStateAsInt;
