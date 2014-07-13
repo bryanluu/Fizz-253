@@ -31,9 +31,9 @@ For a large project like Indy, there is a lot of code. This code is organized as
   * `Indy`
     * This contains the `.pde` files that are uploaded directly onto Indy. Separate files represent separate states.
   * `libraries`
-    * This folder houses the external libraries used by Indy. See [External Libraries](###External Libraries) for more info.
+    * This folder houses the external libraries used by Indy. See External Libraries for more info.
   * `Tester`
-  *   This contains the Unit Tests for the external libraries. See the [Tests](###Running Tests) section for more info.
+  *   This contains the Unit Tests for the external libraries. See the Tests section for more info.
 
 ###External Libraries
 Although most of the code will be written with the Wiring IDE, in the `Indy.pde` sketch, we have created some external classes and code to handle complex calculations. These external libraries are included in `Indy/libraries/Bibliotheque`. These include:
@@ -66,7 +66,7 @@ To upload the code onto Indy, follow these instructions:
 ###Starting Indy
 Finally, Indy can now be run. To run Indy, simply power on the TINAH board. It will wait for you to press start. Pressing the *START* button will make it go to the first state: `FOLLOW_TAPE`. 
 
-###Switching States
+####Switching States
 To switch states manually, simply press the stop button to activate the menu. Use *knob 6* to scroll between the states. Press *START* to select the state. Press *STOP* to exit the menu and return to the previous state.
 
 ###Debugging
