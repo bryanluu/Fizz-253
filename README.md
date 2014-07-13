@@ -31,9 +31,9 @@ For a large project like Indy, there is a lot of code. This code is organized as
   * `Indy`
     * This contains the `.pde` files that are uploaded directly onto Indy. Separate files represent separate states.
   * `libraries`
-    * This folder houses the external libraries used by Indy. See [External Libraries](####External Libraries) for more info.
+    * This folder houses the external libraries used by Indy. See [External Libraries](###External Libraries) for more info.
   * `Tester`
-  *   This contains the Unit Tests for the external libraries. See the [Tests](####Running Tests) section for more info.
+  *   This contains the Unit Tests for the external libraries. See the [Tests](###Running Tests) section for more info.
 
 ###External Libraries
 Although most of the code will be written with the Wiring IDE, in the `Indy.pde` sketch, we have created some external classes and code to handle complex calculations. These external libraries are included in `Indy/libraries/Bibliotheque`. These include:
