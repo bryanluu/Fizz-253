@@ -108,11 +108,11 @@ void TapeFollowerTest::testTooLeft()
 
 	controller.Compute();
 
-	CPPUNIT_ASSERT(controller.error == -1);
+	CPPUNIT_ASSERT(controller.error == -2);
 
 	controller.Compute();
 
-	CPPUNIT_ASSERT(controller.error == -1);
+	CPPUNIT_ASSERT(controller.error == -2);
 
 	controller.Compute();
 
@@ -141,11 +141,11 @@ void TapeFollowerTest::testTooRight()
 
 	controller.Compute();
 
-	CPPUNIT_ASSERT(controller.error == 1);
+	CPPUNIT_ASSERT(controller.error == 2);
 
 	controller.Compute();
 
-	CPPUNIT_ASSERT(controller.error == 1);
+	CPPUNIT_ASSERT(controller.error == 2);
 
 	controller.Compute();
 
