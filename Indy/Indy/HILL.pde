@@ -17,6 +17,7 @@ void checkOffHill()
     {
       endTime = millis();
     }
+    collect();
     ChangeToState(FOLLOW_TAPE);
   }
 }
@@ -26,7 +27,7 @@ void checkDanger()
    distance = senseHeight();
   if(distance >= DANGER_HEIGHT)
   {
-    ChangeToState();
+//    ChangeToState();
   }
 }
 

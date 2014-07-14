@@ -87,7 +87,7 @@ void setup()
   RCServo2.attach(RCServo2Output) ;	
 
 // initialize servo positions
-  RCServo0.write(45);
+  RCServo0.write(10);
   RCServo1.write(115);
 
 // something that bryan's libraries need

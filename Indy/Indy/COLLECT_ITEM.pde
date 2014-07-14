@@ -20,13 +20,15 @@ void collect()
   LCD.setCursor(0,0); LCD.print("Picking Up!");
   
   
-  RCServo0.write(180);
+  RCServo0.write(145);
   delay(10);
-  RCServo1.write(125);
+  RCServo1.write(123);
   delay(2000);
   RCServo1.write(10);
   delay(2000);
-  RCServo0.write(45)
+  RCServo0.write(10);
   delay(1000);
   RCServo1.write(115);
 }
+
+
