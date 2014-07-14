@@ -11,11 +11,6 @@ void updateMenu()
   {
     ChangeToState(menuChoice);
   }
-  
-  if(stopbutton())
-  {
-    ChangeToState(lastState);
-  }
 }
 
 void menuLCD()

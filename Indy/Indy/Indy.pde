@@ -189,9 +189,16 @@ void loop()
   }
   
   //Check for Stopbutton to trigger the MENU
-  if(currentState != MENU && stopbutton())
+  if(stopbutton())
   {
-    ChangeToState(MENU);
+    if(currentState != MENU)
+    {
+      ChangeToState(MENU);
+    }
+    else
+    {
+      ChangeToState(lastState);
+    }
   }
 
   printLCD();
