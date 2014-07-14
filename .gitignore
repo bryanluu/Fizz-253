@@ -1,3 +1,6 @@
+# Indy's Tester Project File
+*.vcxproj
+
 # Object files
 *.o
 *.ko
