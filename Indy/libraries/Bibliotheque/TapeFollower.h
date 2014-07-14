@@ -67,7 +67,7 @@ private:
 	int *leftInput, *rightInput;
 	double *Output;
 
-	double error, lastError, lastError2, lastError3;
+	double error, lastError, lastError2, lastError3, lastExtremeError;
 
 	int timeChange;
 
@@ -87,6 +87,7 @@ private:
 	bool tooMuchOnLeft();
 	bool tooMuchOnRight();
 	bool offTape();
+	bool missedState();
 };
 
 #endif

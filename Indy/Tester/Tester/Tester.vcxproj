@@ -53,12 +53,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\fabratory\Documents\GitHub\Fizz-253\Indy\Tester\Tester;C:\Users\fabratory\Desktop\cppunit-1.12.1.tar\cppunit-1.12.1\cppunit-1.12.1\include;C:\Users\fabratory\Documents\GitHub\Fizz-253\Indy\libraries\Bibliotheque;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>\\VBOXSVR\Programming\Fizz\Fizz-253\Indy\libraries\Bibliotheque;C:\Users\Bryan Luu\Downloads\cppunit-1.12.1.tar\cppunit-1.12.1\cppunit-1.12.1\include;\\VBOXSVR\Programming\Fizz\Fizz-253\Indy\Tester\Tester;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\fabratory\Desktop\cppunit-1.12.1.tar\cppunit-1.12.1\cppunit-1.12.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Bryan Luu\Downloads\cppunit-1.12.1.tar\cppunit-1.12.1\cppunit-1.12.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>cppunit.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
