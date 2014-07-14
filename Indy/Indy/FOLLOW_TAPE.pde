@@ -14,24 +14,23 @@ void followTape()
 
   switch((int)controller.GetError())
   {
-     case -2:
-       rightSpeed = 900;
-       leftSpeed = -200;
-       break;
-       
-     case 2:
-       rightSpeed = 900;
-       leftSpeed = -200;
-       break;
-     
-     default:
-        rightSpeed = baseSpeed+steerOutput;
-        leftSpeed = baseSpeed-steerOutput;
-        break;
+    case -2:
+      rightSpeed = -260;
+      leftSpeed = 920;
+      break;
+    case 2:
+      rightSpeed = 920;
+      leftSpeed = -260;
+      break;
+    default:
+      rightSpeed = baseSpeed+steerOutput;
+      leftSpeed = baseSpeed-steerOutput;
+      break;
   }
-  
-  leftSpeed = constrain(leftSpeed,-1023,1023);
-  rightSpeed = constrain(rightSpeed,-1023,1023);
+
+
+  leftSpeed = constrain(leftSpeed, -1023, 1023);
+  rightSpeed = constrain(rightSpeed, -1023, 1023);
 
   motor.speed(LEFT_MOTOR, leftSpeed);
   motor.speed(RIGHT_MOTOR, rightSpeed);

@@ -38,7 +38,7 @@ RobotState lastState = INITIALIZING;
 #define DANGER_HEIGHT (35) // max distance in centimeters
 #define ON_HILL  (3.25) // on hill threshold
 #define OFF_HILL (5.5) // off hill threshold
-#define DURATION (900.0) //1000 ms
+#define DURATION (850.0) //1000 ms
 
 //collector arm
 #define RETRIEVER_WITHDRAWN (10)
