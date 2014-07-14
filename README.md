@@ -45,23 +45,23 @@ Although most of the code will be written with the Wiring IDE, in the `Indy.pde`
 ##Running Indy
 ###Setup
 To begin programming, follow these instructions:
-1. Ensure that the Wiring IDE, version 27, is installed. Links: [Windows](http://wiring.org.co/download/wiring-0027.zip), [Mac](http://wiring.org.co/download/wiring-0027.dmg), [Linux](http://wiring.org.co/download/wiring-0027.tgz).
-2. Clone this repository if you haven't already!
+ 1. Ensure that the Wiring IDE, version 27, is installed. Links: [Windows](http://wiring.org.co/download/wiring-0027.zip), [Mac](http://wiring.org.co/download/wiring-0027.dmg), [Linux](http://wiring.org.co/download/wiring-0027.tgz).
+ 2. Clone this repository if you haven't already!
   * **PC:** Use the [GitHub Application](https://windows.github.com/) to clone the repository.
   * **Mac/Linux:** In Terminal, navigate to desired folder, then run `git clone https://github.com/bryanluu/Fizz-253.git`.
-3. Open Wiring, and change the sketchbook folder location to *Fizz-253/Indy/*.
-4. You can now open `Indy.pde` in *Fizz-253/Indy* to start programming!
+ 3. Open Wiring, and change the sketchbook folder location to *Fizz-253/Indy/*.
+ 4. You can now open `Indy.pde` in *Fizz-253/Indy* to start programming!
 
 ###Uploading
 To upload the code onto Indy, follow these instructions:
-1. Power the TINAH board with the 16 V LiPo battery
-2. Open `Indy.pde` in *Fizz-253/Indy/* with the Wiring IDE.
-3. Change *target microcontroller* to *atmega128*.
-4. Plug in the USB Serial from your computer to TINAH.
-5. Select the appropriate Serial port.
-6. Press *Upload to Wiring hardware*
-7. Press the *RESET* button on TINAH.
-8. Once upload is finished, press *RESET* again.
+ 1. Power the TINAH board with the 16 V LiPo battery
+ 2. Open `Indy.pde` in *Fizz-253/Indy/* with the Wiring IDE.
+ 3. Change *target microcontroller* to *atmega128*.
+ 4. Plug in the USB Serial from your computer to TINAH.
+ 5. Select the appropriate Serial port.
+ 6. Press *Upload to Wiring hardware*
+ 7. Press the *RESET* button on TINAH.
+ 8. Once upload is finished, press *RESET* again.
 
 ###Starting Indy
 Finally, Indy can now be run. To run Indy, simply power on the TINAH board. It will wait for you to press start. Pressing the *START* button will make it go to the first state: `FOLLOW_TAPE`. 
