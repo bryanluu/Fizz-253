@@ -20,8 +20,8 @@ void checkOffHill()
   {
     if(millis() - startTime > DURATION)
     {
-      ChangeToState(FOLLOW_TAPE);
       collect();
+      ChangeToState(FOLLOW_TAPE);
     }
   }
 }

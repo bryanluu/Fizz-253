@@ -41,7 +41,7 @@ RobotState lastState = INITIALIZING;
 #define DURATION (900.0) //1000 ms
 
 //collector arm
-#define RETRIEVER_WITHDRAWN (0)
+#define RETRIEVER_WITHDRAWN (10)
 #define RETRIEVER_EXTEND (145)
 #define COLLECTOR_DOWN (115)
 #define COLLECTOR_DROP (123)
