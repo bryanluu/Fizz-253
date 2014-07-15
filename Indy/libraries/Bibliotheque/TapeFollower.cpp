@@ -77,27 +77,27 @@ double TapeFollower::calculateError()
 	}
 	else if (slightlyRight())
 	{
-		error = -1;
+		error = 1;
 	}
 	else if (slightlyLeft())
 	{
-		error = 1;
+		error = -1;
 	}
 	else if (moreLeft())
 	{
-		error = 2;
+		error = -2;
 	}
 	else if (moreRight())
 	{
-		error = -2;
+		error = 2;
 	}
 	else if (tooMuchOnLeft())
 	{
-		error = 3;
+		error = -3;
 	}
 	else if (tooMuchOnRight())
 	{
-		error = -3;
+		error = 3;
 	}
 	return error;
 }

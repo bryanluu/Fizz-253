@@ -41,7 +41,7 @@ class TapeFollower
     
     void SetThreshold(double newThresh);
     
-    void SetOffsets(double left, double right);
+    void SetOffsets(double left, double mid, double right);
 
 	//Display functions ****************************************************************
 	double GetKp();

@@ -19,9 +19,10 @@ void TapeFollowerTest::tearDown()
 void TapeFollowerTest::testConstructor()
 {
 	int Left = 0;
+	int Mid = 0;
 	int Right = 0;
 	double Output = 0;
-	TapeFollower controller(&Left, &Right, &Output);
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
 
 	CPPUNIT_ASSERT(controller.fixedSampleRate == false);
 	CPPUNIT_ASSERT(controller.leftInput == &Left);
@@ -31,10 +32,11 @@ void TapeFollowerTest::testConstructor()
 
 void TapeFollowerTest::testGoingStraight()
 {
-	int Left = 300;
-	int Right = 300;
+	int Left = 200;
+	int Mid = 300;
+	int Right = 200;
 	double Output = 0;
-	TapeFollower controller(&Left, &Right, &Output);
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
 
 	CPPUNIT_ASSERT(controller.goingStraight());
 
@@ -47,9 +49,10 @@ void TapeFollowerTest::testGoingStraight()
 void TapeFollowerTest::testOnLeft()
 {
 	int Left = 200;
+	int Mid = 300;
 	int Right = 300;
 	double Output = 0;
-	TapeFollower controller(&Left, &Right, &Output);
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
 
 	CPPUNIT_ASSERT(controller.slightlyLeft());
 
@@ -58,13 +61,28 @@ void TapeFollowerTest::testOnLeft()
 	CPPUNIT_ASSERT(controller.error == -1);
 }
 
+void TapeFollowerTest::testMoreLeft()
+{
+	int Left = 200;
+	int Mid = 200;
+	int Right = 300;
+	double Output = 0;
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
+
+	CPPUNIT_ASSERT(controller.moreLeft());
+
+	controller.Compute();
+
+	CPPUNIT_ASSERT(controller.error == -2);
+}
 
 void TapeFollowerTest::testOnRight()
 {
 	int Left = 300;
+	int Mid = 300;
 	int Right = 200;
 	double Output = 0;
-	TapeFollower controller(&Left, &Right, &Output);
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
 
 	CPPUNIT_ASSERT(controller.slightlyRight());
 
@@ -73,12 +91,28 @@ void TapeFollowerTest::testOnRight()
 	CPPUNIT_ASSERT(controller.error == 1);
 }
 
+void TapeFollowerTest::testMoreRight()
+{
+	int Left = 300;
+	int Mid = 200;
+	int Right = 200;
+	double Output = 0;
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
+
+	CPPUNIT_ASSERT(controller.moreRight());
+
+	controller.Compute();
+
+	CPPUNIT_ASSERT(controller.error == 2);
+}
+
 void TapeFollowerTest::testOffTape()
 {
 	int Left = 200;
+	int Mid = 200;
 	int Right = 200;
 	double Output = 0;
-	TapeFollower controller(&Left, &Right, &Output);
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
 
 	CPPUNIT_ASSERT(controller.offTape());
 
@@ -92,9 +126,10 @@ void TapeFollowerTest::testOffTape()
 void TapeFollowerTest::testTooLeft()
 {
 	int Left = 200;
+	int Mid = 300;
 	int Right = 300;
 	double Output = 0;
-	TapeFollower controller(&Left, &Right, &Output);
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
 
 
 	CPPUNIT_ASSERT(controller.slightlyLeft());
@@ -104,31 +139,30 @@ void TapeFollowerTest::testTooLeft()
 	CPPUNIT_ASSERT(controller.error == -1);
 
 	Left = 100;
+	Mid = 100;
+	Right = 300;
+
+	controller.Compute();
+
+	CPPUNIT_ASSERT(controller.error == -2);
+
 	Right = 100;
 
 	controller.Compute();
 
-	CPPUNIT_ASSERT(controller.error == -2);
-
-	controller.Compute();
-
-	CPPUNIT_ASSERT(controller.error == -2);
-
-	controller.Compute();
-
-	CPPUNIT_ASSERT(controller.error == -2);
 	CPPUNIT_ASSERT(controller.lastError < 0);
-	CPPUNIT_ASSERT(controller.lastError2 < 0);
-	CPPUNIT_ASSERT(controller.lastError3 < 0);
+	CPPUNIT_ASSERT(controller.error == -3);
 
 }
 
 void TapeFollowerTest::testTooRight()
 {
 	int Left = 300;
+	int Mid = 300;
 	int Right = 200;
 	double Output = 0;
-	TapeFollower controller(&Left, &Right, &Output);
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
+
 
 	CPPUNIT_ASSERT(controller.slightlyRight());
 
@@ -136,31 +170,30 @@ void TapeFollowerTest::testTooRight()
 
 	CPPUNIT_ASSERT(controller.error == 1);
 
-	Left = 100;
+	Left = 300;
+	Mid = 100;
 	Right = 100;
 
 	controller.Compute();
 
 	CPPUNIT_ASSERT(controller.error == 2);
 
-	controller.Compute();
-
-	CPPUNIT_ASSERT(controller.error == 2);
+	Left = 100;
 
 	controller.Compute();
 
-	CPPUNIT_ASSERT(controller.error == 2);
 	CPPUNIT_ASSERT(controller.lastError > 0);
-	CPPUNIT_ASSERT(controller.lastError2 > 0);
-	CPPUNIT_ASSERT(controller.lastError3 > 0);
+	CPPUNIT_ASSERT(controller.error == 3);
+
 }
 
 void TapeFollowerTest::testTuning()
 {
 	int Left = 400;
+	int Mid = 400;
 	int Right = 400;
 	double Output = 0;
-	TapeFollower controller(&Left, &Right, &Output);
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
 
 
 	controller.tune(0.5, 0, 0);
@@ -189,10 +222,11 @@ void TapeFollowerTest::testTuning()
 void TapeFollowerTest::testOutput()
 {
 	// Setup
-	int Left = 400;
-	int Right = 400;
+	int Left = 100;
+	int Mid = 400;
+	int Right = 100;
 	double Output = 0;
-	TapeFollower controller(&Left, &Right, &Output);
+	TapeFollower controller(&Left, &Mid, &Right, &Output);
 
 	double Kp = 1, Ki = 2, Kd = 3;
 
@@ -222,6 +256,8 @@ void TapeFollowerTest::testOutput()
 	CPPUNIT_ASSERT(millis() == 20);
 
 	Left = 100;
+	Mid = 400;
+	Right = 400;
 
 	CPPUNIT_ASSERT(controller.slightlyLeft());
 
@@ -245,6 +281,7 @@ void TapeFollowerTest::testOutput()
 	//////Compute again, with right side error
 
 	Left = 300;
+	Mid = 400;
 	Right = 100;
 
 	WProgram::update();
