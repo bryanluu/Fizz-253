@@ -14,24 +14,23 @@ void followTape()
 
   switch((int)controller.GetError())
   {
-     case -2:
-       rightSpeed = 900;
-       leftSpeed = -200;
-       break;
-       
-     case 2:
-       rightSpeed = 900;
-       leftSpeed = -200;
-       break;
-     
-     default:
-        rightSpeed = baseSpeed+steerOutput;
-        leftSpeed = baseSpeed-steerOutput;
-        break;
+    case 2:
+      rightSpeed = 900;
+      leftSpeed = -500;
+      break;
+    case -2:
+      rightSpeed = -500;
+      leftSpeed = 900;
+      break;
+    default:
+      rightSpeed = baseSpeed+steerOutput;
+      leftSpeed = baseSpeed-steerOutput;
+      break;
   }
-  
-  leftSpeed = constrain(leftSpeed,-1023,1023);
-  rightSpeed = constrain(rightSpeed,-1023,1023);
+
+
+  leftSpeed = constrain(leftSpeed, -1023, 1023);
+  rightSpeed = constrain(rightSpeed, -1023, 1023);
 
   motor.speed(LEFT_MOTOR, leftSpeed);
   motor.speed(RIGHT_MOTOR, rightSpeed);
@@ -40,8 +39,8 @@ void followTape()
 void tapeFollowingLCD()
 {
     LCD.print((int)controller.GetError());
-    LCD.setCursor(5,0);LCD.print(leftQRD);
-    LCD.setCursor(11,0);LCD.print(rightQRD);
+    LCD.setCursor(5,0);LCD.print((int)leftQRD);
+    LCD.setCursor(11,0);LCD.print((int)rightQRD);
     LCD.setCursor(0,1);LCD.print("kP: ");LCD.print((int)kP);
     LCD.setCursor(8,1);LCD.print("kD: ");LCD.print((int)kD);
 }

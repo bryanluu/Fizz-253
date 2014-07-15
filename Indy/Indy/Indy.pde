@@ -9,7 +9,7 @@
 #include <TapeFollower.h>
 #include <IndyPID.h>
 
-enum RobotState {INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ESCAPING, FINISHED, MENU};
+enum RobotState {INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ZIPLINE, FINISHED, MENU};
 
 RobotState currentState = INITIALIZING;
 RobotState lastState = INITIALIZING;
@@ -28,6 +28,9 @@ RobotState lastState = INITIALIZING;
 #define ECHO 7
 #define LEFT_IR 2
 #define RIGHT_IR 3
+#define ZIPLINE_ARM 2
+#define ZIPLINE_MISS 1
+#define ZIPLINE_HIT 2
 
 //====================SETTINGS========================
 #define FLAT_SPEED (280)
@@ -38,7 +41,7 @@ RobotState lastState = INITIALIZING;
 #define DANGER_HEIGHT (35) // max distance in centimeters
 #define ON_HILL  (3.25) // on hill threshold
 #define OFF_HILL (5.5) // off hill threshold
-#define DURATION (900.0) //1000 ms
+#define DURATION (850.0) //1000 ms
 
 //collector arm
 #define RETRIEVER_WITHDRAWN (10)
@@ -46,6 +49,9 @@ RobotState lastState = INITIALIZING;
 #define COLLECTOR_DOWN (115)
 #define COLLECTOR_DROP (123)
 #define COLLECTOR_TOP (10)
+
+//zipline arm
+#define ZIPLINE_DOWN_DELAY (5)
 
 //LCD
 #define LCD_FREQ (8)
@@ -140,7 +146,9 @@ void setup()
 
 void loop() 
 {
-  
+  baseSpeed = FLAT_SPEED;
+  readTape();
+  followTape();
   switch (currentState)
   {
       //======================
@@ -178,6 +186,11 @@ void loop()
       lookForBeacon();
       break;
       //======================
+    case ZIPLINE:
+//      swingZiplineArm();
+      testZipArm();
+      break;
+      //======================
     case FINISHED:
       break;
       //======================
@@ -189,9 +202,16 @@ void loop()
   }
   
   //Check for Stopbutton to trigger the MENU
-  if(currentState != MENU && stopbutton())
+  if(stopbutton())
   {
-    ChangeToState(MENU);
+    if(currentState != MENU)
+    {
+      ChangeToState(MENU);
+    }
+    else
+    {
+      ChangeToState(lastState);
+    }
   }
 
   printLCD();
@@ -209,6 +229,8 @@ void ChangeToState(int newStateAsInt)
     if(currentState != MENU)
     {
       lastState = currentState;
+      
+      resetZipline();
     }
     currentState = newState;
     LCDcounter = LCD_STATE_FREQ; //so that it displays the new state first
@@ -232,8 +254,8 @@ String GetStateName(int stateAsInt)
       return "CH";
     case ROCKPIT:
       return "RP";
-    case ESCAPING:
-      return "ESC";
+    case ZIPLINE:
+      return "ZIP";
     case FINISHED:
       return "FIN";
     case MENU:
