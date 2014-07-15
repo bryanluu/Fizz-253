@@ -1,3 +1,5 @@
+int startTime = 0;
+
 void checkOnHill()
 {
   distance = senseHeight();
@@ -48,5 +50,6 @@ double senseHeight()
   duration = pulseIn(ECHO,HIGH);
   return (duration/58.2);
 }
+
 
 

@@ -55,3 +55,4 @@ void printLCD()
 
   LCDcounter++;
 }
+

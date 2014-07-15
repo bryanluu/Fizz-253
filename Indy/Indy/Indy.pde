@@ -1,4 +1,4 @@
- //253 Libraries
+//253 Libraries
 #include <motor.h>
 #include <phys253.h>
 #include <Servo253.h>
@@ -9,28 +9,37 @@
 #include <TapeFollower.h>
 #include <IndyPID.h>
 
-enum RobotState {INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ZIPLINE, FINISHED, MENU};
+enum RobotState {
+  INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ZIPLINE, FINISHED, TEST, MENU
+};
 
 RobotState currentState = INITIALIZING;
 RobotState lastState = INITIALIZING;
 
 
 // ==================PIN SETTINGS====================
-#define LEFT_QRD_PIN 1
-#define RIGHT_QRD_PIN 0
+//Analog
+#define LEFT_QRD_PIN 0
+#define MID_QRD_PIN 1
+#define RIGHT_QRD_PIN 2
+#define LEFT_IR 3
+#define RIGHT_IR 4
+
+//Motors
 #define LEFT_MOTOR 0
 #define RIGHT_MOTOR 1
+
+//Servos
 #define MAGNET_SERVO 0
 #define COLLECTOR_SERVO 1
-#define COLLECTOR_PIN 0
-#define EXTERNAL_INTERRUPT0 0
-#define TRIGGER 8
-#define ECHO 7
-#define LEFT_IR 2
-#define RIGHT_IR 3
 #define ZIPLINE_ARM 2
+
+//Digital
+#define COLLECTOR_PIN 0
 #define ZIPLINE_MISS 1
 #define ZIPLINE_HIT 2
+#define ECHO 7
+#define TRIGGER 8
 
 //====================SETTINGS========================
 #define FLAT_SPEED (280)
@@ -71,10 +80,11 @@ double steerOutput = 0;
 //TAPEFOLLOWING
 
 int leftQRD = 0;
+int midQRD = 0;
 int rightQRD = 0;
 
 
-TapeFollower controller(&leftQRD, &rightQRD, &steerOutput);
+TapeFollower controller(&leftQRD, &midQRD, &rightQRD, &steerOutput);
 
 double kP = 0;
 double kD = 0;
@@ -82,10 +92,10 @@ double kD = 0;
 
 // HEIGHT SENSOR
 
-double duration, distance, startTime, endTime; // can be found in HILL.pde
+double duration, distance; // can be found in HILL.pde
 
 //This is a one-shot variable -> it only happens once in the runtime.
-boolean passedHill = false;
+boolean passedHill = true;
 
 //ROCKPIT BEACON SENSING
 double leftIR = 0;
@@ -103,41 +113,40 @@ int LCDcounter = 0;
 //============================================================
 void setup() 
 {
-// intialize ports
+  // intialize ports
   portMode(0, INPUT) ;      	 	
   portMode(1, OUTPUT) ;
-  
-// initialize pins
+
+  // initialize pins
   pinMode(TRIGGER, OUTPUT);
   pinMode(ECHO, INPUT);
-  
-// initialize LCD screen on TINAH
+
+  // initialize LCD screen on TINAH
   LCD.clear();
   LCD.home();
-// attach the servo motors	   	
+  // attach the servo motors	   	
   RCServo0.attach(RCServo0Output) ;	
   RCServo1.attach(RCServo1Output) ;	
   RCServo2.attach(RCServo2Output) ;	
 
-// initialize servo positions
+  // initialize servo positions
   setRetrieverTo(RETRIEVER_WITHDRAWN);
   setCollectorTo(COLLECTOR_DOWN);
 
-// something that bryan's libraries need
+  // something that bryan's libraries need
   controller.attach_Kp_To(&kP);
   controller.attach_Kd_To(&kD);
   controller.SetThreshold(70);
-  controller.SetOffsets(0, 0);
-  
+  controller.SetOffsets(0, 0, 0);
+
   beaconAim.attach_Kp_To(&beacon_kP);
   beaconAim.attach_Kd_To(&beacon_kD);
 
-// initialize the serial port
-  Serial.begin(9600);
+  // initialize the serial port
+  //  Serial.begin(9600);
 
-// attach the interrupts
+  // attach the interrupts
   //attachInterrupt(EXTERNAL_INTERRUPT0, collectArtifact, FALLING);
-
 }
 
 //============================================================
@@ -187,7 +196,7 @@ void loop()
       break;
       //======================
     case ZIPLINE:
-//      swingZiplineArm();
+      //      swingZiplineArm();
       testZipArm();
       break;
       //======================
@@ -200,7 +209,7 @@ void loop()
     default:
       break;
   }
-  
+
   //Check for Stopbutton to trigger the MENU
   if(stopbutton())
   {
@@ -214,13 +223,13 @@ void loop()
     }
   }
 
-  printLCD();
-  printDebug();
+  //  printLCD();
+  //  printDebug();
 }
 
 /* Changes the current State to the specified state (as one of the enums), updating the last state.
-However, state will remain the same if newState = currentState. Also, lastState does not update if
-currentState == MENU (to prevent history errors).*/
+ However, state will remain the same if newState = currentState. Also, lastState does not update if
+ currentState == MENU (to prevent history errors).*/
 void ChangeToState(int newStateAsInt)
 {
   RobotState newState = (RobotState)newStateAsInt;
@@ -229,7 +238,7 @@ void ChangeToState(int newStateAsInt)
     if(currentState != MENU)
     {
       lastState = currentState;
-      
+
       resetZipline();
     }
     currentState = newState;
@@ -265,3 +274,5 @@ String GetStateName(int stateAsInt)
   }
   return name;
 }
+
+

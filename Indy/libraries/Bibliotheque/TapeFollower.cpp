@@ -62,7 +62,7 @@ void TapeFollower::updateOldData()
 	lastError3 = lastError2;
 	lastError2 = lastError;
 	lastError = error;
-	if (error == -2 || error == 2)
+	if (error == -3 || error == 3)
 	{
 		lastExtremeError = error;
 	}
@@ -98,6 +98,10 @@ double TapeFollower::calculateError()
 	else if (tooMuchOnRight())
 	{
 		error = 3;
+	}
+	else if (missedState())
+	{
+		error = -lastExtremeError;
 	}
 	return error;
 }
@@ -170,8 +174,8 @@ bool TapeFollower::moreRight() { return (*leftInput >= THRESHOLD + LeftOffset) &
 
 bool TapeFollower::offTape() { return (*leftInput < THRESHOLD + LeftOffset) && (*midInput < THRESHOLD + MidOffset) && (*rightInput < THRESHOLD + RightOffset); }
 
-bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError > 0); }
+bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError > 0) && (lastError2 > 0); }
 
-bool TapeFollower::tooMuchOnLeft() { return offTape() && (lastError < 0); }
+bool TapeFollower::tooMuchOnLeft() { return offTape() && (lastError < 0) && (lastError2 > 0); }
 
 bool TapeFollower::missedState() {return offTape() && (lastError == 0); }
