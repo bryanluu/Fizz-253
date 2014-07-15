@@ -1,9 +1,10 @@
 #include "TapeFollower.h"
 #include "StandardCalc.h"
 
-TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output)
+TapeFollower::TapeFollower(int* leftInputVar, int* midInputVar, int* rightInputVar, double* output)
 {
 	leftInput = leftInputVar;
+	midInput = midInputVar;
 	rightInput = rightInputVar;
 	Output = output;
 
@@ -23,32 +24,8 @@ TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output
 
     THRESHOLD = 250;
     LeftOffset = 0;
-    RightOffset = 50;
-}
-
-TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output, double newThreshold, double newLeftOffset, double newRightOffset)
-{
-	leftInput = leftInputVar;
-	rightInput = rightInputVar;
-	Output = output;
-    
-	fixedSampleRate = false;
-    
-	lastTime = millis();
-	lastError = 0;
-	error = 0;
-	lastExtremeError = 0;
-    
-	outMax = 100;
-	outMin = -100;
-    
-	kp = new double(0);
-	ki = new double(0);
-	kd = new double(0);
-    
-    THRESHOLD = newThreshold;
-    LeftOffset = newLeftOffset;
-    RightOffset = newRightOffset;
+    MidOffset = 0;
+    RightOffset = 0;
 }
 
 double TapeFollower::Compute()
@@ -100,23 +77,27 @@ double TapeFollower::calculateError()
 	}
 	else if (slightlyRight())
 	{
-		error = 1;
+		error = -1;
 	}
 	else if (slightlyLeft())
 	{
-		error = -1;
+		error = 1;
 	}
-	else if (tooMuchOnLeft())
-	{
-		error = -2;
-	}
-	else if (tooMuchOnRight())
+	else if (moreLeft())
 	{
 		error = 2;
 	}
-	else if (missedState())
+	else if (moreRight())
 	{
-		error = -lastExtremeError;
+		error = -2;
+	}
+	else if (tooMuchOnLeft())
+	{
+		error = 3;
+	}
+	else if (tooMuchOnRight())
+	{
+		error = -3;
 	}
 	return error;
 }
@@ -170,19 +151,24 @@ void TapeFollower::SetThreshold(double newThreshold)
     THRESHOLD = newThreshold;
 }
 
-void TapeFollower::SetOffsets(double left, double right)
+void TapeFollower::SetOffsets(double left, double mid, double right)
 {
     LeftOffset = left;
+    MidOffset = mid;
     RightOffset = right;
 }
 
-bool TapeFollower::goingStraight() { return (*leftInput >= THRESHOLD + LeftOffset) && (*rightInput >= THRESHOLD + RightOffset); }
+bool TapeFollower::goingStraight() { return  (*leftInput < THRESHOLD + LeftOffset) && (*midInput >= THRESHOLD + MidOffset) && (*rightInput < THRESHOLD + RightOffset); }
 
-bool TapeFollower::slightlyLeft() { return ((*leftInput < THRESHOLD + LeftOffset) && (*rightInput >= THRESHOLD + RightOffset)); }
+bool TapeFollower::slightlyLeft() { return (*leftInput < THRESHOLD + LeftOffset) && (*midInput >= THRESHOLD + MidOffset) && (*rightInput >= THRESHOLD + RightOffset); }
 
-bool TapeFollower::slightlyRight() { return ((*leftInput >= THRESHOLD + LeftOffset) && (*rightInput < THRESHOLD + RightOffset)); }
+bool TapeFollower::slightlyRight() { return (*leftInput >= THRESHOLD + LeftOffset) && (*midInput >= THRESHOLD + MidOffset) && (*rightInput < THRESHOLD + RightOffset); }
 
-bool TapeFollower::offTape() { return ((*leftInput < THRESHOLD + LeftOffset) && (*rightInput < THRESHOLD + RightOffset)); }
+bool TapeFollower::moreLeft() { return (*leftInput < THRESHOLD + LeftOffset) && (*midInput < THRESHOLD + MidOffset) && (*rightInput >= THRESHOLD + RightOffset); }
+
+bool TapeFollower::moreRight() { return (*leftInput >= THRESHOLD + LeftOffset) && (*midInput < THRESHOLD + MidOffset) && (*rightInput < THRESHOLD + RightOffset); }
+
+bool TapeFollower::offTape() { return (*leftInput < THRESHOLD + LeftOffset) && (*midInput < THRESHOLD + MidOffset) && (*rightInput < THRESHOLD + RightOffset); }
 
 bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError > 0); }
 
