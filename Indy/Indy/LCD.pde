@@ -40,7 +40,8 @@ void printLCD()
       case ROCKPIT:
         rockpit_LCD();
         break;
-      case ESCAPING:
+      case ZIPLINE:
+        ziplineLCD();
         break;
       case FINISHED:
         break;

@@ -4,8 +4,9 @@ void updateMenu()
 {
   motor.speed(LEFT_MOTOR, 0);
   motor.speed(RIGHT_MOTOR, 0);
+  motor.speed(ZIPLINE_ARM, 0);
   
-  menuChoice = (RobotState)((int)floor(map(knob(6), 0, 1023, 0, MENU)));
+  menuChoice = (RobotState)((int)(map(knob(6), 0, 1023, 0, MENU-1)));
   
   if(startbutton())
   {
