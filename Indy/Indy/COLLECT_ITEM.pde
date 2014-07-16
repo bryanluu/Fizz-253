@@ -12,7 +12,7 @@ void collect()
 {
   motor.speed(LEFT_MOTOR, 0);
   motor.speed(RIGHT_MOTOR, 0);
-  delay(200);
+//  delay(200);
   
   int i = 0;
   delay(50);

@@ -14,7 +14,7 @@ enum RobotState {
 };
 
 RobotState currentState = INITIALIZING;
-RobotState lastState = INITIALIZING;
+RobotState lastState = INITIALIZING;  
 
 
 // ==================PIN SETTINGS====================
@@ -42,15 +42,15 @@ RobotState lastState = INITIALIZING;
 #define TRIGGER 8
 
 //====================SETTINGS========================
-#define FLAT_SPEED (280)
-#define HILL_SPEED (700)
-#define ROCK_SPEED (500)
+#define FLAT_SPEED (100)
+#define HILL_SPEED (500)
+#define ROCK_SPEED (150)
 
 //level sensor
 #define DANGER_HEIGHT (35) // max distance in centimeters
-#define ON_HILL  (3.25) // on hill threshold
-#define OFF_HILL (5.5) // off hill threshold
-#define DURATION (850.0) //1000 ms
+#define ON_HILL  (2.5) // on hill threshold
+#define OFF_HILL (6.5) // off hill threshold
+#define DURATION (300) //ms
 
 //collector arm
 #define RETRIEVER_WITHDRAWN (10)
@@ -63,9 +63,9 @@ RobotState lastState = INITIALIZING;
 #define ZIPLINE_DOWN_DELAY (5)
 
 //LCD
-#define LCD_FREQ (8)
-#define LCD_STATE_FREQ (100)
-#define LCD_STATE_DUR (5)
+#define LCD_FREQ (100)
+#define LCD_STATE_FREQ (3000)
+#define LCD_STATE_DUR (500)
 
 //====================VARIABLES=======================
 
@@ -185,10 +185,11 @@ void loop()
       break;
       //======================
     case CLIMB_HILL:
-      baseSpeed = HILL_SPEED;
-      readTape();
-      followTape();
-      checkOffHill();
+//      baseSpeed = HILL_SPEED;
+//      readTape();
+//      followTape();
+//      checkOffHill();
+      calibrateHeight();
       break;
       //======================
     case ROCKPIT:
@@ -201,6 +202,12 @@ void loop()
       break;
       //======================
     case FINISHED:
+      break;
+      //======================
+    case TEST:
+      testMotors();
+      testCollectorArm();
+      ChangeToState(lastState);
       break;
       //======================
     case MENU:
@@ -223,8 +230,8 @@ void loop()
     }
   }
 
-  //  printLCD();
-  //  printDebug();
+  printLCD();
+//  printDebug();
 }
 
 /* Changes the current State to the specified state (as one of the enums), updating the last state.
@@ -267,6 +274,8 @@ String GetStateName(int stateAsInt)
       return "ZIP";
     case FINISHED:
       return "FIN";
+    case TEST:
+      return "TEST";
     case MENU:
       return "MENU";
     default:

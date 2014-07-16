@@ -15,11 +15,11 @@ void followTape()
 
 //  switch((int)controller.GetError())
 //  {
-//    case 2:
+//    case 3:
 //      rightSpeed = 900;
 //      leftSpeed = -500;
 //      break;
-//    case -2:
+//    case -3:
 //      rightSpeed = -500;
 //      leftSpeed = 900;
 //      break;

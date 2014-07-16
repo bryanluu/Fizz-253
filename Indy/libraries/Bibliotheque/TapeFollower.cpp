@@ -99,10 +99,10 @@ double TapeFollower::calculateError()
 	{
 		error = 3;
 	}
-	else if (missedState())
-	{
-		error = -lastExtremeError;
-	}
+	// else if (missedState())
+	// {
+	// 	error = -lastExtremeError;
+	// }
 	return error;
 }
 
@@ -176,6 +176,6 @@ bool TapeFollower::offTape() { return (*leftInput < THRESHOLD + LeftOffset) && (
 
 bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError > 0) && (lastError2 > 0); }
 
-bool TapeFollower::tooMuchOnLeft() { return offTape() && (lastError < 0) && (lastError2 > 0); }
+bool TapeFollower::tooMuchOnLeft() { return offTape() && (lastError < 0) && (lastError2 < 0); }
 
 bool TapeFollower::missedState() {return offTape() && (lastError == 0); }

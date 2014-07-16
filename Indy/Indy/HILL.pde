@@ -1,4 +1,6 @@
 int startTime = 0;
+double minDist = -1;
+double maxDist = -1;
 
 void checkOnHill()
 {
@@ -22,6 +24,8 @@ void checkOffHill()
   {
     if(millis() - startTime > DURATION)
     {
+      motor.speed(LEFT_MOTOR, 0);
+      motor.speed(RIGHT_MOTOR, 0);
       collect();
       ChangeToState(FOLLOW_TAPE);
     }
@@ -49,6 +53,28 @@ double senseHeight()
   digitalWrite(TRIGGER,LOW);
   duration = pulseIn(ECHO,HIGH);
   return (duration/58.2);
+}
+
+void calibrateHeight()
+{
+  motor.speed(LEFT_MOTOR, 0);
+  motor.speed(RIGHT_MOTOR, 0);
+  distance = senseHeight();
+  if(distance < minDist || minDist == -1)
+  {
+    minDist = distance;
+  }
+  if(distance > maxDist || maxDist == -1)
+  {
+    maxDist = distance;
+  }
+}
+
+void hill_LCD()
+{
+  LCD.print("D: "); LCD.print(distance);
+  LCD.setCursor(0,1); LCD.print(minDist);
+  LCD.setCursor(8,1); LCD.print(maxDist);
 }
 
 

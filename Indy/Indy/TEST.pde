@@ -7,22 +7,22 @@ void testMotors()
   motor.speed(LEFT_MOTOR, 0);
   motor.speed(RIGHT_MOTOR, 0);
   
-  delay(10);
+  delay(1000);
   
   motor.speed(LEFT_MOTOR, 280);
   motor.speed(RIGHT_MOTOR, 280);
   
-  delay(10);
+  delay(1000);
   
   motor.speed(LEFT_MOTOR, -280);
   motor.speed(RIGHT_MOTOR, -280);
   
-  delay(10);
+  delay(1000);
   
   motor.speed(LEFT_MOTOR, 0);
   motor.speed(RIGHT_MOTOR, 0);
 }
-/*
+
 void testCollectorArm()
 {
   LCD.print("Testing");
@@ -45,15 +45,15 @@ void testCollectorArm()
     delay(10);
   }
   
-  delay(10);
+  delay(1000);
   
   LCD.print("Testing");
   LCD.setCursor(0,1); LCD.print("Retriever");
   
-  setRetriever(RETRIEVER_EXTEND);
-  delay(10);
-  setRetriever(RETRIEVER_WITHDRAWN);
-  delay(10);
+  setRetrieverTo(RETRIEVER_EXTEND);
+  delay(1000);
+  setRetrieverTo(RETRIEVER_WITHDRAWN);
+  delay(1000);
 }
-*/
+
 
