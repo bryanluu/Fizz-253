@@ -26,8 +26,8 @@ RobotState lastState = INITIALIZING;
 #define RIGHT_IR 4
 
 //Motors
-#define LEFT_MOTOR 0
-#define RIGHT_MOTOR 1
+#define RIGHT_MOTOR 0
+#define LEFT_MOTOR 1
 
 //Servos
 #define MAGNET_SERVO 0
@@ -42,9 +42,9 @@ RobotState lastState = INITIALIZING;
 #define TRIGGER 8
 
 //====================SETTINGS========================
-#define FLAT_SPEED (100)
-#define HILL_SPEED (500)
-#define ROCK_SPEED (150)
+#define FLAT_SPEED (500)
+#define HILL_SPEED (700)
+#define ROCK_SPEED (300)
 
 //level sensor
 #define DANGER_HEIGHT (35) // max distance in centimeters
@@ -162,6 +162,8 @@ void loop()
   {
       //======================
     case INITIALIZING:
+      motor.speed(LEFT_MOTOR, 0);
+      motor.speed(RIGHT_MOTOR, 0);
       if(startbutton())
       {
         ChangeToState(FOLLOW_TAPE);
@@ -223,10 +225,6 @@ void loop()
     if(currentState != MENU)
     {
       ChangeToState(MENU);
-    }
-    else
-    {
-      ChangeToState(lastState);
     }
   }
 

@@ -2,22 +2,26 @@
 
 void testMotors()
 {
-  LCD.print("Testing Motors");
-  
   motor.speed(LEFT_MOTOR, 0);
   motor.speed(RIGHT_MOTOR, 0);
   
-  delay(1000);
+  delay(500);
+  LCD.clear();
+  LCD.home();
+  LCD.print("Testing Motors");
   
-  motor.speed(LEFT_MOTOR, 280);
-  motor.speed(RIGHT_MOTOR, 280);
   
-  delay(1000);
+  delay(500);
   
-  motor.speed(LEFT_MOTOR, -280);
-  motor.speed(RIGHT_MOTOR, -280);
+  motor.speed(LEFT_MOTOR, 1023);
+  motor.speed(RIGHT_MOTOR, 1023);
   
-  delay(1000);
+  delay(500);
+  
+  motor.speed(LEFT_MOTOR, -1023);
+  motor.speed(RIGHT_MOTOR, -1023);
+  
+  delay(500);
   
   motor.speed(LEFT_MOTOR, 0);
   motor.speed(RIGHT_MOTOR, 0);
@@ -25,8 +29,15 @@ void testMotors()
 
 void testCollectorArm()
 {
+  
+  delay(500);
+  
+  LCD.clear();
+  LCD.home();
   LCD.print("Testing");
   LCD.setCursor(0,1); LCD.print("Collector");
+  
+  delay(500);
   
   if(digitalRead(COLLECTOR_PIN) == HIGH)
   {
@@ -36,24 +47,24 @@ void testCollectorArm()
   else
   {
     setCollectorTo(COLLECTOR_DOWN);
-    delay(10);
+    delay(500);
     setCollectorTo(COLLECTOR_DROP);
-    delay(10);
+    delay(500);
     setCollectorTo(COLLECTOR_TOP);
-    delay(10);
+    delay(500);
     setCollectorTo(COLLECTOR_DOWN);
-    delay(10);
+    delay(500);
   }
   
-  delay(1000);
+  delay(500);
   
   LCD.print("Testing");
   LCD.setCursor(0,1); LCD.print("Retriever");
   
   setRetrieverTo(RETRIEVER_EXTEND);
-  delay(1000);
+  delay(500);
   setRetrieverTo(RETRIEVER_WITHDRAWN);
-  delay(1000);
+  delay(500);
 }
 
 

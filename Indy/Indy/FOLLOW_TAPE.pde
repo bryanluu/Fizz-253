@@ -6,6 +6,9 @@ void readTape()
 
   kP = knob(6);
   kD = knob(7);
+
+//  leftSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);
+//  rightSpeed = (int)map(knob(7), 0, 1023, -1023, 1023);
 }
 
 void followTape()
