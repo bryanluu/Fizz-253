@@ -24,8 +24,8 @@ void checkOffHill()
   {
     if(millis() - startTime > DURATION)
     {
-      motor.speed(LEFT_MOTOR, 0);
-      motor.speed(RIGHT_MOTOR, 0);
+      motor.stop(LEFT_MOTOR);
+      motor.stop(RIGHT_MOTOR);
       collect();
       ChangeToState(FOLLOW_TAPE);
     }
@@ -57,8 +57,7 @@ double senseHeight()
 
 void calibrateHeight()
 {
-  motor.speed(LEFT_MOTOR, 0);
-  motor.speed(RIGHT_MOTOR, 0);
+  motor.stop_all();
   distance = senseHeight();
   if(distance < minDist || minDist == -1)
   {

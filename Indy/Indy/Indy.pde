@@ -63,9 +63,9 @@ RobotState lastState = INITIALIZING;
 #define ZIPLINE_DOWN_DELAY (5)
 
 //LCD
-#define LCD_FREQ (100)
-#define LCD_STATE_FREQ (3000)
-#define LCD_STATE_DUR (500)
+#define LCD_FREQ (1000)
+#define LCD_STATE_FREQ (100000)
+#define LCD_STATE_DUR (10000)
 
 //====================VARIABLES=======================
 
@@ -105,7 +105,7 @@ double beacon_kP = 0;
 double beacon_kD = 0;
 
 // LCD
-int LCDcounter = 0;
+long LCDcounter = 0;
 
 
 //============================================================
@@ -155,15 +155,11 @@ void setup()
 
 void loop() 
 {
-  baseSpeed = FLAT_SPEED;
-  readTape();
-  followTape();
   switch (currentState)
   {
       //======================
     case INITIALIZING:
-      motor.speed(LEFT_MOTOR, 0);
-      motor.speed(RIGHT_MOTOR, 0);
+      motor.stop_all();
       if(startbutton())
       {
         ChangeToState(FOLLOW_TAPE);
@@ -207,9 +203,7 @@ void loop()
       break;
       //======================
     case TEST:
-      testMotors();
-      testCollectorArm();
-      ChangeToState(lastState);
+      test();
       break;
       //======================
     case MENU:

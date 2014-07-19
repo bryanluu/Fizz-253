@@ -1,70 +1,24 @@
 /*This state is for testing TINAH and the general systems of INDY*/
-
-void testMotors()
+void test()
 {
-  motor.speed(LEFT_MOTOR, 0);
-  motor.speed(RIGHT_MOTOR, 0);
+  leftSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);  
+  rightSpeed = (int)map(knob(7), 0, 1023, -1023, 1023);
   
-  delay(500);
-  LCD.clear();
-  LCD.home();
-  LCD.print("Testing Motors");
+  leftSpeed = constrain(leftSpeed, -1023, 1023);
+  rightSpeed = constrain(rightSpeed, -1023, 1023);
   
+  motor.speed(LEFT_MOTOR, leftSpeed);
+  motor.speed(RIGHT_MOTOR, rightSpeed);
   
-  delay(500);
-  
-  motor.speed(LEFT_MOTOR, 1023);
-  motor.speed(RIGHT_MOTOR, 1023);
-  
-  delay(500);
-  
-  motor.speed(LEFT_MOTOR, -1023);
-  motor.speed(RIGHT_MOTOR, -1023);
-  
-  delay(500);
-  
-  motor.speed(LEFT_MOTOR, 0);
-  motor.speed(RIGHT_MOTOR, 0);
+//  if(startbutton())
+//  {
+//    digitalWrite(HIGH);
+//  }
 }
 
-void testCollectorArm()
+void testLCD()
 {
-  
-  delay(500);
-  
-  LCD.clear();
-  LCD.home();
-  LCD.print("Testing");
-  LCD.setCursor(0,1); LCD.print("Collector");
-  
-  delay(500);
-  
-  if(digitalRead(COLLECTOR_PIN) == HIGH)
-  {
-    LCD.print("Collector");
-    LCD.setCursor(0,1); LCD.print("Not Connected!");
-  }
-  else
-  {
-    setCollectorTo(COLLECTOR_DOWN);
-    delay(500);
-    setCollectorTo(COLLECTOR_DROP);
-    delay(500);
-    setCollectorTo(COLLECTOR_TOP);
-    delay(500);
-    setCollectorTo(COLLECTOR_DOWN);
-    delay(500);
-  }
-  
-  delay(500);
-  
-  LCD.print("Testing");
-  LCD.setCursor(0,1); LCD.print("Retriever");
-  
-  setRetrieverTo(RETRIEVER_EXTEND);
-  delay(500);
-  setRetrieverTo(RETRIEVER_WITHDRAWN);
-  delay(500);
+  LCD.print((int)leftSpeed);
+  LCD.setCursor(5,0);LCD.print((int)rightSpeed);
 }
-
 
