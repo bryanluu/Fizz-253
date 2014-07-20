@@ -62,3 +62,4 @@ void ziplineLCD()
   LCD.print("Zip Speed: ");
   LCD.setCursor(0,1);LCD.print(zipArmSpeed);
 }
+

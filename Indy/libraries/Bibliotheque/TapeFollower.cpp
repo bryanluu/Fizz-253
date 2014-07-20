@@ -1,9 +1,10 @@
 #include "TapeFollower.h"
 #include "StandardCalc.h"
 
-TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output)
+TapeFollower::TapeFollower(int* leftInputVar, int* midInputVar, int* rightInputVar, double* output)
 {
 	leftInput = leftInputVar;
+	midInput = midInputVar;
 	rightInput = rightInputVar;
 	Output = output;
 
@@ -23,32 +24,8 @@ TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output
 
     THRESHOLD = 250;
     LeftOffset = 0;
-    RightOffset = 50;
-}
-
-TapeFollower::TapeFollower(int* leftInputVar, int* rightInputVar, double* output, double newThreshold, double newLeftOffset, double newRightOffset)
-{
-	leftInput = leftInputVar;
-	rightInput = rightInputVar;
-	Output = output;
-    
-	fixedSampleRate = false;
-    
-	lastTime = millis();
-	lastError = 0;
-	error = 0;
-	lastExtremeError = 0;
-    
-	outMax = 100;
-	outMin = -100;
-    
-	kp = new double(0);
-	ki = new double(0);
-	kd = new double(0);
-    
-    THRESHOLD = newThreshold;
-    LeftOffset = newLeftOffset;
-    RightOffset = newRightOffset;
+    MidOffset = 0;
+    RightOffset = 0;
 }
 
 double TapeFollower::Compute()
@@ -85,7 +62,7 @@ void TapeFollower::updateOldData()
 	lastError3 = lastError2;
 	lastError2 = lastError;
 	lastError = error;
-	if (error == -2 || error == 2)
+	if (error == -3 || error == 3)
 	{
 		lastExtremeError = error;
 	}
@@ -106,18 +83,26 @@ double TapeFollower::calculateError()
 	{
 		error = -1;
 	}
-	else if (tooMuchOnLeft())
+	else if (moreLeft())
 	{
 		error = -2;
 	}
-	else if (tooMuchOnRight())
+	else if (moreRight())
 	{
 		error = 2;
 	}
-	else if (missedState())
+	else if (tooMuchOnLeft())
 	{
-		error = -lastExtremeError;
+		error = -3;
 	}
+	else if (tooMuchOnRight())
+	{
+		error = 3;
+	}
+	// else if (missedState())
+	// {
+	// 	error = -lastExtremeError;
+	// }
 	return error;
 }
 
@@ -170,22 +155,27 @@ void TapeFollower::SetThreshold(double newThreshold)
     THRESHOLD = newThreshold;
 }
 
-void TapeFollower::SetOffsets(double left, double right)
+void TapeFollower::SetOffsets(double left, double mid, double right)
 {
     LeftOffset = left;
+    MidOffset = mid;
     RightOffset = right;
 }
 
-bool TapeFollower::goingStraight() { return (*leftInput >= THRESHOLD + LeftOffset) && (*rightInput >= THRESHOLD + RightOffset); }
+bool TapeFollower::goingStraight() { return  (*leftInput < THRESHOLD + LeftOffset) && (*midInput >= THRESHOLD + MidOffset) && (*rightInput < THRESHOLD + RightOffset); }
 
-bool TapeFollower::slightlyLeft() { return ((*leftInput < THRESHOLD + LeftOffset) && (*rightInput >= THRESHOLD + RightOffset)); }
+bool TapeFollower::slightlyLeft() { return (*leftInput < THRESHOLD + LeftOffset) && (*midInput >= THRESHOLD + MidOffset) && (*rightInput >= THRESHOLD + RightOffset); }
 
-bool TapeFollower::slightlyRight() { return ((*leftInput >= THRESHOLD + LeftOffset) && (*rightInput < THRESHOLD + RightOffset)); }
+bool TapeFollower::slightlyRight() { return (*leftInput >= THRESHOLD + LeftOffset) && (*midInput >= THRESHOLD + MidOffset) && (*rightInput < THRESHOLD + RightOffset); }
 
-bool TapeFollower::offTape() { return ((*leftInput < THRESHOLD + LeftOffset) && (*rightInput < THRESHOLD + RightOffset)); }
+bool TapeFollower::moreLeft() { return (*leftInput < THRESHOLD + LeftOffset) && (*midInput < THRESHOLD + MidOffset) && (*rightInput >= THRESHOLD + RightOffset); }
 
-bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError > 0); }
+bool TapeFollower::moreRight() { return (*leftInput >= THRESHOLD + LeftOffset) && (*midInput < THRESHOLD + MidOffset) && (*rightInput < THRESHOLD + RightOffset); }
 
-bool TapeFollower::tooMuchOnLeft() { return offTape() && (lastError < 0); }
+bool TapeFollower::offTape() { return (*leftInput < THRESHOLD + LeftOffset) && (*midInput < THRESHOLD + MidOffset) && (*rightInput < THRESHOLD + RightOffset); }
+
+bool TapeFollower::tooMuchOnRight() { return offTape() && (lastError > 0) && (lastError2 > 0); }
+
+bool TapeFollower::tooMuchOnLeft() { return offTape() && (lastError < 0) && (lastError2 < 0); }
 
 bool TapeFollower::missedState() {return offTape() && (lastError == 0); }

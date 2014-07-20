@@ -28,6 +28,7 @@ void printLCD()
         LCD.print("Press START");
         LCD.setCursor(0,1);
         LCD.print("to begin...");
+//        LCD.print(LCDcounter);
         break;
       case FOLLOW_TAPE:
         tapeFollowingLCD();
@@ -35,7 +36,8 @@ void printLCD()
       case COLLECT_ITEM:
         break;
       case CLIMB_HILL:
-        tapeFollowingLCD();
+//        tapeFollowingLCD();
+        hill_LCD();
         break;
       case ROCKPIT:
         rockpit_LCD();
@@ -44,6 +46,9 @@ void printLCD()
         ziplineLCD();
         break;
       case FINISHED:
+        break;
+      case TEST:
+        testLCD();
         break;
       case MENU:
         menuLCD();
@@ -55,3 +60,4 @@ void printLCD()
 
   LCDcounter++;
 }
+

@@ -11,8 +11,7 @@ class TapeFollower
 
 	//commonly used functions **************************************************************************
 	// Takes a pointer to the two sensor values, adjusts the Output pointer
-	TapeFollower(int* leftInputVar, int* rightInputVar, double* output);
-    TapeFollower(int* leftInputVar, int* rightInputVar, double* output, double threshold, double leftOffset, double rightOffset);
+	TapeFollower(int* leftInputVar, int* midInputVar, int* rightInputVar, double* output);
 
 	double Compute();                       // * performs the PID calculation.  it should be
 	//   called every time loop() cycles. ON/OFF and
@@ -42,7 +41,7 @@ class TapeFollower
     
     void SetThreshold(double newThresh);
     
-    void SetOffsets(double left, double right);
+    void SetOffsets(double left, double mid, double right);
 
 	//Display functions ****************************************************************
 	double GetKp();
@@ -54,8 +53,7 @@ class TapeFollower
 private:
 #endif
 	double THRESHOLD;
-    double LeftOffset;
-    double RightOffset;
+    double LeftOffset, MidOffset, RightOffset;
 
 	double* kp;                  // * (P)roportional Tuning Parameter
 	double* ki;                  // * (I)ntegral Tuning Parameter
@@ -64,7 +62,7 @@ private:
 	unsigned long lastTime;
 	double ITerm, PTerm, DTerm, lastInput;
 
-	int *leftInput, *rightInput;
+	int *leftInput, *midInput, *rightInput;
 	double *Output;
 
 	double error, lastError, lastError2, lastError3, lastExtremeError;
@@ -84,6 +82,8 @@ private:
 	bool goingStraight();
 	bool slightlyLeft();
 	bool slightlyRight();
+	bool moreLeft();
+	bool moreRight();
 	bool tooMuchOnLeft();
 	bool tooMuchOnRight();
 	bool offTape();

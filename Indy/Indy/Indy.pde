@@ -1,4 +1,4 @@
- //253 Libraries
+//253 Libraries
 #include <motor.h>
 #include <phys253.h>
 #include <Servo253.h>
@@ -9,39 +9,48 @@
 #include <TapeFollower.h>
 #include <IndyPID.h>
 
-enum RobotState {INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ZIPLINE, FINISHED, MENU};
+enum RobotState {
+  INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ZIPLINE, FINISHED, TEST, MENU
+};
 
 RobotState currentState = INITIALIZING;
-RobotState lastState = INITIALIZING;
+RobotState lastState = INITIALIZING;  
 
 
 // ==================PIN SETTINGS====================
-#define LEFT_QRD_PIN 1
-#define RIGHT_QRD_PIN 0
-#define LEFT_MOTOR 0
-#define RIGHT_MOTOR 1
+//Analog
+#define LEFT_QRD_PIN 0
+#define MID_QRD_PIN 1
+#define RIGHT_QRD_PIN 2
+#define LEFT_IR 3
+#define RIGHT_IR 4
+
+//Motors
+#define RIGHT_MOTOR 0
+#define LEFT_MOTOR 1
+
+//Servos
 #define MAGNET_SERVO 0
 #define COLLECTOR_SERVO 1
-#define COLLECTOR_PIN 0
-#define EXTERNAL_INTERRUPT0 0
-#define TRIGGER 8
-#define ECHO 7
-#define LEFT_IR 2
-#define RIGHT_IR 3
 #define ZIPLINE_ARM 2
+
+//Digital
+#define COLLECTOR_PIN 0
 #define ZIPLINE_MISS 1
 #define ZIPLINE_HIT 2
+#define ECHO 7
+#define TRIGGER 8
 
 //====================SETTINGS========================
-#define FLAT_SPEED (280)
+#define FLAT_SPEED (500)
 #define HILL_SPEED (700)
-#define ROCK_SPEED (500)
+#define ROCK_SPEED (300)
 
 //level sensor
 #define DANGER_HEIGHT (35) // max distance in centimeters
-#define ON_HILL  (3.25) // on hill threshold
-#define OFF_HILL (5.5) // off hill threshold
-#define DURATION (850.0) //1000 ms
+#define ON_HILL  (2.5) // on hill threshold
+#define OFF_HILL (6.5) // off hill threshold
+#define DURATION (300) //ms
 
 //collector arm
 #define RETRIEVER_WITHDRAWN (10)
@@ -54,9 +63,9 @@ RobotState lastState = INITIALIZING;
 #define ZIPLINE_DOWN_DELAY (5)
 
 //LCD
-#define LCD_FREQ (8)
-#define LCD_STATE_FREQ (100)
-#define LCD_STATE_DUR (5)
+#define LCD_FREQ (1000)
+#define LCD_STATE_FREQ (100000)
+#define LCD_STATE_DUR (10000)
 
 //====================VARIABLES=======================
 
@@ -71,10 +80,11 @@ double steerOutput = 0;
 //TAPEFOLLOWING
 
 int leftQRD = 0;
+int midQRD = 0;
 int rightQRD = 0;
 
 
-TapeFollower controller(&leftQRD, &rightQRD, &steerOutput);
+TapeFollower controller(&leftQRD, &midQRD, &rightQRD, &steerOutput);
 
 double kP = 0;
 double kD = 0;
@@ -82,10 +92,10 @@ double kD = 0;
 
 // HEIGHT SENSOR
 
-double duration, distance, startTime, endTime; // can be found in HILL.pde
+double duration, distance; // can be found in HILL.pde
 
 //This is a one-shot variable -> it only happens once in the runtime.
-boolean passedHill = false;
+boolean passedHill = true;
 
 //ROCKPIT BEACON SENSING
 double leftIR = 0;
@@ -95,7 +105,7 @@ double beacon_kP = 0;
 double beacon_kD = 0;
 
 // LCD
-int LCDcounter = 0;
+long LCDcounter = 0;
 
 
 //============================================================
@@ -103,41 +113,40 @@ int LCDcounter = 0;
 //============================================================
 void setup() 
 {
-// intialize ports
+  // intialize ports
   portMode(0, INPUT) ;      	 	
   portMode(1, OUTPUT) ;
-  
-// initialize pins
+
+  // initialize pins
   pinMode(TRIGGER, OUTPUT);
   pinMode(ECHO, INPUT);
-  
-// initialize LCD screen on TINAH
+
+  // initialize LCD screen on TINAH
   LCD.clear();
   LCD.home();
-// attach the servo motors	   	
+  // attach the servo motors	   	
   RCServo0.attach(RCServo0Output) ;	
   RCServo1.attach(RCServo1Output) ;	
   RCServo2.attach(RCServo2Output) ;	
 
-// initialize servo positions
+  // initialize servo positions
   setRetrieverTo(RETRIEVER_WITHDRAWN);
   setCollectorTo(COLLECTOR_DOWN);
 
-// something that bryan's libraries need
+  // something that bryan's libraries need
   controller.attach_Kp_To(&kP);
   controller.attach_Kd_To(&kD);
   controller.SetThreshold(70);
-  controller.SetOffsets(0, 0);
-  
+  controller.SetOffsets(0, 0, 0);
+
   beaconAim.attach_Kp_To(&beacon_kP);
   beaconAim.attach_Kd_To(&beacon_kD);
 
-// initialize the serial port
-  Serial.begin(9600);
+  // initialize the serial port
+  //  Serial.begin(9600);
 
-// attach the interrupts
+  // attach the interrupts
   //attachInterrupt(EXTERNAL_INTERRUPT0, collectArtifact, FALLING);
-
 }
 
 //============================================================
@@ -146,13 +155,11 @@ void setup()
 
 void loop() 
 {
-  baseSpeed = FLAT_SPEED;
-  readTape();
-  followTape();
   switch (currentState)
   {
       //======================
     case INITIALIZING:
+      motor.stop_all();
       if(startbutton())
       {
         ChangeToState(FOLLOW_TAPE);
@@ -176,10 +183,11 @@ void loop()
       break;
       //======================
     case CLIMB_HILL:
-      baseSpeed = HILL_SPEED;
-      readTape();
-      followTape();
-      checkOffHill();
+//      baseSpeed = HILL_SPEED;
+//      readTape();
+//      followTape();
+//      checkOffHill();
+      calibrateHeight();
       break;
       //======================
     case ROCKPIT:
@@ -187,11 +195,15 @@ void loop()
       break;
       //======================
     case ZIPLINE:
-//      swingZiplineArm();
+      //      swingZiplineArm();
       testZipArm();
       break;
       //======================
     case FINISHED:
+      break;
+      //======================
+    case TEST:
+      test();
       break;
       //======================
     case MENU:
@@ -200,7 +212,7 @@ void loop()
     default:
       break;
   }
-  
+
   //Check for Stopbutton to trigger the MENU
   if(stopbutton())
   {
@@ -208,19 +220,15 @@ void loop()
     {
       ChangeToState(MENU);
     }
-    else
-    {
-      ChangeToState(lastState);
-    }
   }
 
   printLCD();
-  printDebug();
+//  printDebug();
 }
 
 /* Changes the current State to the specified state (as one of the enums), updating the last state.
-However, state will remain the same if newState = currentState. Also, lastState does not update if
-currentState == MENU (to prevent history errors).*/
+ However, state will remain the same if newState = currentState. Also, lastState does not update if
+ currentState == MENU (to prevent history errors).*/
 void ChangeToState(int newStateAsInt)
 {
   RobotState newState = (RobotState)newStateAsInt;
@@ -229,7 +237,7 @@ void ChangeToState(int newStateAsInt)
     if(currentState != MENU)
     {
       lastState = currentState;
-      
+
       resetZipline();
     }
     currentState = newState;
@@ -258,6 +266,8 @@ String GetStateName(int stateAsInt)
       return "ZIP";
     case FINISHED:
       return "FIN";
+    case TEST:
+      return "TEST";
     case MENU:
       return "MENU";
     default:
@@ -265,3 +275,5 @@ String GetStateName(int stateAsInt)
   }
   return name;
 }
+
+

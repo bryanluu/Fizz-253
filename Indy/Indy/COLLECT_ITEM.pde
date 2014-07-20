@@ -10,9 +10,8 @@ void checkCollectorArm()
 
 void collect()
 {
-  motor.speed(LEFT_MOTOR, 0);
-  motor.speed(RIGHT_MOTOR, 0);
-  delay(200);
+  motor.stop_all();
+//  delay(200);
   
   int i = 0;
   delay(50);
@@ -42,5 +41,6 @@ void setCollectorTo(int angle)
 {
   RCServo1.write(angle); 
 }
+
 
 
