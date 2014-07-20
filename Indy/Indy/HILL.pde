@@ -1,6 +1,26 @@
 int startTime = 0;
 double minDist = -1;
 double maxDist = -1;
+boolean CH_init = false;
+
+void CH_setup()
+{
+  if(!CH_init)
+  {
+    CH_init = true;
+    minDist = -1;
+    maxDist = -1;
+    startTime = 0;
+    passedHill = false;
+  }
+}
+
+void CH_exit()
+{
+  CH_init = false;
+}
+
+///===========MAIN CODE
 
 void checkOnHill()
 {

@@ -1,8 +1,26 @@
 RobotState menuChoice;
+boolean MENU_init = false;
+
+void MENU_setup()
+{
+  if(!MENU_init)
+  {
+    MENU_init = true;
+    motor.stop_all();
+    delay(500);
+  }
+}
+
+void MENU_exit()
+{
+  MENU_init = false;
+  delay(500);
+}
+
+///===========MAIN CODE
 
 void updateMenu()
 {
-  motor.stop_all();
   
   menuChoice = (RobotState)((int)(map(knob(6), 0, 1023, 0, MENU)));
   
@@ -12,6 +30,7 @@ void updateMenu()
   {
     ChangeToState(menuChoice);
   }
+  
 }
 
 void menuLCD()

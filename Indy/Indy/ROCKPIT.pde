@@ -1,3 +1,25 @@
+boolean RP_init = false;
+  
+void RP_setup()
+{
+  if(!RP_init)
+  {
+    RP_init = true;
+    
+    //INITIALIZATION
+    
+    baseSpeed = ROCK_SPEED;
+  }
+}
+
+void RP_exit()
+{
+  RP_init = false;
+  baseSpeed = 0;
+}
+
+///===========MAIN CODE
+
 void lookForBeacon()
 {
   leftIR = analogRead(LEFT_IR);

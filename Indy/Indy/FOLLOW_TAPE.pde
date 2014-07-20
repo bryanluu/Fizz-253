@@ -1,3 +1,25 @@
+boolean FT_init = false;
+  
+void FT_setup()
+{
+  if(!FT_init)
+  {
+    FT_init = true;
+    
+    //INITIALIZATION
+    
+    baseSpeed = FLAT_SPEED;
+  }
+}
+
+void FT_exit()
+{
+  FT_init = false;
+  baseSpeed = 0;
+}
+
+///===========MAIN CODE
+
 void readTape()
 {
   leftQRD = analogRead(LEFT_QRD_PIN);

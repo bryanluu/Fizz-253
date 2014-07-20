@@ -226,24 +226,6 @@ void loop()
 //  printDebug();
 }
 
-/* Changes the current State to the specified state (as one of the enums), updating the last state.
- However, state will remain the same if newState = currentState. Also, lastState does not update if
- currentState == MENU (to prevent history errors).*/
-void ChangeToState(int newStateAsInt)
-{
-  RobotState newState = (RobotState)newStateAsInt;
-  if(newState != currentState)
-  {
-    if(currentState != MENU)
-    {
-      lastState = currentState;
-
-      resetZipline();
-    }
-    currentState = newState;
-    LCDcounter = LCD_STATE_FREQ; //so that it displays the new state first
-  }
-}
 
 /* Returns a string representation of the state. Input must be the a valid RobotState*/
 String GetStateName(int stateAsInt)
@@ -277,3 +259,66 @@ String GetStateName(int stateAsInt)
 }
 
 
+/* Changes the current State to the specified state (as one of the enums), updating the last state.
+ However, state will remain the same if newState = currentState. Also, lastState does not update if
+ currentState == MENU (to prevent history errors). 
+ 
+ Also, as it changes states, it runs any necessary setup and exit functions.*/
+void ChangeToState(int newStateAsInt)
+{
+  RobotState newState = (RobotState)newStateAsInt;
+  if(newState != currentState)
+  {
+    if(currentState != MENU)
+    {
+      lastState = currentState;
+    }
+    
+    SetupState(newState);
+    ExitState(currentState);
+    
+    currentState = newState;
+    LCDcounter = LCD_STATE_FREQ; //so that it displays the new state first
+  }
+}
+
+
+void SetupState(int stateAsInt)
+{
+  RobotState state = (RobotState)stateAsInt;
+  switch (state)
+  {
+    case FOLLOW_TAPE:
+      FT_setup();
+      break;
+    case CLIMB_HILL:
+      CH_setup();
+      break;
+    case MENU:
+      MENU_setup();
+      break;
+    case ROCKPIT:
+      RP_setup();
+      break;
+  }
+}
+
+void ExitState(int stateAsInt)
+{
+  RobotState state = (RobotState)stateAsInt;
+  switch (state)
+  {
+    case FOLLOW_TAPE:
+      FT_exit();
+      break;
+    case CLIMB_HILL:
+      CH_exit();
+      break;
+    case MENU:
+      MENU_exit();
+      break;
+    case ROCKPIT:
+      RP_setup();
+      break;
+  }
+}

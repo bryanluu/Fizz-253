@@ -1,5 +1,19 @@
 int zipArmSpeed;
-boolean initialized = false;
+boolean ZIP_init = false;
+
+void ZIP_setup()
+{
+  if(!ZIP_init)
+  {
+    ZIP_init = true;
+    zipArmSpeed = 100;
+  }
+}
+
+void ZIP_exit()
+{
+  ZIP_init = false;
+}
 
 void testZipArm()
 {
@@ -7,19 +21,8 @@ void testZipArm()
   motor.speed(ZIPLINE_ARM, zipArmSpeed);
 }
 
-void resetZipline()
-{
-  initialized = false;
-}
-
 void swingZiplineArm()
 {
-  if(!initialized)
-  {
-    initialized = true;
-    zipArmSpeed = 100;
-  }
-  
   if(ziplineHit())
   {
     motor.speed(ZIPLINE_ARM, 0);
