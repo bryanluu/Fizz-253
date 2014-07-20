@@ -7,14 +7,14 @@ void MENU_setup()
   {
     MENU_init = true;
     motor.stop_all();
-    delay(500);
+    delay(200);
   }
 }
 
 void MENU_exit()
 {
   MENU_init = false;
-  delay(500);
+  delay(200);
 }
 
 ///===========MAIN CODE

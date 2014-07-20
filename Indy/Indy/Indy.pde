@@ -203,7 +203,7 @@ void loop()
       break;
       //======================
     case TEST:
-      test();
+      updateTest();
       break;
       //======================
     case MENU:
@@ -300,6 +300,9 @@ void SetupState(int stateAsInt)
     case ROCKPIT:
       RP_setup();
       break;
+    case TEST:
+      TEST_setup();
+      break;
   }
 }
 
@@ -318,7 +321,10 @@ void ExitState(int stateAsInt)
       MENU_exit();
       break;
     case ROCKPIT:
-      RP_setup();
+      RP_exit();
+      break;
+    case TEST:
+      TEST_exit();
       break;
   }
 }
