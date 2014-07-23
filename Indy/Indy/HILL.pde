@@ -3,6 +3,7 @@ double minDist = -1;
 double maxDist = -1;
 boolean CH_init = false;
 
+
 void CH_setup()
 {
   if(!CH_init)
@@ -12,12 +13,16 @@ void CH_setup()
     maxDist = -1;
     startTime = 0;
     passedHill = false;
+    LCD_FREQ = 300;
+    baseSpeed = HILL_SPEED;
   }
 }
 
 void CH_exit()
 {
   CH_init = false;
+  LCD_FREQ = LCD_FREQ_DEFAULT;
+  baseSpeed = FLAT_SPEED;
 }
 
 ///===========MAIN CODE
@@ -28,6 +33,8 @@ void checkOnHill()
   if(distance <= ON_HILL)
   {
     ChangeToState(CLIMB_HILL);
+    
+    
   }
 }
 

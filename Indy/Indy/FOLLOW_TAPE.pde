@@ -7,7 +7,7 @@ void FT_setup()
     FT_init = true;
     
     //INITIALIZATION
-    
+    LCD_FREQ = 300;
     baseSpeed = FLAT_SPEED;
   }
 }
@@ -15,6 +15,7 @@ void FT_setup()
 void FT_exit()
 {
   FT_init = false;
+  LCD_FREQ = LCD_FREQ_DEFAULT;
   baseSpeed = 0;
 }
 

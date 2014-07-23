@@ -56,6 +56,16 @@ void testMotors()
   leftSpeed = constrain(leftSpeed, -1023, 1023);
   rightSpeed = constrain(rightSpeed, -1023, 1023);
   
+  if(abs(leftSpeed) < 20)
+  {
+    leftSpeed = 0;
+  }
+  
+  if(abs(rightSpeed) < 20)
+  {
+    rightSpeed = 0;
+  }
+  
   motor.speed(LEFT_MOTOR, leftSpeed);
   motor.speed(RIGHT_MOTOR, rightSpeed);
 }

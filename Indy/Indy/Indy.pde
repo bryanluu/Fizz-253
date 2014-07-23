@@ -42,13 +42,13 @@ RobotState lastState = INITIALIZING;
 #define TRIGGER 8
 
 //====================SETTINGS========================
-#define FLAT_SPEED (500)
-#define HILL_SPEED (700)
+#define FLAT_SPEED (280)
+#define HILL_SPEED (720)
 #define ROCK_SPEED (300)
 
 //level sensor
 #define DANGER_HEIGHT (35) // max distance in centimeters
-#define ON_HILL  (2.5) // on hill threshold
+#define ON_HILL  (0.5) // on hill threshold
 #define OFF_HILL (6.5) // off hill threshold
 #define DURATION (300) //ms
 
@@ -63,9 +63,10 @@ RobotState lastState = INITIALIZING;
 #define ZIPLINE_DOWN_DELAY (5)
 
 //LCD
-#define LCD_FREQ (1000)
-#define LCD_STATE_FREQ (100000)
-#define LCD_STATE_DUR (10000)
+long LCD_FREQ=(1000);
+#define LCD_STATE_FREQ (LCD_FREQ*100)
+#define LCD_STATE_DUR (LCD_FREQ*10)
+#define LCD_FREQ_DEFAULT (1000);
 
 //====================VARIABLES=======================
 
@@ -171,10 +172,10 @@ void loop()
       readTape();
       followTape();
       checkCollectorArm();
-      if(!passedHill)
-      {
-        checkOnHill();
-      }
+//      if(!passedHill)
+//      {
+//        checkOnHill();
+//      }
       break;
       //======================
     case COLLECT_ITEM:
@@ -183,7 +184,6 @@ void loop()
       break;
       //======================
     case CLIMB_HILL:
-//      baseSpeed = HILL_SPEED;
 //      readTape();
 //      followTape();
 //      checkOffHill();
