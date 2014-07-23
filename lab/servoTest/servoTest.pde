@@ -1,4 +1,4 @@
-#include <phys253.h>       //   ***** from 253 template file
+       #include <phys253.h>       //   ***** from 253 template file
 #include <LiquidCrystal.h> //   ***** from 253 template file
 #include <Servo253.h>      //   ***** from 253 template file 
 
@@ -49,7 +49,7 @@ void pickUp(){
 
     RCServo2.write(123);
     delay(2000);
-    RCServo2.write(10);
+    RCServo2.write(18);
     delay(2000);   
   
   for(i=145;i>=0;i--){

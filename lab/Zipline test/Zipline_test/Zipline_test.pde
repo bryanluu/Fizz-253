@@ -40,14 +40,24 @@ void loop()
     }
     count++;
 
-    //TODO: implement "miss" algorithm
+    // "miss" algorithm
     if (digitalRead(1) == LOW)
     {
+      
 
-//      motor.speed(2,0);
-//      motor.speed(2,400);
-//      delay(500);
-//      motor.speed(2,motorSpeed);
+      motor.speed(2,0);
+      motor.speed(2,700);
+      while(digitalRead(4) == HIGH)
+     {delay(15);}  
+      motor.speed(2,0);
+      
+      // reverse to get closer to zipline
+      // motor.speed(0,-500);
+      // motor.speed(1,-500);
+      
+      delay(2000);
+      
+      
     }
     
     // "hit"
@@ -63,23 +73,33 @@ void loop()
      // retract servo, carabiner drops onto zipline
      RCServo2.write(90);
      delay(500);
-     
-     // INSERT WINCH MOTOR CODE HERE
-     winchSpeed = 700;
-     motor.speed(3,winchSpeed);
-     while(digitalRead(3) == HIGH)
-     {delay(15);}
-     motor.speed(3,0);
+  
      
      
      delay(500);
      // retract deployment arm
-     motor.speed(2,300);
+     motor.speed(2,700);
+     
+     
+     //start winching
+     winchSpeed = 700;
+     motor.speed(3,winchSpeed);
+     
      while(digitalRead(4) == HIGH)
      {delay(15);}
-     
+
+      
      // chill at the bottom
      motor.speed(2,0);
+     
+     
+        
+     // INSERT WINCH MOTOR CODE HERE
+
+     while(digitalRead(3) == HIGH)
+     {delay(15);}
+     motor.speed(3,0);
+    
      
      LCD.home();
      LCD.print("Start to reset..");
