@@ -25,7 +25,7 @@ void lookForBeacon()
   leftIR = analogRead(LEFT_IR);
   rightIR = analogRead(RIGHT_IR);
   
-  beacon_kP = knob(6);
+//  beacon_kP = knob(6);
   
   beaconAim.Compute();
 }

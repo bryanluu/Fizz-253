@@ -13,7 +13,7 @@ void CH_setup()
     maxDist = -1;
     startTime = 0;
     passedHill = false;
-    LCD_FREQ = 300;
+    LCD_FREQ = 100;
     baseSpeed = HILL_SPEED;
   }
 }

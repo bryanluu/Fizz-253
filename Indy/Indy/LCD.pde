@@ -50,6 +50,9 @@ void printLCD()
       case TEST:
         testLCD();
         break;
+      case SETTINGS:
+        settings_LCD();
+        break;
       case MENU:
         menuLCD();
         break;

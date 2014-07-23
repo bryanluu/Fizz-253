@@ -10,7 +10,7 @@
 #include <IndyPID.h>
 
 enum RobotState {
-  INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ZIPLINE, FINISHED, TEST, MENU
+  INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ZIPLINE, FINISHED, TEST, SETTINGS, MENU
 };
 
 RobotState currentState = INITIALIZING;
@@ -42,14 +42,14 @@ RobotState lastState = INITIALIZING;
 #define TRIGGER 8
 
 //====================SETTINGS========================
-#define FLAT_SPEED (280)
-#define HILL_SPEED (720)
-#define ROCK_SPEED (300)
+int FLAT_SPEED=(280);
+int HILL_SPEED=(720);
+int ROCK_SPEED=(300);
 
 //level sensor
 #define DANGER_HEIGHT (35) // max distance in centimeters
-#define ON_HILL  (0.5) // on hill threshold
-#define OFF_HILL (6.5) // off hill threshold
+double ON_HILL=(0.5); // on hill threshold
+double OFF_HILL=(6.5); // off hill threshold
 #define DURATION (300) //ms
 
 //collector arm
@@ -63,10 +63,10 @@ RobotState lastState = INITIALIZING;
 #define ZIPLINE_DOWN_DELAY (5)
 
 //LCD
-long LCD_FREQ=(1000);
-#define LCD_STATE_FREQ (LCD_FREQ*100)
+#define LCD_FREQ_DEFAULT (500);
+long LCD_FREQ=LCD_FREQ_DEFAULT;
+#define LCD_STATE_FREQ (LCD_FREQ*200)
 #define LCD_STATE_DUR (LCD_FREQ*10)
-#define LCD_FREQ_DEFAULT (1000);
 
 //====================VARIABLES=======================
 
@@ -87,7 +87,7 @@ int rightQRD = 0;
 
 TapeFollower controller(&leftQRD, &midQRD, &rightQRD, &steerOutput);
 
-double kP = 0;
+double kP = 450;
 double kD = 0;
 
 
@@ -206,6 +206,10 @@ void loop()
       updateTest();
       break;
       //======================
+    case SETTINGS:
+      updateSettings();
+      break;
+      //======================
     case MENU:
       updateMenu();
       break;
@@ -250,6 +254,8 @@ String GetStateName(int stateAsInt)
       return "FIN";
     case TEST:
       return "TEST";
+    case SETTINGS:
+      return "SETTINGS";
     case MENU:
       return "MENU";
     default:
@@ -303,6 +309,9 @@ void SetupState(int stateAsInt)
     case TEST:
       TEST_setup();
       break;
+    case SETTINGS:
+      SETTINGS_setup();
+      break;
   }
 }
 
@@ -325,6 +334,9 @@ void ExitState(int stateAsInt)
       break;
     case TEST:
       TEST_exit();
+      break;
+    case SETTINGS:
+      SETTINGS_exit();
       break;
   }
 }

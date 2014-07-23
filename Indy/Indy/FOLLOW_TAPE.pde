@@ -7,7 +7,7 @@ void FT_setup()
     FT_init = true;
     
     //INITIALIZATION
-    LCD_FREQ = 300;
+    LCD_FREQ = 100;
     baseSpeed = FLAT_SPEED;
   }
 }
@@ -27,8 +27,8 @@ void readTape()
   midQRD = analogRead(MID_QRD_PIN);
   rightQRD = analogRead(RIGHT_QRD_PIN);
 
-  kP = knob(6);
-  kD = knob(7);
+//  kP = knob(6);
+//  kD = knob(7);
 
 //  leftSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);
 //  rightSpeed = (int)map(knob(7), 0, 1023, -1023, 1023);
