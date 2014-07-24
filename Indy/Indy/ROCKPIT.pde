@@ -47,7 +47,7 @@ void rockpit_LCD()
   LCD.print((int)beaconAim.GetError());
   LCD.setCursor(5,0);LCD.print((int)leftIR);
   LCD.setCursor(11,0);LCD.print((int)rightIR);
-  LCD.setCursor(0,1);LCD.print("L: ");LCD.print(leftSpeed);
-  LCD.setCursor(8,1);LCD.print("R: ");LCD.print(rightSpeed);
+  LCD.setCursor(0,1);LCD.print("L: ");LCD.print((int)leftSpeed);
+  LCD.setCursor(8,1);LCD.print("R: ");LCD.print((int)rightSpeed);
 }
 

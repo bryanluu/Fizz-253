@@ -47,24 +47,24 @@ int HILL_SPEED=(720);
 int ROCK_SPEED=(300);
 
 //level sensor
-#define DANGER_HEIGHT (35) // max distance in centimeters
+double DANGER_HEIGHT=(35); // max distance in centimeters
 double ON_HILL=(0.5); // on hill threshold
 double OFF_HILL=(4.2); // off hill threshold
 #define DURATION (800) //ms
 
 //collector arm
-#define RETRIEVER_WITHDRAWN (10)
-#define RETRIEVER_EXTEND (145)
-#define COLLECTOR_DOWN (115)
-#define COLLECTOR_DROP (123)
-#define COLLECTOR_TOP (10)
+int RETRIEVER_WITHDRAWN=(10);
+int RETRIEVER_EXTEND=(145);
+int COLLECTOR_DOWN=(115);
+int COLLECTOR_DROP=(123);
+int COLLECTOR_TOP=(10);
 
 //zipline arm
 #define ZIPLINE_DOWN_DELAY (5)
 
 //LCD
 #define LCD_FREQ_DEFAULT (500);
-long LCD_FREQ=LCD_FREQ_DEFAULT;
+unsigned long LCD_FREQ=LCD_FREQ_DEFAULT;
 #define LCD_STATE_FREQ (LCD_FREQ*200)
 #define LCD_STATE_DUR (LCD_FREQ*10)
 
@@ -103,10 +103,11 @@ double leftIR = 0;
 double rightIR = 0;
 PID beaconAim(&leftIR, &rightIR, &steerOutput);
 double beacon_kP = 400;
+double beacon_kI = 0;
 double beacon_kD = 0;
 
 // LCD
-long LCDcounter = 0;
+unsigned long LCDcounter = 0;
 
 
 //============================================================
@@ -141,6 +142,7 @@ void setup()
   controller.SetOffsets(0, 0, 0);
 
   beaconAim.attach_Kp_To(&beacon_kP);
+  beaconAim.attach_Ki_To(&beacon_kI);
   beaconAim.attach_Kd_To(&beacon_kD);
 
   // initialize the serial port

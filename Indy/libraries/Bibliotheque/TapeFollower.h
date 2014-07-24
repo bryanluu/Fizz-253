@@ -49,6 +49,16 @@ class TapeFollower
 	double GetKd();
 	double GetError();
 
+	bool goingStraight();
+	bool slightlyLeft();
+	bool slightlyRight();
+	bool moreLeft();
+	bool moreRight();
+	bool tooMuchOnLeft();
+	bool tooMuchOnRight();
+	bool offTape();
+	bool missedState();
+
 #ifndef TESTING
 private:
 #endif
@@ -79,15 +89,7 @@ private:
 
 	void updateOldData();
 
-	bool goingStraight();
-	bool slightlyLeft();
-	bool slightlyRight();
-	bool moreLeft();
-	bool moreRight();
-	bool tooMuchOnLeft();
-	bool tooMuchOnRight();
-	bool offTape();
-	bool missedState();
+	
 };
 
 #endif
