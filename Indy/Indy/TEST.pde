@@ -50,8 +50,8 @@ void updateTest()
 
 void testMotors()
 {
-  leftSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);  
-  rightSpeed = (int)map(knob(7), 0, 1023, -1023, 1023);
+  leftSpeed = (int)map(knob(7), 0, 1023, -1023, 1023);  
+  rightSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);
   
   leftSpeed = constrain(leftSpeed, -1023, 1023);
   rightSpeed = constrain(rightSpeed, -1023, 1023);

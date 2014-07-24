@@ -42,15 +42,15 @@ RobotState lastState = INITIALIZING;
 #define TRIGGER 8
 
 //====================SETTINGS========================
-int FLAT_SPEED=(280);
+int FLAT_SPEED=(300);
 int HILL_SPEED=(720);
 int ROCK_SPEED=(300);
 
 //level sensor
 #define DANGER_HEIGHT (35) // max distance in centimeters
 double ON_HILL=(0.5); // on hill threshold
-double OFF_HILL=(6.5); // off hill threshold
-#define DURATION (300) //ms
+double OFF_HILL=(4.2); // off hill threshold
+#define DURATION (800) //ms
 
 //collector arm
 #define RETRIEVER_WITHDRAWN (10)
@@ -83,26 +83,26 @@ double steerOutput = 0;
 int leftQRD = 0;
 int midQRD = 0;
 int rightQRD = 0;
-
-
 TapeFollower controller(&leftQRD, &midQRD, &rightQRD, &steerOutput);
-
-double kP = 450;
+double kP = 300;
 double kD = 0;
 
 
 // HEIGHT SENSOR
 
 double duration, distance; // can be found in HILL.pde
+int hillCount = 0;
+double minDist = -1;
+double maxDist = -1;
 
 //This is a one-shot variable -> it only happens once in the runtime.
-boolean passedHill = true;
+boolean passedHill = false;
 
 //ROCKPIT BEACON SENSING
 double leftIR = 0;
 double rightIR = 0;
 PID beaconAim(&leftIR, &rightIR, &steerOutput);
-double beacon_kP = 0;
+double beacon_kP = 400;
 double beacon_kD = 0;
 
 // LCD
@@ -161,6 +161,7 @@ void loop()
       //======================
     case INITIALIZING:
       motor.stop_all();
+      passedHill = false; // Resets the Hill Pass flag when set back to INIT
       if(startbutton())
       {
         ChangeToState(FOLLOW_TAPE);
@@ -168,14 +169,13 @@ void loop()
       break;
       //======================
     case FOLLOW_TAPE:
-      baseSpeed = FLAT_SPEED;
       readTape();
       followTape();
       checkCollectorArm();
-//      if(!passedHill)
-//      {
-//        checkOnHill();
-//      }
+      if(!passedHill)
+      {
+        checkOnHill();
+      }
       break;
       //======================
     case COLLECT_ITEM:
@@ -184,10 +184,10 @@ void loop()
       break;
       //======================
     case CLIMB_HILL:
-//      readTape();
-//      followTape();
-//      checkOffHill();
-      calibrateHeight();
+      readTape();
+      followTape();
+      checkOffHill();
+//      calibrateHeight();
       break;
       //======================
     case ROCKPIT:
@@ -280,8 +280,9 @@ void ChangeToState(int newStateAsInt)
       lastState = currentState;
     }
     
-    SetupState(newState);
+    
     ExitState(currentState);
+    SetupState(newState);
     
     currentState = newState;
     LCDcounter = LCD_STATE_FREQ; //so that it displays the new state first

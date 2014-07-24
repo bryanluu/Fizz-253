@@ -1,8 +1,6 @@
-int startTime = 0;
-double minDist = -1;
-double maxDist = -1;
+unsigned long startTime = 0;
 boolean CH_init = false;
-
+unsigned long pulseStartTime = 0;
 
 void CH_setup()
 {
@@ -15,6 +13,13 @@ void CH_setup()
     passedHill = false;
     LCD_FREQ = 100;
     baseSpeed = HILL_SPEED;
+    
+//    motor.speed(LEFT_MOTOR, -100);
+//    motor.speed(RIGHT_MOTOR, -100);
+//    delay(100);
+//    
+//    motor.speed(LEFT_MOTOR, HILL_SPEED);
+//    motor.speed(RIGHT_MOTOR, HILL_SPEED);
   }
 }
 
@@ -29,22 +34,28 @@ void CH_exit()
 
 void checkOnHill()
 {
-  distance = senseHeight();
+  senseHeight();
   if(distance <= ON_HILL)
   {
+//    LCD.clear();
+//    LCD.home();
+//    LCD.print("HILL!");
+//    delay(500);
     ChangeToState(CLIMB_HILL);
-    
-    
+//    hillCount++;
   }
 }
 
 void checkOffHill()
 {
-  distance = senseHeight();
+  senseHeight();
   if(!passedHill && distance >= OFF_HILL)
   {
     passedHill = true;
     startTime = millis();    
+    LCD.clear();
+    LCD.home();
+    LCD.print("OFF HILL!");
   }
   
   if(passedHill)
@@ -61,46 +72,58 @@ void checkOffHill()
 
 void checkDanger()
 {
-   distance = senseHeight();
+   senseHeight();
   if(distance >= DANGER_HEIGHT)
   {
 //    ChangeToState();
   }
 }
 
-
-double senseHeight()
+/* Measures the distance from the ULS sensor */
+void senseHeight()
 {
-  digitalWrite(TRIGGER, LOW);
-  delayMicroseconds(2);
+  if(millis() - pulseStartTime > 100)
+  {
   
-  digitalWrite(TRIGGER, HIGH);
-  delayMicroseconds(10);
-  
-  digitalWrite(TRIGGER,LOW);
-  duration = pulseIn(ECHO,HIGH);
-  return (duration/58.2);
+    digitalWrite(TRIGGER, LOW);
+    delayMicroseconds(2);
+    
+    digitalWrite(TRIGGER, HIGH);
+    delayMicroseconds(10);
+    
+    digitalWrite(TRIGGER,LOW);
+    duration = pulseIn(ECHO,HIGH);
+    
+    pulseStartTime = millis();
+    
+    distance = (duration/58.2);
+    if(distance < minDist || minDist == -1)
+    {
+      minDist = distance;
+    }
+    if(distance > maxDist || maxDist == -1)
+    {
+      maxDist = distance;
+    }
+  }
 }
 
 void calibrateHeight()
 {
   motor.stop_all();
-  distance = senseHeight();
-  if(distance < minDist || minDist == -1)
-  {
-    minDist = distance;
-  }
-  if(distance > maxDist || maxDist == -1)
-  {
-    maxDist = distance;
-  }
+  senseHeight();
 }
 
 void hill_LCD()
 {
-  LCD.print("D: "); LCD.print(distance);
-  LCD.setCursor(0,1); LCD.print(minDist);
-  LCD.setCursor(8,1); LCD.print(maxDist);
+//  LCD.print("D: "); LCD.print(distance);
+//  LCD.setCursor(0,1); LCD.print(minDist);
+//  LCD.setCursor(8,1); LCD.print(maxDist);
+  LCD.print((int)leftQRD);
+  LCD.setCursor(5,0);LCD.print((int)midQRD);
+  LCD.setCursor(11,0);LCD.print((int)rightQRD);
+  LCD.setCursor(0,1);LCD.print((int)controller.GetError());
+  LCD.setCursor(5,1);LCD.print(maxDist);
 }
 
 

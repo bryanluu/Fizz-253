@@ -9,6 +9,9 @@ void FT_setup()
     //INITIALIZATION
     LCD_FREQ = 100;
     baseSpeed = FLAT_SPEED;
+    hillCount = 0;
+    minDist = -1;
+    maxDist = -1;
   }
 }
 
@@ -16,7 +19,6 @@ void FT_exit()
 {
   FT_init = false;
   LCD_FREQ = LCD_FREQ_DEFAULT;
-  baseSpeed = 0;
 }
 
 ///===========MAIN CODE
@@ -71,7 +73,6 @@ void tapeFollowingLCD()
     LCD.setCursor(5,0);LCD.print((int)midQRD);
     LCD.setCursor(11,0);LCD.print((int)rightQRD);
     LCD.setCursor(0,1);LCD.print((int)controller.GetError());
-    LCD.setCursor(5,1);LCD.print((int)kP);
-    LCD.setCursor(11,1);LCD.print((int)kD);
+    LCD.setCursor(5,1);LCD.print(minDist);
 }
 
