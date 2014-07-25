@@ -10,7 +10,7 @@
 #include <IndyPID.h>
 
 enum RobotState {
-  INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ZIPLINE, FINISHED, TEST, SETTINGS, MENU
+  INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, DANGER, ZIPLINE, FINISHED, TEST, SETTINGS, MENU
 };
 
 RobotState currentState = INITIALIZING;
@@ -43,21 +43,23 @@ RobotState lastState = INITIALIZING;
 
 //====================SETTINGS========================
 int FLAT_SPEED=(300);
-int HILL_SPEED=(720);
+int HILL_SPEED=(800);
 int ROCK_SPEED=(300);
+int SPIN_SPEED=(1023);
 
 //level sensor
 double DANGER_HEIGHT=(35); // max distance in centimeters
-double ON_HILL=(0.5); // on hill threshold
-double OFF_HILL=(4.2); // off hill threshold
-#define DURATION (800) //ms
+double ON_HILL=(3.03); // on hill threshold
+double OFF_HILL=(5.0); // off hill threshold
+double DURATION=(1000); //ms
 
 //collector arm
-int RETRIEVER_WITHDRAWN=(10);
-int RETRIEVER_EXTEND=(145);
-int COLLECTOR_DOWN=(115);
-int COLLECTOR_DROP=(123);
-int COLLECTOR_TOP=(10);
+int RETRIEVER_WITHDRAWN=(0);
+int RETRIEVER_EXTEND=(117);
+int COLLECTOR_START=(110);
+int COLLECTOR_DOWN=(120);
+int COLLECTOR_DROP=(130);
+int COLLECTOR_TOP=(17);
 
 //zipline arm
 #define ZIPLINE_DOWN_DELAY (5)
@@ -108,6 +110,10 @@ double beacon_kD = 0;
 
 // LCD
 unsigned long LCDcounter = 0;
+
+// Challenge Related
+int itemCount = 0;
+boolean goingHome = false;
 
 
 //============================================================
@@ -164,6 +170,7 @@ void loop()
     case INITIALIZING:
       motor.stop_all();
       passedHill = false; // Resets the Hill Pass flag when set back to INIT
+      itemCount = 0;
       if(startbutton())
       {
         ChangeToState(FOLLOW_TAPE);
@@ -173,11 +180,15 @@ void loop()
     case FOLLOW_TAPE:
       readTape();
       followTape();
-      checkCollectorArm();
+      if(!goingHome)
+      {
+        checkCollectorArm();
+      }
       if(!passedHill)
       {
         checkOnHill();
       }
+      watchForEdge();
       break;
       //======================
     case COLLECT_ITEM:
@@ -190,10 +201,16 @@ void loop()
       followTape();
       checkOffHill();
 //      calibrateHeight();
+      watchForEdge();
       break;
       //======================
     case ROCKPIT:
       lookForBeacon();
+      driveTowardsBeacon();
+      watchForEdge();
+      break;
+      //======================
+    case DANGER:
       break;
       //======================
     case ZIPLINE:
@@ -229,7 +246,6 @@ void loop()
   }
 
   printLCD();
-//  printDebug();
 }
 
 
@@ -250,6 +266,8 @@ String GetStateName(int stateAsInt)
       return "CH";
     case ROCKPIT:
       return "RP";
+    case DANGER:
+      return "DANGER";
     case ZIPLINE:
       return "ZIP";
     case FINISHED:
@@ -309,6 +327,9 @@ void SetupState(int stateAsInt)
     case ROCKPIT:
       RP_setup();
       break;
+    case DANGER:
+      DANGER_setup();
+      break;
     case TEST:
       TEST_setup();
       break;
@@ -335,6 +356,8 @@ void ExitState(int stateAsInt)
     case ROCKPIT:
       RP_exit();
       break;
+    case DANGER:
+      DANGER_exit();
     case TEST:
       TEST_exit();
       break;

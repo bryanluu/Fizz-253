@@ -14,6 +14,9 @@ void CH_setup()
     LCD_FREQ = 100;
     baseSpeed = HILL_SPEED;
     
+    setRetrieverTo(RETRIEVER_WITHDRAWN);
+    setCollectorTo(COLLECTOR_DOWN);
+    
 //    motor.speed(LEFT_MOTOR, -100);
 //    motor.speed(RIGHT_MOTOR, -100);
 //    delay(100);

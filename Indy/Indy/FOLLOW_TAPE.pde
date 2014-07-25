@@ -12,6 +12,20 @@ void FT_setup()
     hillCount = 0;
     minDist = -1;
     maxDist = -1;
+    setRetrieverTo(RETRIEVER_WITHDRAWN);
+    
+    if(itemCount==0)
+    {
+      setCollectorTo(COLLECTOR_START);
+    }
+    else if (goingHome)
+    {
+      setCollectorTo(COLLECTOR_TOP);
+    }
+    else
+    {
+      setCollectorTo(COLLECTOR_DOWN);
+    }
   }
 }
 
@@ -74,5 +88,12 @@ void tapeFollowingLCD()
     LCD.setCursor(11,0);LCD.print((int)rightQRD);
     LCD.setCursor(0,1);LCD.print((int)controller.GetError());
     LCD.setCursor(5,1);LCD.print(minDist);
+}
+
+//Spins Indy on the Dime to the left.
+void turnAround()
+{
+  motor.speed(LEFT_MOTOR, -SPIN_SPEED);
+  motor.speed(RIGHT_MOTOR, SPIN_SPEED);
 }
 

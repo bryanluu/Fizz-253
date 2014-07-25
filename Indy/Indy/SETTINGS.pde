@@ -1,6 +1,6 @@
 /*This state is for adjusting the settings of INDY*/
 boolean SETTINGS_init = false;
-enum Setting { FLATSPEED, FT_KP, FT_KD, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND, HILLSPEED, CH_ON_HILL, CH_OFF_HILL, EDGE_HEIGHT, ROCKSPEED, RP_KP, RP_KI, RP_KD, NO_SETTING };
+enum Setting { FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND, HILLSPEED, CH_ON_HILL, CH_OFF_HILL, CH_DURATION, EDGE_HEIGHT, SPINSPEED, ROCKSPEED, RP_KP, RP_KI, RP_KD, NO_SETTING };
 Setting settingChoice = NO_SETTING;
 Setting currentSetting = NO_SETTING;
 double value;
@@ -42,6 +42,7 @@ void updateSettings()
   
     switch(currentSetting)
     {
+      case CI_C_START:
       case CI_C_DOWN:
       case CI_C_UP:
       case CI_C_DROP:
@@ -52,6 +53,9 @@ void updateSettings()
       case CH_ON_HILL:
       case CH_OFF_HILL:
         value = map(knob(6), 0, 1023, 0, 10.0);
+        break;
+      case CH_DURATION:
+        value = map(knob(6), 0, 1023, 0, 5000.0);
         break;
       case EDGE_HEIGHT:
         value = map(knob(6), 0, 1023, 0, 100.0);
@@ -74,16 +78,24 @@ void updateSettings()
         case FT_KD:
           kD = (int)value;
           break;
+        case CI_C_START:
+          COLLECTOR_START = (int)value;
+          break;
         case CI_C_DOWN:
           COLLECTOR_DOWN = (int)value;
+          break;
         case CI_C_UP:
           COLLECTOR_TOP = (int)value;
+          break;
         case CI_C_DROP:
           COLLECTOR_DROP = (int)value;
+          break;
         case CI_R_WITHDRAWN:
           RETRIEVER_WITHDRAWN = (int)value;
+          break;
         case CI_R_EXTEND:
           RETRIEVER_EXTEND = (int)value;
+          break;
         case HILLSPEED:
           HILL_SPEED = (int)value;
           break;
@@ -93,8 +105,15 @@ void updateSettings()
         case CH_OFF_HILL:
           OFF_HILL = value;
           break;
+        case CH_DURATION:
+          DURATION = value;
+          break;
         case EDGE_HEIGHT:
           DANGER_HEIGHT = value;
+          break;
+        case SPINSPEED:
+          SPIN_SPEED = value;
+          break;
         case ROCKSPEED:
           ROCK_SPEED = (int)value;
           break;
@@ -115,7 +134,7 @@ void updateSettings()
       LCD.clear();
       LCD.home();
       LCD.print(GetSettingName(currentSetting));
-      LCD.setCursor(0,1); LCD.print("set to:");LCD.print(value);
+      LCD.setCursor(0,1); LCD.print("set to:");LCD.print(GetSettingValue(currentSetting));
       
       delay(1000);
       
@@ -151,6 +170,8 @@ String GetSettingName(int settingAsInt)
       return "FT kP";
     case FT_KD:
       return "FT kD";
+    case CI_C_START:
+      return "C Arm Start";
     case CI_C_DOWN:
       return "C Arm Down";
     case CI_C_UP:
@@ -167,8 +188,12 @@ String GetSettingName(int settingAsInt)
       return "On Hill";
     case CH_OFF_HILL:
       return "Off Hill";
+    case CH_DURATION:
+      return "CH Duration";
     case EDGE_HEIGHT:
       return "Edge";
+    case SPINSPEED:
+      return "Spin Speed";
     case ROCKSPEED:
       return "Rock Speed";
     case RP_KP:
@@ -193,6 +218,8 @@ double GetSettingValue(int settingAsInt)
       return kP;
     case FT_KD:
       return kD;
+    case CI_C_START:
+      return COLLECTOR_START;
     case CI_C_DOWN:
       return COLLECTOR_DOWN;
     case CI_C_UP:
@@ -209,8 +236,12 @@ double GetSettingValue(int settingAsInt)
       return ON_HILL;
     case CH_OFF_HILL:
       return OFF_HILL;
+    case CH_DURATION:
+      return DURATION;
     case EDGE_HEIGHT:
       return DANGER_HEIGHT;
+    case SPINSPEED:
+      return SPIN_SPEED;
     case ROCKSPEED:
       return ROCK_SPEED;
     case RP_KP:
