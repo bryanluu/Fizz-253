@@ -19,9 +19,9 @@ void collect()
   
   if(itemCount == 0)
   {
-    motor.speed(LEFT_MOTOR, -280);
-    motor.speed(RIGHT_MOTOR, -280);
-    delay(500);
+    motor.speed(LEFT_MOTOR, -300);
+    motor.speed(RIGHT_MOTOR, -300);
+    delay(200);
     motor.stop_all();
   }
 
