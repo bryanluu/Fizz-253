@@ -171,6 +171,7 @@ void loop()
       motor.stop_all();
       passedHill = false; // Resets the Hill Pass flag when set back to INIT
       itemCount = 0;
+      goingHome = false;
       if(startbutton())
       {
         ChangeToState(FOLLOW_TAPE);

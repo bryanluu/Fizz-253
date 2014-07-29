@@ -33,14 +33,16 @@ void collect()
   setCollectorTo(COLLECTOR_TOP);
   delay(2000);
   setRetrieverTo(RETRIEVER_WITHDRAWN);
-  delay(1000);
-  itemCount++;
-  setCollectorTo(COLLECTOR_DOWN);
+  
   
   LCD.clear(); LCD.home();
-  LCD.print(itemCount);
+  LCD.print(itemCount++);
   LCD.setCursor(0,1);
   LCD.print("Collected");
+  
+  delay(1000);
+  setCollectorTo(COLLECTOR_DOWN);
+  
   
   
   if(itemCount == 3)

@@ -85,7 +85,8 @@ void checkDanger()
 /* Measures the distance from the ULS sensor */
 void senseHeight()
 {
-  if(millis() - pulseStartTime > 100)
+  // 60 milliseconds between pulses
+  if(millis() - pulseStartTime > 60)
   {
   
     digitalWrite(TRIGGER, LOW);
