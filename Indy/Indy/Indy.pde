@@ -10,7 +10,8 @@
 #include <IndyPID.h>
 
 //Other Libraries
-#include <EEPROM.h>
+#include <EEPROMex.h>
+#include <EEPROMVar.h>
 
 enum RobotState {
   INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, DANGER, ZIPLINE, FINISHED, TEST, SETTINGS, MENU

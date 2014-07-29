@@ -315,13 +315,10 @@ void SaveSettings()
 {
   for(int setting=0; setting < CLEAR; setting++)
   {
-    if(EEPROM.read(setting) != GetSettingValue(setting))
-    {
-      EEPROM.write(setting, GetSettingValue(setting));
-    }
+    EEPROM.updateDouble(setting*sizeof(double), GetSettingValue(setting));
   }
   
-  EEPROM.write(CLEAR, 's'); //S means settings have been saved
+  EEPROM.write(CLEAR*sizeof(double), 's'); //S means settings have been saved
 }
 
 void LoadSettings()
@@ -336,15 +333,15 @@ void LoadSettings()
   
   for(int setting=0; setting < CLEAR; setting++)
   {
-    if(EEPROM.read(setting) != GetSettingValue(setting))
+    if(EEPROM.readDouble(setting*sizeof(double)) != GetSettingValue(setting))
     {
       LCD.clear();
       LCD.home();
       LCD.print(GetSettingName(setting));
       LCD.setCursor(0,1);
-      SetSetting(setting, EEPROM.read(setting));
+      SetSetting(setting, EEPROM.readDouble(setting*sizeof(double)));
       LCD.print(GetSettingValue(setting));
-      delay(500);
+      delay(700);
     }
     
   }
@@ -358,10 +355,10 @@ void LoadSettings()
 
 inline boolean hasSavedSettings()
 {
-  return (EEPROM.read(CLEAR) == 's');
+  return (EEPROM.read(CLEAR*sizeof(double)) == 's');
 }
 
 void ClearSavedSettings()
 {
-  EEPROM.write(CLEAR, 0);
+  EEPROM.write(CLEAR*sizeof(double), 0);
 }
