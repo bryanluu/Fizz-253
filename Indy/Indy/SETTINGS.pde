@@ -1,6 +1,6 @@
 /*This state is for adjusting the settings of INDY*/
 boolean SETTINGS_init = false;
-enum Setting { FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND, HILLSPEED, CH_ON_HILL, CH_OFF_HILL, CH_DURATION, EDGE_HEIGHT, SPINSPEED, IR_THRESH, ROCKSPEED, RP_KP, RP_KI, RP_KD, NO_SETTING };
+enum Setting { FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND, HILLSPEED, CH_ON_HILL, CH_OFF_HILL, CH_DURATION, EDGE_HEIGHT, SPINSPEED, SWEEP_DUR, SWEEP_OFF, IR_THRESH, ROCKSPEED, RP_KP, RP_KI, RP_KD, NO_SETTING };
 Setting settingChoice = NO_SETTING;
 Setting currentSetting = NO_SETTING;
 double value;
@@ -114,6 +114,12 @@ void updateSettings()
         case SPINSPEED:
           SPIN_SPEED = value;
           break;
+        case SWEEP_DUR:
+          SWEEP_DURATION = (int)value;
+          break;
+        case SWEEP_OFF:
+          SWEEP_OFFSET = (int)value;
+          break;
         case IR_THRESH:
           IR_THRESHOLD = (int)value;
           break;
@@ -197,6 +203,10 @@ String GetSettingName(int settingAsInt)
       return "Edge";
     case SPINSPEED:
       return "Spin Speed";
+    case SWEEP_DUR:
+      return "Sweep Dur";
+    case SWEEP_OFF:
+      return "Sweep Off";
     case IR_THRESH:
       return "IR Thresh";
     case ROCKSPEED:
@@ -247,6 +257,10 @@ double GetSettingValue(int settingAsInt)
       return DANGER_HEIGHT;
     case SPINSPEED:
       return SPIN_SPEED;
+    case SWEEP_DUR:
+      return SWEEP_DURATION;
+    case SWEEP_OFF:
+      return SWEEP_OFFSET;
     case IR_THRESH:
       return IR_THRESHOLD;
     case ROCKSPEED:

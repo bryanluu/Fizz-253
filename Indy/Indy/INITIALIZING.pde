@@ -39,7 +39,7 @@ void INIT_update()
     ChangeToState(FOLLOW_TAPE);
     LCD.clear();
     LCD.home();
-    LCD.print("Strategy:");
+    LCD.print("Going for...");
     LCD.setCursor(0,1);
     LCD.print(GetStratString(currentStrat));
     delay(1000);
@@ -48,7 +48,7 @@ void INIT_update()
 
 void INIT_LCD()
 {
-  LCD.print("Choose Strat:");
+  LCD.print("Choose Strategy:");
   LCD.setCursor(0,1);
   LCD.print(GetStratString(choice));
 }

@@ -16,7 +16,7 @@ enum RobotState {
 RobotState currentState = INITIALIZING;
 RobotState lastState = INITIALIZING;  
 
-enum Strategy {FullCourse, OnePoint, TwoPoints, ThreePoints, OnlyIdolGround, OnlyIdolZip};
+enum Strategy { FullCourse, OnePoint, TwoPoints, ThreePoints, OnlyIdolGround, OnlyIdolZip };
 Strategy currentStrat = FullCourse;
 
 

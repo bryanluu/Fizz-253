@@ -1,5 +1,5 @@
 boolean DANGER_init = false;
-int sweepStartTime = 0;
+unsigned long sweepStartTime = 0;
 int sweepDirection = 1;
 
 void DANGER_setup()
@@ -20,12 +20,12 @@ void DANGER_exit()
 
 void sweep(int straightSpeed)
 {
-  if(millis() - sweepStartTime > SWEEP_DURATION)
+  if(millis() - sweepStartTime >= SWEEP_DURATION)
   {
     sweepStartTime = millis();
     sweepDirection *= -1; //flip direction
     leftSpeed = straightSpeed - sweepDirection*SWEEP_OFFSET;
-    rightSpeed = straightSpeed - sweepDirection*SWEEP_OFFSET;
+    rightSpeed = straightSpeed + sweepDirection*SWEEP_OFFSET;
     
     motor.speed(LEFT_MOTOR, leftSpeed);
     motor.speed(RIGHT_MOTOR, rightSpeed);

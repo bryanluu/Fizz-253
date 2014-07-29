@@ -1,10 +1,11 @@
 /*This state is for testing TINAH and the general systems of INDY*/
 boolean TEST_init = false;
-enum TEST_KIND { MOTORS, COLLECTOR, NONE };
+enum TEST_KIND { MOTORS, COLLECTOR, SWEEP, NONE };
 TEST_KIND testChoice = NONE;
 TEST_KIND currentTest = NONE;
 int collectorAngle = 0;
 int retrieverAngle = 0;
+int sweepSpeed = 0;
 
 void TEST_setup()
 {
@@ -16,6 +17,7 @@ void TEST_setup()
     motor.stop_all();
     collectorAngle = 0;
     retrieverAngle = 0;
+    sweepSpeed = 0;
     delay(200);
   }
 }
@@ -44,6 +46,9 @@ void updateTest()
       break;
     case COLLECTOR:
       testCollector();
+      break;
+    case SWEEP:
+      testSweep();
       break;
   }
 }
@@ -79,6 +84,14 @@ void testCollector()
   setRetrieverTo(retrieverAngle);
 }
 
+void testSweep()
+{
+  sweepSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);  
+  sweepSpeed = constrain(sweepSpeed, -1023, 1023);
+  
+  sweep(sweepSpeed);
+}
+
 ///////TEST LCD/////////
 
 void testLCD()
@@ -94,6 +107,9 @@ void testLCD()
       break;
     case COLLECTOR:
       testCollectorLCD();
+      break;
+    case SWEEP:
+      testSweepLCD();
       break;
   }
 }
@@ -114,6 +130,12 @@ void testCollectorLCD()
   LCD.setCursor(12,1);LCD.print(retrieverAngle);
 }
 
+void testSweepLCD()
+{
+  LCD.print("Speed:");
+  LCD.setCursor(0,1);LCD.print(sweepSpeed);
+}
+
 String GetTestName(int testAsInt)
 {
   TEST_KIND test = (TEST_KIND)testAsInt;
@@ -123,6 +145,8 @@ String GetTestName(int testAsInt)
       return "MOTORS";
     case COLLECTOR:
       return "COLLECTOR";
+    case SWEEP:
+      return "SWEEP";
     default:
       return "INVALID";
   }
