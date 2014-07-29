@@ -2,7 +2,7 @@
 boolean SETTINGS_init = false;
 enum Setting { FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND, 
                 HILLSPEED, CH_ON_HILL, CH_OFF_HILL, CH_DURATION, EDGE_HEIGHT, SPINSPEED, SWEEP_DUR, SWEEP_OFF, 
-                IR_THRESH, ROCKSPEED, RP_KP, RP_KI, RP_KD, NO_SETTING };
+                IR_THRESH, ROCKSPEED, RP_KP, RP_KI, RP_KD, CLEAR, NO_SETTING };
 Setting settingChoice = NO_SETTING;
 Setting currentSetting = NO_SETTING;
 double value;
@@ -30,14 +30,29 @@ void updateSettings()
 {
   if (currentSetting == NO_SETTING)
   {
-    settingChoice = (Setting)((int)(map(knob(6), 0, 1023, 0, NO_SETTING)));
+    settingChoice = (Setting)((int)(map(knob(6), 0, KNOB6_MAX, 0, NO_SETTING)));
     settingChoice = (Setting)constrain(settingChoice, 0, NO_SETTING-1);
     
     if(startbutton())
     {
-      LCD.clear(); LCD.print("...");
-      currentSetting = settingChoice;
-      delay(500);
+      if(settingChoice == CLEAR)
+      {
+        ClearSavedSettings();
+        LCD.clear(); LCD.home();
+        LCD.print("Settings");
+        LCD.setCursor(0,1); LCD.print("Cleared!");
+        delay(1000);
+        LCD.clear(); LCD.home();
+        LCD.print("Press RESET");
+        LCD.setCursor(0,1); LCD.print("for Defaults");
+        delay(1000);
+      }
+      else
+      {
+        LCD.clear(); LCD.print("...");
+        currentSetting = settingChoice;
+        delay(500);
+      }
     }
   }
   else
@@ -51,17 +66,17 @@ void updateSettings()
       case CI_C_DROP:
       case CI_R_WITHDRAWN:
       case CI_R_EXTEND:
-        value = map(knob(6), 0, 1023, 0, 180);
+        value = map(knob(6), 0, KNOB6_MAX, 0, 180);
         break;
       case CH_ON_HILL:
       case CH_OFF_HILL:
-        value = map(knob(6), 0, 1023, 0, 10.0);
+        value = map(knob(6), 0, KNOB6_MAX, 0, 10.0);
         break;
       case CH_DURATION:
-        value = map(knob(6), 0, 1023, 0, 5000.0);
+        value = map(knob(6), 0, KNOB6_MAX, 0, 5000.0);
         break;
       case EDGE_HEIGHT:
-        value = map(knob(6), 0, 1023, 0, 100.0);
+        value = map(knob(6), 0, KNOB6_MAX, 0, 100.0);
         break;
       default:
         value = knob(6);
@@ -70,7 +85,7 @@ void updateSettings()
     
     if (startbutton())
     {
-      SetSettings(value);
+      SetSetting(currentSetting, value);
       
       //Notify that setting has been set
       LCD.clear();
@@ -92,8 +107,16 @@ void settings_LCD()
   switch(currentSetting)
   {
     case NO_SETTING:
-      LCD.print("Set: "); LCD.print(GetSettingName(settingChoice)); 
-      LCD.setCursor(0,1); LCD.print("("); LCD.print(GetSettingValue(settingChoice)); LCD.print(")");
+      if(settingChoice == CLEAR)
+      {
+        LCD.print("Clear Saved");
+        LCD.setCursor(0,1); LCD.print("Settings");
+      }
+      else
+      {
+        LCD.print("Set: "); LCD.print(GetSettingName(settingChoice)); 
+        LCD.setCursor(0,1); LCD.print("("); LCD.print(GetSettingValue(settingChoice)); LCD.print(")");
+      }
       break;
     default:
       LCD.print("{"); LCD.print(GetSettingName(currentSetting)); LCD.print("}:");
@@ -101,9 +124,11 @@ void settings_LCD()
   }
 }
 
-void SetSettings(double value)
+void SetSetting(int settingAsInt, double value)
 {
-  switch(currentSetting)
+  Setting setting = (Setting)settingAsInt;
+  
+  switch(setting)
   {
     case FLATSPEED:
       FLAT_SPEED = (int)value;
@@ -284,10 +309,11 @@ double GetSettingValue(int settingAsInt)
   }
 }
 
+/////SAVING AND LOADING///////
 
 void SaveSettings()
 {
-  for(int setting=0; setting < NO_SETTING; setting++)
+  for(int setting=0; setting < CLEAR; setting++)
   {
     if(EEPROM.read(setting) != GetSettingValue(setting))
     {
@@ -295,18 +321,47 @@ void SaveSettings()
     }
   }
   
-  EEPROM.write(NO_SETTING, 's'); //S means settings have been saved
+  EEPROM.write(CLEAR, 's'); //S means settings have been saved
 }
 
 void LoadSettings()
 {
-  for(int setting=0; setting < NO_SETTING; setting++)
+  
+  LCD.clear();
+  LCD.home();
+  LCD.print("Loading");
+  LCD.setCursor(0,1);
+  LCD.print("Settings...");
+  delay(1000);
+  
+  for(int setting=0; setting < CLEAR; setting++)
   {
-    SetSettings(setting);
+    if(EEPROM.read(setting) != GetSettingValue(setting))
+    {
+      LCD.clear();
+      LCD.home();
+      LCD.print(GetSettingName(setting));
+      LCD.setCursor(0,1);
+      SetSetting(setting, EEPROM.read(setting));
+      LCD.print(GetSettingValue(setting));
+      delay(500);
+    }
+    
   }
+  
+  
+  LCD.clear();
+  LCD.home();
+  LCD.print("...");
+  delay(1000);
 }
 
 inline boolean hasSavedSettings()
 {
-  return (EEPROM.read(NO_SETTING) == 's');
+  return (EEPROM.read(CLEAR) == 's');
+}
+
+void ClearSavedSettings()
+{
+  EEPROM.write(CLEAR, 0);
 }

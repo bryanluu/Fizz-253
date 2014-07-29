@@ -22,7 +22,7 @@ void MENU_exit()
 void updateMenu()
 {
   
-  menuChoice = (RobotState)((int)(map(knob(6), 0, 1023, 0, MENU)));
+  menuChoice = (RobotState)((int)(map(knob(6), 0, KNOB6_MAX, 0, MENU)));
   
   menuChoice = (RobotState)constrain(menuChoice, 0, MENU-1);
   

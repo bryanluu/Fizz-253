@@ -33,7 +33,7 @@ void updateTest()
   switch(currentTest)
   {
     case NONE:
-      testChoice = (TEST_KIND)((int)(map(knob(6), 0, 1023, 0, NONE)));
+      testChoice = (TEST_KIND)((int)(map(knob(6), 0, KNOB6_MAX, 0, NONE)));
       testChoice = (TEST_KIND)constrain(testChoice, 0, NONE-1);
       
       if(startbutton())
@@ -55,8 +55,8 @@ void updateTest()
 
 void testMotors()
 {
-  leftSpeed = (int)map(knob(7), 0, 1023, -1023, 1023);  
-  rightSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);
+  leftSpeed = (int)map(knob(7), 0, KNOB7_MAX, -1023, 1023);  
+  rightSpeed = (int)map(knob(6), 0, KNOB6_MAX, -1023, 1023);
   
   leftSpeed = constrain(leftSpeed, -1023, 1023);
   rightSpeed = constrain(rightSpeed, -1023, 1023);
@@ -77,8 +77,8 @@ void testMotors()
 
 void testCollector()
 {
-  collectorAngle = (int)map(knob(6), 0, 1023, 0, 180);  
-  retrieverAngle = (int)map(knob(7), 0, 1023, 0, 180);
+  collectorAngle = (int)map(knob(6), 0, KNOB6_MAX, 0, 180);  
+  retrieverAngle = (int)map(knob(7), 0, KNOB7_MAX, 0, 180);
   
   setCollectorTo(collectorAngle);
   setRetrieverTo(retrieverAngle);
@@ -86,7 +86,7 @@ void testCollector()
 
 void testSweep()
 {
-  sweepSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);  
+  sweepSpeed = (int)map(knob(6), 0, KNOB6_MAX, -1023, 1023);  
   sweepSpeed = constrain(sweepSpeed, -1023, 1023);
   
   sweep(sweepSpeed);

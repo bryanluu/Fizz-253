@@ -26,6 +26,7 @@ void INIT_update()
     if(!loaded && hasSavedSettings())
     {
       LoadSettings();
+      loaded = true;
     }
     
     initializeChallenge();
@@ -38,7 +39,7 @@ void INIT_update()
     delay(1000);
   }
   
-  choice = (Strategy)((int)(map(knob(6), 0, 1023, 0, OnlyIdolZip+1)));
+  choice = (Strategy)((int)(map(knob(6), 0, KNOB6_MAX, 0, OnlyIdolZip+1)));
   choice = (Strategy)constrain(choice, 0, OnlyIdolZip);
   if(startbutton())
   {

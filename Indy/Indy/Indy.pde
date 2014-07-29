@@ -83,6 +83,10 @@ unsigned long LCD_FREQ=LCD_FREQ_DEFAULT;
 #define LCD_STATE_FREQ (LCD_FREQ*200)
 #define LCD_STATE_DUR (LCD_FREQ*10)
 
+//Hardware
+#define KNOB6_MAX (959)
+#define KNOB7_MAX (959)
+
 //====================VARIABLES=======================
 
 int baseSpeed = FLAT_SPEED;
