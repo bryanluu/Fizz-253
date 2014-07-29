@@ -9,6 +9,9 @@
 #include <TapeFollower.h>
 #include <IndyPID.h>
 
+//Other Libraries
+#include <EEPROM.h>
+
 enum RobotState {
   INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, DANGER, ZIPLINE, FINISHED, TEST, SETTINGS, MENU
 };

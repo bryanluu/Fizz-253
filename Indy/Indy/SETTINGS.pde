@@ -1,6 +1,8 @@
 /*This state is for adjusting the settings of INDY*/
 boolean SETTINGS_init = false;
-enum Setting { FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND, HILLSPEED, CH_ON_HILL, CH_OFF_HILL, CH_DURATION, EDGE_HEIGHT, SPINSPEED, SWEEP_DUR, SWEEP_OFF, IR_THRESH, ROCKSPEED, RP_KP, RP_KI, RP_KD, NO_SETTING };
+enum Setting { FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND, 
+                HILLSPEED, CH_ON_HILL, CH_OFF_HILL, CH_DURATION, EDGE_HEIGHT, SPINSPEED, SWEEP_DUR, SWEEP_OFF, 
+                IR_THRESH, ROCKSPEED, RP_KP, RP_KI, RP_KD, NO_SETTING };
 Setting settingChoice = NO_SETTING;
 Setting currentSetting = NO_SETTING;
 double value;
@@ -20,6 +22,7 @@ void SETTINGS_setup()
 void SETTINGS_exit()
 {
   SETTINGS_init = false;
+  SaveSettings();
   delay(200);
 }
 
@@ -67,77 +70,7 @@ void updateSettings()
     
     if (startbutton())
     {
-      switch(currentSetting)
-      {
-        case FLATSPEED:
-          FLAT_SPEED = (int)value;
-          break;
-        case FT_KP:
-          kP = (int)value;
-          break;
-        case FT_KD:
-          kD = (int)value;
-          break;
-        case CI_C_START:
-          COLLECTOR_START = (int)value;
-          break;
-        case CI_C_DOWN:
-          COLLECTOR_DOWN = (int)value;
-          break;
-        case CI_C_UP:
-          COLLECTOR_TOP = (int)value;
-          break;
-        case CI_C_DROP:
-          COLLECTOR_DROP = (int)value;
-          break;
-        case CI_R_WITHDRAWN:
-          RETRIEVER_WITHDRAWN = (int)value;
-          break;
-        case CI_R_EXTEND:
-          RETRIEVER_EXTEND = (int)value;
-          break;
-        case HILLSPEED:
-          HILL_SPEED = (int)value;
-          break;
-        case CH_ON_HILL:
-          ON_HILL = value;
-          break;
-        case CH_OFF_HILL:
-          OFF_HILL = value;
-          break;
-        case CH_DURATION:
-          DURATION = value;
-          break;
-        case EDGE_HEIGHT:
-          DANGER_HEIGHT = value;
-          break;
-        case SPINSPEED:
-          SPIN_SPEED = value;
-          break;
-        case SWEEP_DUR:
-          SWEEP_DURATION = (int)value;
-          break;
-        case SWEEP_OFF:
-          SWEEP_OFFSET = (int)value;
-          break;
-        case IR_THRESH:
-          IR_THRESHOLD = (int)value;
-          break;
-        case ROCKSPEED:
-          ROCK_SPEED = (int)value;
-          break;
-        case RP_KP:
-          beacon_kP = (int)value;
-          break;
-        case RP_KI:
-          beacon_kI = (int)value;
-          break;
-        case RP_KD:
-          beacon_kD = (int)value;
-          break;
-        default:
-          break;
-      }
+      SetSettings(value);
       
       //Notify that setting has been set
       LCD.clear();
@@ -165,6 +98,81 @@ void settings_LCD()
     default:
       LCD.print("{"); LCD.print(GetSettingName(currentSetting)); LCD.print("}:");
       LCD.setCursor(0,1);LCD.print(value);
+  }
+}
+
+void SetSettings(double value)
+{
+  switch(currentSetting)
+  {
+    case FLATSPEED:
+      FLAT_SPEED = (int)value;
+      break;
+    case FT_KP:
+      kP = (int)value;
+      break;
+    case FT_KD:
+      kD = (int)value;
+      break;
+    case CI_C_START:
+      COLLECTOR_START = (int)value;
+      break;
+    case CI_C_DOWN:
+      COLLECTOR_DOWN = (int)value;
+      break;
+    case CI_C_UP:
+      COLLECTOR_TOP = (int)value;
+      break;
+    case CI_C_DROP:
+      COLLECTOR_DROP = (int)value;
+      break;
+    case CI_R_WITHDRAWN:
+      RETRIEVER_WITHDRAWN = (int)value;
+      break;
+    case CI_R_EXTEND:
+      RETRIEVER_EXTEND = (int)value;
+      break;
+    case HILLSPEED:
+      HILL_SPEED = (int)value;
+      break;
+    case CH_ON_HILL:
+      ON_HILL = value;
+      break;
+    case CH_OFF_HILL:
+      OFF_HILL = value;
+      break;
+    case CH_DURATION:
+      DURATION = value;
+      break;
+    case EDGE_HEIGHT:
+      DANGER_HEIGHT = value;
+      break;
+    case SPINSPEED:
+      SPIN_SPEED = value;
+      break;
+    case SWEEP_DUR:
+      SWEEP_DURATION = (int)value;
+      break;
+    case SWEEP_OFF:
+      SWEEP_OFFSET = (int)value;
+      break;
+    case IR_THRESH:
+      IR_THRESHOLD = (int)value;
+      break;
+    case ROCKSPEED:
+      ROCK_SPEED = (int)value;
+      break;
+    case RP_KP:
+      beacon_kP = (int)value;
+      break;
+    case RP_KI:
+      beacon_kI = (int)value;
+      break;
+    case RP_KD:
+      beacon_kD = (int)value;
+      break;
+    default:
+      break;
   }
 }
 
@@ -276,3 +284,29 @@ double GetSettingValue(int settingAsInt)
   }
 }
 
+
+void SaveSettings()
+{
+  for(int setting=0; setting < NO_SETTING; setting++)
+  {
+    if(EEPROM.read(setting) != GetSettingValue(setting))
+    {
+      EEPROM.write(setting, GetSettingValue(setting));
+    }
+  }
+  
+  EEPROM.write(NO_SETTING, 's'); //S means settings have been saved
+}
+
+void LoadSettings()
+{
+  for(int setting=0; setting < NO_SETTING; setting++)
+  {
+    SetSettings(setting);
+  }
+}
+
+inline boolean hasSavedSettings()
+{
+  return (EEPROM.read(NO_SETTING) == 's');
+}

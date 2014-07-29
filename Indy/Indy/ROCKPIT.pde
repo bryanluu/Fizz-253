@@ -20,7 +20,7 @@ void RP_exit()
 
 ///===========MAIN CODE
 
-boolean beaconDetected()
+inline boolean beaconDetected()
 {
   return leftIR >= IR_THRESHOLD && rightIR >= IR_THRESHOLD;
 }

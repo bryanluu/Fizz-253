@@ -1,5 +1,6 @@
 boolean INIT_init = false;
 Strategy choice = FullCourse;
+boolean loaded = false;
   
 void initializeChallenge()
 {
@@ -21,6 +22,12 @@ void INIT_update()
     INIT_init = true;
     
     //INITIALIZATION
+    
+    if(!loaded && hasSavedSettings())
+    {
+      LoadSettings();
+    }
+    
     initializeChallenge();
     
     LCD.clear();
