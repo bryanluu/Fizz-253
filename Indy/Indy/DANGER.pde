@@ -1,5 +1,7 @@
 boolean DANGER_init = false;
-  
+int sweepStartTime = 0;
+int sweepDirection = 1;
+
 void DANGER_setup()
 {
   if(!DANGER_init)
@@ -7,7 +9,7 @@ void DANGER_setup()
     DANGER_init = true;
     
     //INITIALIZATION
-    
+    motor.stop_all();
   }
 }
 
@@ -16,17 +18,18 @@ void DANGER_exit()
   DANGER_init = false;
 }
 
-void lookForTape()
+void sweep(int straightSpeed)
 {
-  if(controller.offTape())
+  if(millis() - sweepStartTime > SWEEP_DURATION)
   {
-    sweepBackwards();
+    sweepStartTime = millis();
+    sweepDirection *= -1; //flip direction
+    leftSpeed = straightSpeed - sweepDirection*SWEEP_OFFSET;
+    rightSpeed = straightSpeed - sweepDirection*SWEEP_OFFSET;
+    
+    motor.speed(LEFT_MOTOR, leftSpeed);
+    motor.speed(RIGHT_MOTOR, rightSpeed);
   }
-}
-
-void sweepBackwards()
-{
-
 }
 
 void DANGER_LCD()

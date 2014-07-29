@@ -20,18 +20,21 @@ void RP_exit()
 
 ///===========MAIN CODE
 
+boolean beaconDetected()
+{
+  return leftIR >= IR_THRESHOLD && rightIR >= IR_THRESHOLD;
+}
+
 void lookForBeacon()
 {
   leftIR = analogRead(LEFT_IR);
   rightIR = analogRead(RIGHT_IR);
-  
-  
-  beaconAim.Compute();
-  
 }
 
 void driveTowardsBeacon()
 {
+  beaconAim.Compute();
+  
   rightSpeed = baseSpeed+steerOutput;
   leftSpeed = baseSpeed-steerOutput;
 

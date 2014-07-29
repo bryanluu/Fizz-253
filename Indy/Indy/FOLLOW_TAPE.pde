@@ -26,6 +26,11 @@ void FT_setup()
     {
       setCollectorTo(COLLECTOR_DOWN);
     }
+    
+    if(lastState == COLLECT_ITEM && currentStrat == FullCourse && passedHill)
+    {
+      baseSpeed = ROCK_SPEED;
+    }
   }
 }
 

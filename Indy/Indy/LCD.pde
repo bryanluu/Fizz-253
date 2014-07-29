@@ -25,9 +25,7 @@ void printLCD()
     switch (currentState)
     {
       case INITIALIZING:
-        LCD.print("Press START");
-        LCD.setCursor(0,1);
-        LCD.print("to begin...");
+        INIT_LCD();
 //        LCD.print(LCDcounter);
         break;
       case FOLLOW_TAPE:

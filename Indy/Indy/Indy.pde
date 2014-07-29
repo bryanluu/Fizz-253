@@ -16,6 +16,10 @@ enum RobotState {
 RobotState currentState = INITIALIZING;
 RobotState lastState = INITIALIZING;  
 
+enum Strategy {FullCourse, OnePoint, TwoPoints, ThreePoints, OnlyIdolGround, OnlyIdolZip};
+Strategy currentStrat = FullCourse;
+
+
 
 // ==================PIN SETTINGS====================
 //Analog
@@ -47,6 +51,9 @@ int HILL_SPEED=(800);
 int ROCK_SPEED=(300);
 int SPIN_SPEED=(1023);
 
+int SWEEP_DURATION=(1000);
+int SWEEP_OFFSET=(100);
+
 //level sensor
 double DANGER_HEIGHT=(35); // max distance in centimeters
 double ON_HILL=(3.03); // on hill threshold
@@ -60,6 +67,9 @@ int COLLECTOR_START=(110);
 int COLLECTOR_DOWN=(120);
 int COLLECTOR_DROP=(130);
 int COLLECTOR_TOP=(17);
+
+//IR detection
+int IR_THRESHOLD=(10);
 
 //zipline arm
 #define ZIPLINE_DOWN_DELAY (5)
@@ -168,14 +178,7 @@ void loop()
   {
       //======================
     case INITIALIZING:
-      motor.stop_all();
-      passedHill = false; // Resets the Hill Pass flag when set back to INIT
-      itemCount = 0;
-      goingHome = false;
-      if(startbutton())
-      {
-        ChangeToState(FOLLOW_TAPE);
-      }
+      INIT_update();
       break;
       //======================
     case FOLLOW_TAPE:
@@ -190,11 +193,78 @@ void loop()
         checkOnHill();
       }
       watchForEdge();
+      
+      if(currentStrat == FullCourse || currentStrat == OnlyIdolGround || currentStrat == OnlyIdolZip)
+      {
+        if(passedHill)
+        {
+          lookForBeacon();
+          if(beaconDetected())
+          {
+            ChangeToState(ROCKPIT);
+          }
+        }
+        
+      }
       break;
       //======================
     case COLLECT_ITEM:
       collect();
+      
+      if(currentStrat != FullCourse && currentStrat <= ThreePoints && itemCount == currentStrat)
+      {
+        LCD.clear(); LCD.home();
+        LCD.print("GOING HOME!");
+        
+        goingHome = true;
+        
+        turnAround();
+        delay(200);
+        do
+        {
+          readTape();
+        }while(controller.offTape());
+        
+      }
+      
       ChangeToState(lastState);
+      
+      if(lastState == ROCKPIT)
+      {
+        if(currentStrat == OnlyIdolGround) //turn around on the rocks
+        {
+          LCD.clear(); LCD.home();
+          LCD.print("GOING HOME!");
+          
+          goingHome = true;
+          
+          turnAround();
+          delay(200);
+          do
+          {
+            lookForBeacon();
+          }while(!beaconDetected());
+          
+          do
+          {
+            lookForBeacon();
+            driveTowardsBeacon();
+          }while(leftIR < 1000 && rightIR < 1000);
+          
+          do
+          {
+            readTape();
+            sweep(FLAT_SPEED);
+          }while(controller.offTape());
+          
+          ChangeToState(FOLLOW_TAPE);
+        }
+        else
+        {
+          ChangeToState(ZIPLINE);
+        }
+      }
+      
       break;
       //======================
     case CLIMB_HILL:
@@ -207,16 +277,35 @@ void loop()
       //======================
     case ROCKPIT:
       lookForBeacon();
-      driveTowardsBeacon();
+      if(beaconDetected())
+      {
+        driveTowardsBeacon();
+      }
+      else
+      {
+        sweep(ROCK_SPEED);
+      }
       watchForEdge();
       break;
       //======================
     case DANGER:
+      if(lastState == FOLLOW_TAPE)
+      {
+        readTape(); 
+        //swivels the bot back and forth backwards until it sees tape
+        if(controller.offTape())
+        {
+          sweep(-FLAT_SPEED);
+        }
+        else
+        {
+          ChangeToState(FOLLOW_TAPE);
+        }
+      }
       break;
       //======================
     case ZIPLINE:
-      //      swingZiplineArm();
-      testZipArm();
+      swingZiplineArm();
       break;
       //======================
     case FINISHED:
@@ -345,6 +434,8 @@ void ExitState(int stateAsInt)
   RobotState state = (RobotState)stateAsInt;
   switch (state)
   {
+    case INITIALIZING:
+      INIT_exit();
     case FOLLOW_TAPE:
       FT_exit();
       break;

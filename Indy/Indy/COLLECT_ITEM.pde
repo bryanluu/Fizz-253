@@ -44,23 +44,6 @@ void collect()
   setCollectorTo(COLLECTOR_DOWN);
   
   
-  
-  if(itemCount == 3)
-  {
-    LCD.clear(); LCD.home();
-    LCD.print("GOING HOME!");
-    
-    goingHome = true;
-    
-    turnAround();
-    delay(200);
-    do
-    {
-      readTape();
-    }while(controller.offTape());
-    
-  }
-  
 }
 
 void setRetrieverTo(int angle)
