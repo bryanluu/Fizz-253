@@ -1,7 +1,7 @@
 boolean INIT_init = false;
 Strategy choice = FullCourse;
 boolean loaded = false;
-  
+
 void initializeChallenge()
 {
   motor.stop_all();
@@ -20,17 +20,17 @@ void INIT_update()
   if(!INIT_init)
   {
     INIT_init = true;
-    
+
     //INITIALIZATION
-    
+
     if(!loaded && hasSavedSettings())
     {
       LoadSettings();
       loaded = true;
     }
-    
+
     initializeChallenge();
-    
+
     LCD.clear();
     LCD.home();
     LCD.print("Press START");
@@ -38,7 +38,7 @@ void INIT_update()
     LCD.print("to begin...");
     delay(1000);
   }
-  
+
   choice = (Strategy)((int)(map(knob(6), 0, KNOB6_MAX, 0, OnlyIdolZip+1)));
   choice = (Strategy)constrain(choice, 0, OnlyIdolZip);
   if(startbutton())
@@ -66,19 +66,20 @@ String GetStratString(int stratAsInt)
   Strategy strat = (Strategy)stratAsInt;
   switch(strat)
   {
-    case FullCourse:
-      return "Full Course";
-    case OnePoint:
-      return "1 Pt";
-    case TwoPoints:
-      return "2 Pts";
-    case ThreePoints:
-      return "3 Pts";
-    case OnlyIdolGround:
-      return "Idol via Gnd";
-    case OnlyIdolZip:
-      return "Idol via Zip";
-    default:
-      return "INVALID";
+  case FullCourse:
+    return "Full Course";
+  case OnePoint:
+    return "1 Pt";
+  case TwoPoints:
+    return "2 Pts";
+  case ThreePoints:
+    return "3 Pts";
+  case OnlyIdolGround:
+    return "Idol via Gnd";
+  case OnlyIdolZip:
+    return "Idol via Zip";
+  default:
+    return "INVALID";
   }
 }
+

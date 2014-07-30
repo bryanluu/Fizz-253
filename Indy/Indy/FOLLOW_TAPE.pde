@@ -1,11 +1,11 @@
 boolean FT_init = false;
-  
+
 void FT_setup()
 {
   if(!FT_init)
   {
     FT_init = true;
-    
+
     //INITIALIZATION
     LCD_FREQ = 100;
     baseSpeed = FLAT_SPEED;
@@ -13,7 +13,7 @@ void FT_setup()
     minDist = -1;
     maxDist = -1;
     setRetrieverTo(RETRIEVER_WITHDRAWN);
-    
+
     if(itemCount==0)
     {
       setCollectorTo(COLLECTOR_START);
@@ -26,7 +26,7 @@ void FT_setup()
     {
       setCollectorTo(COLLECTOR_DOWN);
     }
-    
+
     if(lastState == COLLECT_ITEM && currentStrat == FullCourse && passedHill)
     {
       baseSpeed = ROCK_SPEED;
@@ -48,11 +48,11 @@ void readTape()
   midQRD = analogRead(MID_QRD_PIN);
   rightQRD = analogRead(RIGHT_QRD_PIN);
 
-//  kP = knob(6);
-//  kD = knob(7);
+  //  kP = knob(6);
+  //  kD = knob(7);
 
-//  leftSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);
-//  rightSpeed = (int)map(knob(7), 0, 1023, -1023, 1023);
+  //  leftSpeed = (int)map(knob(6), 0, 1023, -1023, 1023);
+  //  rightSpeed = (int)map(knob(7), 0, 1023, -1023, 1023);
 }
 
 void followTape()
@@ -60,21 +60,21 @@ void followTape()
 
   controller.Compute();
 
-//  switch((int)controller.GetError())
-//  {
-//    case 3:
-//      rightSpeed = 900;
-//      leftSpeed = -500;
-//      break;
-//    case -3:
-//      rightSpeed = -500;
-//      leftSpeed = 900;
-//      break;
-//    default:
-//      rightSpeed = baseSpeed+steerOutput;
-//      leftSpeed = baseSpeed-steerOutput;
-//      break;
-//  }
+  //  switch((int)controller.GetError())
+  //  {
+  //    case 3:
+  //      rightSpeed = 900;
+  //      leftSpeed = -500;
+  //      break;
+  //    case -3:
+  //      rightSpeed = -500;
+  //      leftSpeed = 900;
+  //      break;
+  //    default:
+  //      rightSpeed = baseSpeed+steerOutput;
+  //      leftSpeed = baseSpeed-steerOutput;
+  //      break;
+  //  }
 
   rightSpeed = baseSpeed+steerOutput;
   leftSpeed = baseSpeed-steerOutput;
@@ -88,17 +88,21 @@ void followTape()
 
 void tapeFollowingLCD()
 {
-    LCD.print((int)leftQRD);
-    LCD.setCursor(5,0);LCD.print((int)midQRD);
-    LCD.setCursor(11,0);LCD.print((int)rightQRD);
-    LCD.setCursor(0,1);LCD.print((int)controller.GetError());
-    LCD.setCursor(5,1);LCD.print(minDist);
+  LCD.print((int)leftQRD);
+  LCD.setCursor(5,0);
+  LCD.print((int)midQRD);
+  LCD.setCursor(11,0);
+  LCD.print((int)rightQRD);
+  LCD.setCursor(0,1);
+  LCD.print((int)controller.GetError());
+  LCD.setCursor(5,1);
+  LCD.print(minDist);
 }
 
-//Spins Indy on the Dime to the left.
-void turnAround()
+//If last error is positive => clockwise, if last error negative => counter clock wise
+void turnAround(int spinSpeed)
 {
-  motor.speed(LEFT_MOTOR, -SPIN_SPEED);
-  motor.speed(RIGHT_MOTOR, SPIN_SPEED);
+  motor.speed(LEFT_MOTOR, spinSpeed);
+  motor.speed(RIGHT_MOTOR, -spinSpeed);
 }
 

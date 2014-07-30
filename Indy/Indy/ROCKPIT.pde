@@ -1,13 +1,13 @@
 boolean RP_init = false;
-  
+
 void RP_setup()
 {
   if(!RP_init)
   {
     RP_init = true;
-    
+
     //INITIALIZATION
-    
+
     baseSpeed = ROCK_SPEED;
   }
 }
@@ -34,7 +34,7 @@ void lookForBeacon()
 void driveTowardsBeacon()
 {
   beaconAim.Compute();
-  
+
   rightSpeed = baseSpeed+steerOutput;
   leftSpeed = baseSpeed-steerOutput;
 
@@ -48,9 +48,15 @@ void driveTowardsBeacon()
 void rockpit_LCD()
 {
   LCD.print((int)beaconAim.GetError());
-  LCD.setCursor(5,0);LCD.print((int)leftIR);
-  LCD.setCursor(11,0);LCD.print((int)rightIR);
-  LCD.setCursor(0,1);LCD.print("L: ");LCD.print((int)leftSpeed);
-  LCD.setCursor(8,1);LCD.print("R: ");LCD.print((int)rightSpeed);
+  LCD.setCursor(5,0);
+  LCD.print((int)leftIR);
+  LCD.setCursor(11,0);
+  LCD.print((int)rightIR);
+  LCD.setCursor(0,1);
+  LCD.print("L: ");
+  LCD.print((int)leftSpeed);
+  LCD.setCursor(8,1);
+  LCD.print("R: ");
+  LCD.print((int)rightSpeed);
 }
 

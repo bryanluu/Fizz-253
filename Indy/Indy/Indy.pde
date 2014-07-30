@@ -20,7 +20,9 @@ enum RobotState {
 RobotState currentState = INITIALIZING;
 RobotState lastState = INITIALIZING;  
 
-enum Strategy { FullCourse, OnePoint, TwoPoints, ThreePoints, OnlyIdolGround, OnlyIdolZip };
+enum Strategy { 
+  FullCourse, OnePoint, TwoPoints, ThreePoints, OnlyIdolGround, OnlyIdolZip
+};
 Strategy currentStrat = FullCourse;
 
 
@@ -36,16 +38,20 @@ Strategy currentStrat = FullCourse;
 //Motors
 #define RIGHT_MOTOR 0
 #define LEFT_MOTOR 1
+#define WINCH_MOTOR 2
+#define DEPLOY_MOTOR 3
 
 //Servos
 #define MAGNET_SERVO 0
 #define COLLECTOR_SERVO 1
-#define ZIPLINE_ARM 2
+#define ZIPLINE_ARM 2          
 
 //Digital
 #define COLLECTOR_PIN 0
 #define ZIPLINE_MISS 1
 #define ZIPLINE_HIT 2
+#define WINCH_PIN 9
+#define ARM_STOP_PIN 4
 #define ECHO 7
 #define TRIGGER 8
 
@@ -60,8 +66,8 @@ int SWEEP_OFFSET=(100);
 
 //level sensor
 double DANGER_HEIGHT=(35); // max distance in centimeters
-double ON_HILL=(3.03); // on hill threshold
-double OFF_HILL=(5.0); // off hill threshold
+double ON_HILL=(2.5); // on hill threshold
+double OFF_HILL=(10.0); // off hill threshold
 double DURATION=(1000); //ms
 
 //collector arm
@@ -77,6 +83,7 @@ int IR_THRESHOLD=(10);
 
 //zipline arm
 #define ZIPLINE_DOWN_DELAY (5)
+#define DEPLOY_SPEED -950
 
 //LCD
 #define LCD_FREQ_DEFAULT (500);
@@ -184,154 +191,173 @@ void loop()
 {
   switch (currentState)
   {
-      //======================
-    case INITIALIZING:
-      INIT_update();
-      break;
-      //======================
-    case FOLLOW_TAPE:
-      readTape();
-      followTape();
-      if(!goingHome)
+    //======================
+  case INITIALIZING:
+    INIT_update();
+    break;
+    //======================
+  case FOLLOW_TAPE:
+    readTape();
+    followTape();
+    if(!goingHome)
+    {
+      checkCollectorArm();
+    }
+    if(!passedHill)
+    {
+      checkOnHill();
+    }
+    watchForEdge();
+
+    if(currentStrat == FullCourse || currentStrat == OnlyIdolGround || currentStrat == OnlyIdolZip)
+    {
+      if(passedHill)
       {
-        checkCollectorArm();
-      }
-      if(!passedHill)
-      {
-        checkOnHill();
-      }
-      watchForEdge();
-      
-      if(currentStrat == FullCourse || currentStrat == OnlyIdolGround || currentStrat == OnlyIdolZip)
-      {
-        if(passedHill)
+        lookForBeacon();
+        if(beaconDetected())
         {
-          lookForBeacon();
-          if(beaconDetected())
-          {
-            ChangeToState(ROCKPIT);
-          }
+          ChangeToState(ROCKPIT);
         }
-        
       }
-      break;
-      //======================
-    case COLLECT_ITEM:
-      collect();
-      
-      if(currentStrat != FullCourse && currentStrat <= ThreePoints && itemCount == currentStrat)
+    }
+    break;
+    //======================
+  case COLLECT_ITEM:
+    collect();
+
+    if(currentStrat != FullCourse && currentStrat <= ThreePoints && itemCount == currentStrat)
+    {
+      LCD.clear(); 
+      LCD.home();
+      LCD.print("GOING HOME!");
+
+      goingHome = true;
+
+      if(controller.calculateError()>0)
       {
-        LCD.clear(); LCD.home();
+        turnAround(1023);
+      }
+
+      else if(controller.calculateError()<0)
+      {
+        turnAround(-1023);
+      }
+
+      else if(controller.calculateError()==0)
+      {
+        turnAround(-1023);
+      }
+
+      delay(330);
+
+      do
+      {
+        readTape();
+      }
+      while(controller.offTape());
+    }
+
+    ChangeToState(lastState);
+
+    if(lastState == ROCKPIT)
+    {
+      if(currentStrat == OnlyIdolGround) //turn around on the rocks
+      {
+        LCD.clear(); 
+        LCD.home();
         LCD.print("GOING HOME!");
-        
+
         goingHome = true;
-        
-        turnAround();
+
+        turnAround(-1023);
         delay(200);
         do
         {
+          lookForBeacon();
+        }
+        while(!beaconDetected());
+
+        do
+        {
+          lookForBeacon();
+          driveTowardsBeacon();
+        }
+        while(leftIR < 1000 && rightIR < 1000);
+
+        do
+        {
           readTape();
-        }while(controller.offTape());
-        
-      }
-      
-      ChangeToState(lastState);
-      
-      if(lastState == ROCKPIT)
-      {
-        if(currentStrat == OnlyIdolGround) //turn around on the rocks
-        {
-          LCD.clear(); LCD.home();
-          LCD.print("GOING HOME!");
-          
-          goingHome = true;
-          
-          turnAround();
-          delay(200);
-          do
-          {
-            lookForBeacon();
-          }while(!beaconDetected());
-          
-          do
-          {
-            lookForBeacon();
-            driveTowardsBeacon();
-          }while(leftIR < 1000 && rightIR < 1000);
-          
-          do
-          {
-            readTape();
-            sweep(FLAT_SPEED);
-          }while(controller.offTape());
-          
-          ChangeToState(FOLLOW_TAPE);
+          sweep(FLAT_SPEED);
         }
-        else
-        {
-          ChangeToState(ZIPLINE);
-        }
-      }
-      
-      break;
-      //======================
-    case CLIMB_HILL:
-      readTape();
-      followTape();
-      checkOffHill();
-//      calibrateHeight();
-      watchForEdge();
-      break;
-      //======================
-    case ROCKPIT:
-      lookForBeacon();
-      if(beaconDetected())
-      {
-        driveTowardsBeacon();
+        while(controller.offTape());
+
+        ChangeToState(FOLLOW_TAPE);
       }
       else
       {
-        sweep(ROCK_SPEED);
+        ChangeToState(ZIPLINE);
       }
-      watchForEdge();
-      break;
-      //======================
-    case DANGER:
-      if(lastState == FOLLOW_TAPE)
+    }
+
+    break;
+    //======================
+  case CLIMB_HILL:
+    readTape();
+    followTape();
+    checkOffHill();
+    //      calibrateHeight();
+    watchForEdge();
+    break;
+    //======================
+  case ROCKPIT:
+    lookForBeacon();
+    if(beaconDetected())
+    {
+      driveTowardsBeacon();
+    }
+    else
+    {
+      sweep(ROCK_SPEED);
+    }
+    watchForEdge();
+    break;
+    //======================
+  case DANGER:
+    if(lastState == FOLLOW_TAPE)
+    {
+      readTape(); 
+      //swivels the bot back and forth backwards until it sees tape
+      if(controller.offTape())
       {
-        readTape(); 
-        //swivels the bot back and forth backwards until it sees tape
-        if(controller.offTape())
-        {
-          sweep(-FLAT_SPEED);
-        }
-        else
-        {
-          ChangeToState(FOLLOW_TAPE);
-        }
+        sweep(-FLAT_SPEED);
       }
-      break;
-      //======================
-    case ZIPLINE:
-      swingZiplineArm();
-      break;
-      //======================
-    case FINISHED:
-      break;
-      //======================
-    case TEST:
-      updateTest();
-      break;
-      //======================
-    case SETTINGS:
-      updateSettings();
-      break;
-      //======================
-    case MENU:
-      updateMenu();
-      break;
-    default:
-      break;
+      else
+      {
+        ChangeToState(FOLLOW_TAPE);
+      }
+    }
+    break;
+    //======================
+  case ZIPLINE:
+    swingZiplineArm();
+    break;
+    //======================
+  case FINISHED:
+    break;
+    //======================
+  case TEST:
+    updateTest();
+    break;
+    //======================
+  case SETTINGS:
+    updateSettings();
+    break;
+    //======================
+  case MENU:
+    updateMenu();
+    break;
+  default:
+    break;
   }
 
   //Check for Stopbutton to trigger the MENU
@@ -354,30 +380,30 @@ String GetStateName(int stateAsInt)
   String name;
   switch (state)
   {
-    case INITIALIZING:
-      return "INIT";
-    case FOLLOW_TAPE:
-      return "FT";
-    case COLLECT_ITEM:
-      return "CI";
-    case CLIMB_HILL:
-      return "CH";
-    case ROCKPIT:
-      return "RP";
-    case DANGER:
-      return "DANGER";
-    case ZIPLINE:
-      return "ZIP";
-    case FINISHED:
-      return "FIN";
-    case TEST:
-      return "TEST";
-    case SETTINGS:
-      return "SETTINGS";
-    case MENU:
-      return "MENU";
-    default:
-      return "INVALID";
+  case INITIALIZING:
+    return "INIT";
+  case FOLLOW_TAPE:
+    return "FT";
+  case COLLECT_ITEM:
+    return "CI";
+  case CLIMB_HILL:
+    return "CH";
+  case ROCKPIT:
+    return "RP";
+  case DANGER:
+    return "DANGER";
+  case ZIPLINE:
+    return "ZIP";
+  case FINISHED:
+    return "FIN";
+  case TEST:
+    return "TEST";
+  case SETTINGS:
+    return "SETTINGS";
+  case MENU:
+    return "MENU";
+  default:
+    return "INVALID";
   }
   return name;
 }
@@ -397,11 +423,11 @@ void ChangeToState(int newStateAsInt)
     {
       lastState = currentState;
     }
-    
-    
+
+
     ExitState(currentState);
     SetupState(newState);
-    
+
     currentState = newState;
     LCDcounter = LCD_STATE_FREQ; //so that it displays the new state first
   }
@@ -413,27 +439,27 @@ void SetupState(int stateAsInt)
   RobotState state = (RobotState)stateAsInt;
   switch (state)
   {
-    case FOLLOW_TAPE:
-      FT_setup();
-      break;
-    case CLIMB_HILL:
-      CH_setup();
-      break;
-    case MENU:
-      MENU_setup();
-      break;
-    case ROCKPIT:
-      RP_setup();
-      break;
-    case DANGER:
-      DANGER_setup();
-      break;
-    case TEST:
-      TEST_setup();
-      break;
-    case SETTINGS:
-      SETTINGS_setup();
-      break;
+  case FOLLOW_TAPE:
+    FT_setup();
+    break;
+  case CLIMB_HILL:
+    CH_setup();
+    break;
+  case MENU:
+    MENU_setup();
+    break;
+  case ROCKPIT:
+    RP_setup();
+    break;
+  case DANGER:
+    DANGER_setup();
+    break;
+  case TEST:
+    TEST_setup();
+    break;
+  case SETTINGS:
+    SETTINGS_setup();
+    break;
   }
 }
 
@@ -442,27 +468,28 @@ void ExitState(int stateAsInt)
   RobotState state = (RobotState)stateAsInt;
   switch (state)
   {
-    case INITIALIZING:
-      INIT_exit();
-    case FOLLOW_TAPE:
-      FT_exit();
-      break;
-    case CLIMB_HILL:
-      CH_exit();
-      break;
-    case MENU:
-      MENU_exit();
-      break;
-    case ROCKPIT:
-      RP_exit();
-      break;
-    case DANGER:
-      DANGER_exit();
-    case TEST:
-      TEST_exit();
-      break;
-    case SETTINGS:
-      SETTINGS_exit();
-      break;
+  case INITIALIZING:
+    INIT_exit();
+  case FOLLOW_TAPE:
+    FT_exit();
+    break;
+  case CLIMB_HILL:
+    CH_exit();
+    break;
+  case MENU:
+    MENU_exit();
+    break;
+  case ROCKPIT:
+    RP_exit();
+    break;
+  case DANGER:
+    DANGER_exit();
+  case TEST:
+    TEST_exit();
+    break;
+  case SETTINGS:
+    SETTINGS_exit();
+    break;
   }
 }
+

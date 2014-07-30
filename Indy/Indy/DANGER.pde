@@ -7,7 +7,7 @@ void DANGER_setup()
   if(!DANGER_init)
   {
     DANGER_init = true;
-    
+
     //INITIALIZATION
     motor.stop_all();
   }
@@ -26,7 +26,7 @@ void sweep(int straightSpeed)
     sweepDirection *= -1; //flip direction
     leftSpeed = straightSpeed - sweepDirection*SWEEP_OFFSET;
     rightSpeed = straightSpeed + sweepDirection*SWEEP_OFFSET;
-    
+
     motor.speed(LEFT_MOTOR, leftSpeed);
     motor.speed(RIGHT_MOTOR, rightSpeed);
   }
@@ -35,7 +35,8 @@ void sweep(int straightSpeed)
 void DANGER_LCD()
 {
   LCD.print("Looking for");
-  LCD.setCursor(0,1); LCD.print("Tape...");
+  LCD.setCursor(0,1); 
+  LCD.print("Tape...");
 }
 
 void watchForEdge()
@@ -45,3 +46,4 @@ void watchForEdge()
     ChangeToState(DANGER);
   }
 }
+

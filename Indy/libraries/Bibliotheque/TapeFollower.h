@@ -59,9 +59,6 @@ class TapeFollower
 	bool offTape();
 	bool missedState();
 
-#ifndef TESTING
-private:
-#endif
 	double THRESHOLD;
     double LeftOffset, MidOffset, RightOffset;
 
