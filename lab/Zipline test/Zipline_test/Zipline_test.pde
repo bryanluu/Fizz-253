@@ -96,9 +96,6 @@ void loop()
         
      // INSERT WINCH MOTOR CODE HERE
 
-     while(digitalRead(3) == HIGH)
-     {delay(15);}
-     motor.speed(3,0);
     
      
      LCD.home();

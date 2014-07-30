@@ -39,7 +39,7 @@ void collect()
 
   LCD.clear(); 
   LCD.home();
-  LCD.print(itemCount++);
+  LCD.print(++itemCount);
   LCD.setCursor(0,1);
   LCD.print("Collected");
 

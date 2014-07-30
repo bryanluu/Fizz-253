@@ -169,7 +169,7 @@ void setup()
   // something that bryan's libraries need
   controller.attach_Kp_To(&kP);
   controller.attach_Kd_To(&kD);
-  controller.SetThreshold(70);
+  controller.SetThreshold(100);
   controller.SetOffsets(0, 0, 0);
 
   beaconAim.attach_Kp_To(&beacon_kP);
