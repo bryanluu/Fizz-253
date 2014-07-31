@@ -38,8 +38,7 @@ Strategy currentStrat = FullCourse;
 //Motors
 #define RIGHT_MOTOR 0
 #define LEFT_MOTOR 1
-#define WINCH_MOTOR 2
-#define DEPLOY_MOTOR 3
+#define DEPLOY_MOTOR 2
 
 //Servos
 #define MAGNET_SERVO 0
@@ -165,6 +164,7 @@ void setup()
   // initialize servo positions
   setRetrieverTo(RETRIEVER_WITHDRAWN);
   setCollectorTo(COLLECTOR_DOWN);
+  RCServo2.write(180);
 
   // something that bryan's libraries need
   controller.attach_Kp_To(&kP);

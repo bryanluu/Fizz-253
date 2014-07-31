@@ -47,12 +47,14 @@ void ziplineGo()
   RCServo2.write(90);
   delay(500);
 
-  delay(500);
-  // retract deployment arm
-  motor.speed(DEPLOY_MOTOR,700);
+
 
   //start winching
   digitalWrite(WINCH_PIN,HIGH);
+  
+  delay(3000);
+  // retract deployment arm
+  motor.speed(DEPLOY_MOTOR,700);
 
   while(digitalRead(ARM_STOP_PIN) == HIGH)
   {
@@ -62,13 +64,15 @@ void ziplineGo()
   // chill at the bottom
   motor.speed(DEPLOY_MOTOR,0);
   
-  delay(2000);
+  delay(4000);
   digitalWrite(WINCH_PIN,LOW);
 
      //while(digitalRead(4) == HIGH)
      //{
      // delay(15);
      // }
+     
+   ChangeToState(MENU);
 
 }
 
