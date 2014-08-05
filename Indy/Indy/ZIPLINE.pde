@@ -44,7 +44,7 @@ void ziplineGo()
   motor.speed(DEPLOY_MOTOR,0);
 
   // retract servo, carabiner drops onto zipline
-  RCServo2.write(90);
+  setZiplineDeployTo(90);
   delay(500);
 
 
@@ -74,9 +74,9 @@ void ziplineGo()
   while(!startbutton()){
     delay(15);
   }
-  RCServo2.write(170);
+  setZiplineDeployTo(170);
      
-   ChangeToState(MENU);
+  ChangeToState(MENU);
 
 }
 
@@ -97,17 +97,22 @@ void ziplineTryAgain()
   delay(2000);
 }
 
-boolean ziplineHit()
+inline boolean ziplineHit()
 {
   return digitalRead(ZIPLINE_HIT) == LOW;
 }
 
-boolean ziplineMiss()
+inline boolean ziplineMiss()
 {
   return digitalRead(ZIPLINE_MISS) == LOW;
 }
 
 void ziplineLCD()
 {
+}
+
+void setZiplineDeployTo(int angle)
+{
+  RCServo2.write(angle);
 }
 

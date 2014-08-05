@@ -1,22 +1,5 @@
-boolean DANGER_init = false;
 unsigned long sweepStartTime = 0;
 int sweepDirection = 1;
-
-void DANGER_setup()
-{
-  if(!DANGER_init)
-  {
-    DANGER_init = true;
-
-    //INITIALIZATION
-    motor.stop_all();
-  }
-}
-
-void DANGER_exit()
-{
-  DANGER_init = false;
-}
 
 void sweep(int straightSpeed)
 {
@@ -32,18 +15,10 @@ void sweep(int straightSpeed)
   }
 }
 
-void DANGER_LCD()
+//If last error is positive => clockwise, if last error negative => counter clock wise
+void turnAround(int spinSpeed)
 {
-  LCD.print("Looking for");
-  LCD.setCursor(0,1); 
-  LCD.print("Tape...");
-}
-
-void watchForEdge()
-{
-  if (distance >= DANGER_HEIGHT)
-  {
-    ChangeToState(DANGER);
-  }
+  motor.speed(LEFT_MOTOR, spinSpeed);
+  motor.speed(RIGHT_MOTOR, -spinSpeed);
 }
 

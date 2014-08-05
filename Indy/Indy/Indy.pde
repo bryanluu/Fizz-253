@@ -14,7 +14,7 @@
 #include <EEPROMVar.h>
 
 enum RobotState {
-  INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, DANGER, ZIPLINE, FINISHED, TEST, SETTINGS, MENU
+  INITIALIZING, FOLLOW_TAPE, COLLECT_ITEM, CLIMB_HILL, ROCKPIT, ZIPLINE, FINISHED, TEST, SETTINGS, MENU
 };
 
 RobotState currentState = INITIALIZING;
@@ -55,31 +55,30 @@ Strategy currentStrat = FullCourse;
 #define TRIGGER 8
 
 //====================SETTINGS========================
-int FLAT_SPEED=(300);
-int HILL_SPEED=(800);
-int ROCK_SPEED=(300);
+int FLAT_SPEED=(400);
+int HILL_SPEED=(950);
+int ROCK_SPEED=(450);
 int SPIN_SPEED=(1023);
 
 int SWEEP_DURATION=(1000);
-int SWEEP_OFFSET=(100);
+int SWEEP_OFFSET=(500);
 
 //level sensor
-double DANGER_HEIGHT=(35); // max distance in centimeters
-double ON_HILL=(2.5); // on hill threshold
-double OFF_HILL=(10.0); // off hill threshold
-double DURATION=(1000); //ms
+double ON_HILL=(25); // on hill threshold
+double OFF_HILL=(50); // off hill threshold
 
 //collector arm
 int RETRIEVER_WITHDRAWN=(0);
-int RETRIEVER_EXTEND=(117);
+int RETRIEVER_EXTEND=(130);
 int COLLECTOR_START=(110);
-int COLLECTOR_DOWN=(120);
-int COLLECTOR_DROP=(130);
+int COLLECTOR_DOWN=(110);
+int COLLECTOR_DROP=(122);
 int COLLECTOR_TOP=(17);
 int COLLECTOR_ROCK=(113);
 
 //IR detection
-int IR_THRESHOLD=(10);
+double DURATION=(1000); //ms
+int IR_THRESHOLD=(20);
 
 //zipline arm
 #define ZIPLINE_DOWN_DELAY (5)
@@ -165,7 +164,7 @@ void setup()
   // initialize servo positions
   setRetrieverTo(RETRIEVER_WITHDRAWN);
   setCollectorTo(COLLECTOR_DOWN);
-  RCServo2.write(170);
+  setZiplineDeployTo(170);
 
   // something that bryan's libraries need
   controller.attach_Kp_To(&kP);
@@ -204,23 +203,11 @@ void loop()
     {
       checkCollectorArm();
     }
-//    if(!passedHill)
-//    {
-//      checkOnHill();
-//    }
-//    watchForEdge();
-
-    if(currentStrat == FullCourse || currentStrat == OnlyIdolGround || currentStrat == OnlyIdolZip)
+    if(!passedHill)
     {
-      if(passedHill)
-      {
-        lookForBeacon();
-        if(beaconDetected())
-        {
-          ChangeToState(ROCKPIT);
-        }
-      }
+      checkOnHill();
     }
+
     break;
     //======================
   case COLLECT_ITEM:
@@ -257,8 +244,22 @@ void loop()
       }
       while(controller.offTape());
     }
-
-    ChangeToState(lastState);
+    
+    if(currentStrat == FullCourse || currentStrat == OnlyIdolGround || currentStrat == OnlyIdolZip)
+    {
+      if(passedHill)
+      {
+        unsigned long readyRockTime = millis();
+        setCollectorTo(COLLECTOR_TOP);
+        baseSpeed = 700;
+        do
+        {
+        readTape();
+        followTape();
+        }while(millis()-readyRockTime<=DURATION);
+        ChangeToState(ROCKPIT);
+      }
+    }
 
     if(lastState == ROCKPIT)
     {
@@ -299,6 +300,10 @@ void loop()
         ChangeToState(ZIPLINE);
       }
     }
+    else
+    {
+      ChangeToState(lastState);
+    }
 
     break;
     //======================
@@ -306,8 +311,8 @@ void loop()
     readTape();
     followTape();
     checkOffHill();
-    //      calibrateHeight();
-    watchForEdge();
+//    calibrateHeight();
+
     break;
     //======================
   case ROCKPIT:
@@ -318,31 +323,16 @@ void loop()
     }
     else
     {
-      sweep(FLAT_SPEED);
+      sweep(ROCK_SPEED);
     }
-//    watchForEdge();
+    checkCollectorArm();
+    
     
     LCD.clear();
     LCD.home();
     rockpit_LCD();
     delay(50);
     
-    break;
-    //======================
-  case DANGER:
-    if(lastState == FOLLOW_TAPE)
-    {
-      readTape(); 
-      //swivels the bot back and forth backwards until it sees tape
-      if(controller.offTape())
-      {
-        sweep(-FLAT_SPEED);
-      }
-      else
-      {
-        ChangeToState(FOLLOW_TAPE);
-      }
-    }
     break;
     //======================
   case ZIPLINE:
@@ -398,8 +388,6 @@ String GetStateName(int stateAsInt)
     return "CH";
   case ROCKPIT:
     return "RP";
-  case DANGER:
-    return "DANGER";
   case ZIPLINE:
     return "ZIP";
   case FINISHED:
@@ -459,9 +447,6 @@ void SetupState(int stateAsInt)
   case ROCKPIT:
     RP_setup();
     break;
-  case DANGER:
-    DANGER_setup();
-    break;
   case TEST:
     TEST_setup();
     break;
@@ -490,8 +475,6 @@ void ExitState(int stateAsInt)
   case ROCKPIT:
     RP_exit();
     break;
-  case DANGER:
-    DANGER_exit();
   case TEST:
     TEST_exit();
     break;

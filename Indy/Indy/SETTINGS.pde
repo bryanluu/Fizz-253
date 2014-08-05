@@ -2,8 +2,8 @@
 boolean SETTINGS_init = false;
 enum Setting { 
   FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND,
-  HILLSPEED, CH_ON_HILL, CH_OFF_HILL, CH_DURATION, EDGE_HEIGHT, SPINSPEED, SWEEP_DUR, SWEEP_OFF, 
-  IR_THRESH, ROCKSPEED, RP_ANGLE, RP_KP, RP_KI, RP_KD, CLEAR, NO_SETTING
+  HILLSPEED, CH_ON_HILL, CH_OFF_HILL, SPINSPEED, SWEEP_DUR, SWEEP_OFF, 
+  RP_DURATION, IR_THRESH, ROCKSPEED, RP_ANGLE, RP_KP, RP_KI, RP_KD, CLEAR, NO_SETTING
 };
 Setting settingChoice = NO_SETTING;
 Setting currentSetting = NO_SETTING;
@@ -51,7 +51,7 @@ void updateSettings()
         LCD.print("Press RESET");
         LCD.setCursor(0,1); 
         LCD.print("for Defaults");
-        delay(1000);
+        while(true){}
       }
       else
       {
@@ -77,14 +77,13 @@ void updateSettings()
       value = map(knob(6), 0, KNOB6_MAX, 0, 180);
       break;
     case CH_ON_HILL:
-    case CH_OFF_HILL:
       value = map(knob(6), 0, KNOB6_MAX, 0, 10.0);
       break;
-    case CH_DURATION:
+    case CH_OFF_HILL:
       value = map(knob(6), 0, KNOB6_MAX, 0, 5000.0);
       break;
-    case EDGE_HEIGHT:
-      value = map(knob(6), 0, KNOB6_MAX, 0, 100.0);
+    case RP_DURATION:
+      value = map(knob(6), 0, KNOB6_MAX, 0, 5000.0);
       break;
     case RP_KP:
     case RP_KI:
@@ -189,12 +188,6 @@ void SetSetting(int settingAsInt, double value)
   case CH_OFF_HILL:
     OFF_HILL = value;
     break;
-  case CH_DURATION:
-    DURATION = value;
-    break;
-  case EDGE_HEIGHT:
-    DANGER_HEIGHT = value;
-    break;
   case SPINSPEED:
     SPIN_SPEED = value;
     break;
@@ -203,6 +196,9 @@ void SetSetting(int settingAsInt, double value)
     break;
   case SWEEP_OFF:
     SWEEP_OFFSET = (int)value;
+    break;
+  case RP_DURATION:
+    DURATION = value;
     break;
   case IR_THRESH:
     IR_THRESHOLD = (int)value;
@@ -255,16 +251,14 @@ String GetSettingName(int settingAsInt)
     return "On Hill";
   case CH_OFF_HILL:
     return "Off Hill";
-  case CH_DURATION:
-    return "CH Duration";
-  case EDGE_HEIGHT:
-    return "Edge";
   case SPINSPEED:
     return "Spin Speed";
   case SWEEP_DUR:
     return "Sweep Dur";
   case SWEEP_OFF:
     return "Sweep Off";
+  case RP_DURATION:
+    return "RP Duration";
   case IR_THRESH:
     return "IR Thresh";
   case ROCKSPEED:
@@ -311,16 +305,14 @@ double GetSettingValue(int settingAsInt)
     return ON_HILL;
   case CH_OFF_HILL:
     return OFF_HILL;
-  case CH_DURATION:
-    return DURATION;
-  case EDGE_HEIGHT:
-    return DANGER_HEIGHT;
   case SPINSPEED:
     return SPIN_SPEED;
   case SWEEP_DUR:
     return SWEEP_DURATION;
   case SWEEP_OFF:
     return SWEEP_OFFSET;
+  case RP_DURATION:
+    return DURATION;
   case IR_THRESH:
     return IR_THRESHOLD;
   case ROCKSPEED:

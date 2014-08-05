@@ -99,10 +99,3 @@ void tapeFollowingLCD()
   LCD.print(minDist);
 }
 
-//If last error is positive => clockwise, if last error negative => counter clock wise
-void turnAround(int spinSpeed)
-{
-  motor.speed(LEFT_MOTOR, spinSpeed);
-  motor.speed(RIGHT_MOTOR, -spinSpeed);
-}
-

@@ -19,13 +19,13 @@ void collect()
   LCD.setCursor(0,0); 
   LCD.print("Picking Up!");
 
-  if(itemCount == 0)
-  {
-    motor.speed(LEFT_MOTOR, -300);
-    motor.speed(RIGHT_MOTOR, -300);
-    delay(200);
-    motor.stop_all();
-  }
+//  if(itemCount == 0)
+//  {
+//    motor.speed(LEFT_MOTOR, -300);
+//    motor.speed(RIGHT_MOTOR, -300);
+//    delay(200);
+//    motor.stop_all();
+//  }
 
   setRetrieverTo(RETRIEVER_EXTEND);
   delay(10);

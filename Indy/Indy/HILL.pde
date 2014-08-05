@@ -59,28 +59,26 @@ void checkOffHill()
     LCD.clear();
     LCD.home();
     LCD.print("OFF HILL!");
+    
+    motor.stop(LEFT_MOTOR);
+    motor.stop(RIGHT_MOTOR);
+    collect();
+    ChangeToState(FOLLOW_TAPE);
   }
 
-  if(passedHill)
-  {
-    if(millis() - startTime > DURATION)
-    {
-      motor.stop(LEFT_MOTOR);
-      motor.stop(RIGHT_MOTOR);
-      collect();
-      ChangeToState(FOLLOW_TAPE);
-    }
-  }
+//  if(passedHill)
+//  {
+//    if(distance <= FLAT_GROUND)
+//    {
+//      motor.stop(LEFT_MOTOR);
+//      motor.stop(RIGHT_MOTOR);
+//      collect();
+//      ChangeToState(FOLLOW_TAPE);
+//    }
+//  }
 }
 
-void checkDanger()
-{
-  senseHeight();
-  if(distance >= DANGER_HEIGHT)
-  {
-    //    ChangeToState();
-  }
-}
+
 
 /* Measures the distance from the ULS sensor */
 void senseHeight()
@@ -123,13 +121,10 @@ void hill_LCD()
   //  LCD.print("D: "); LCD.print(distance);
   //  LCD.setCursor(0,1); LCD.print(minDist);
   //  LCD.setCursor(8,1); LCD.print(maxDist);
-  LCD.print((int)leftQRD);
-  LCD.setCursor(5,0);
-  LCD.print((int)midQRD);
-  LCD.setCursor(11,0);
-  LCD.print((int)rightQRD);
+  LCD.print((int)distance);
   LCD.setCursor(0,1);
-  LCD.print((int)controller.GetError());
+//  LCD.print((int)controller.GetError());
+  LCD.print(minDist);
   LCD.setCursor(5,1);
   LCD.print(maxDist);
 }
