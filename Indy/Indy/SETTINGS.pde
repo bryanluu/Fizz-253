@@ -334,12 +334,24 @@ double GetSettingValue(int settingAsInt)
 
 void SaveSettings()
 {
+  boolean writtenSettings = false;
   for(int setting=0; setting < CLEAR; setting++)
   {
-    EEPROM.updateDouble(setting*sizeof(double), GetSettingValue(setting));
+    if(EEPROM.readDouble(setting*sizeof(double)) != GetSettingValue(setting))
+    {
+      EEPROM.updateDouble(setting*sizeof(double), GetSettingValue(setting));
+      writtenSettings = true;
+    }
   }
-
-  EEPROM.write(CLEAR*sizeof(double), 's'); //S means settings have been saved
+  
+  if(writtenSettings)
+  {
+    EEPROM.write(CLEAR*sizeof(double), 's'); //S means settings have been saved
+  }
+  else
+  {
+    EEPROM.write(CLEAR*sizeof(double), 0); //S means settings have been saved
+  }
 }
 
 void LoadSettings()

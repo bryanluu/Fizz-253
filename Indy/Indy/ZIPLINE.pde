@@ -30,7 +30,7 @@ void swingZiplineArm()
   else if(ziplineMiss())
   {
     ziplineTryAgain();
-    swingZiplineArm();
+//    swingZiplineArm();
   }
 }
 

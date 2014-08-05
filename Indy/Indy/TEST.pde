@@ -1,7 +1,7 @@
 /*This state is for testing TINAH and the general systems of INDY*/
 boolean TEST_init = false;
 enum TEST_KIND { 
-  MOTORS, COLLECTOR, SWEEP, NONE
+  MOTORS, COLLECTOR, SWEEP, WINCH, NONE
 };
 TEST_KIND testChoice = NONE;
 TEST_KIND currentTest = NONE;
@@ -41,6 +41,7 @@ void updateTest()
     if(startbutton())
     {
       currentTest = testChoice;
+      delay(500);
     }
     break;
   case MOTORS:
@@ -51,6 +52,9 @@ void updateTest()
     break;
   case SWEEP:
     testSweep();
+    break;
+  case WINCH:
+    testWinch();
     break;
   }
 }
@@ -94,6 +98,20 @@ void testSweep()
   sweep(sweepSpeed);
 }
 
+void testWinch()
+{
+  
+  if(startbutton())
+  {
+    digitalWrite(WINCH_PIN, HIGH);
+  }
+  else
+  {
+    digitalWrite(WINCH_PIN, LOW);
+  }
+  
+}
+
 ///////TEST LCD/////////
 
 void testLCD()
@@ -113,6 +131,9 @@ void testLCD()
     break;
   case SWEEP:
     testSweepLCD();
+    break;
+  case WINCH:
+    testWinchLCD();
     break;
   }
 }
@@ -146,6 +167,20 @@ void testSweepLCD()
   LCD.print(sweepSpeed);
 }
 
+void testWinchLCD()
+{
+  LCD.print("Use START");
+  LCD.setCursor(0,1);
+  if(startbutton())
+  {
+    LCD.print("Winch ON");
+  }
+  else
+  {
+    LCD.print("Winch OFF");
+  }
+}
+
 String GetTestName(int testAsInt)
 {
   TEST_KIND test = (TEST_KIND)testAsInt;
@@ -157,6 +192,8 @@ String GetTestName(int testAsInt)
     return "COLLECTOR";
   case SWEEP:
     return "SWEEP";
+  case WINCH:
+    return "WINCH";
   default:
     return "INVALID";
   }
