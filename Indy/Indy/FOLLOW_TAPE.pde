@@ -8,7 +8,14 @@ void FT_setup()
 
     //INITIALIZATION
     LCD_FREQ = 100;
-    baseSpeed = FLAT_SPEED;
+    if(!goingHome)
+    {
+      baseSpeed = FLAT_SPEED;
+    }
+    else
+    {
+      baseSpeed = FLAT_SPEED-50;
+    }
     hillCount = 0;
     minDist = -1;
     maxDist = -1;
