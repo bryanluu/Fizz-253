@@ -43,7 +43,7 @@ double PID::Compute()
 
 	StandardCalc::boundValueBetween(&ITerm, outMin, outMax);
 
-	*Output = PTerm + ITerm + DTerm;
+	*Output = -(PTerm + ITerm + DTerm);
 
 
 
@@ -60,7 +60,7 @@ void PID::updateOldData()
 /*Returns a positive error if Input is Undershooting Setpoint, negative if overshooting, and 0 if on setpoint*/
 double PID::calculateError()
 {
-	error = *Setpoint - *Input;
+	error = *Input - *Setpoint;
 	return error;
 }
 

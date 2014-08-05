@@ -11,7 +11,6 @@ void printLCD()
 
       LCD.clear();
       LCD.home();
-      LCD.setCursor(0,0);
 
       LCD.print("STATE:");
       LCD.setCursor(0,1);
@@ -22,7 +21,6 @@ void printLCD()
   {
     LCD.clear();
     LCD.home();
-    LCD.setCursor(0,0);
 
     switch (currentState)
     {

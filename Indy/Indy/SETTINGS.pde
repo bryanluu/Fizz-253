@@ -1,9 +1,9 @@
 /*This state is for adjusting the settings of INDY*/
 boolean SETTINGS_init = false;
 enum Setting { 
-  FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND, 
+  FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND,
   HILLSPEED, CH_ON_HILL, CH_OFF_HILL, CH_DURATION, EDGE_HEIGHT, SPINSPEED, SWEEP_DUR, SWEEP_OFF, 
-  IR_THRESH, ROCKSPEED, RP_KP, RP_KI, RP_KD, CLEAR, NO_SETTING
+  IR_THRESH, ROCKSPEED, RP_ANGLE, RP_KP, RP_KI, RP_KD, CLEAR, NO_SETTING
 };
 Setting settingChoice = NO_SETTING;
 Setting currentSetting = NO_SETTING;
@@ -73,6 +73,7 @@ void updateSettings()
     case CI_C_DROP:
     case CI_R_WITHDRAWN:
     case CI_R_EXTEND:
+    case RP_ANGLE:
       value = map(knob(6), 0, KNOB6_MAX, 0, 180);
       break;
     case CH_ON_HILL:
@@ -83,6 +84,11 @@ void updateSettings()
       value = map(knob(6), 0, KNOB6_MAX, 0, 5000.0);
       break;
     case EDGE_HEIGHT:
+      value = map(knob(6), 0, KNOB6_MAX, 0, 100.0);
+      break;
+    case RP_KP:
+    case RP_KI:
+    case RP_KD:
       value = map(knob(6), 0, KNOB6_MAX, 0, 100.0);
       break;
     default:
@@ -204,14 +210,16 @@ void SetSetting(int settingAsInt, double value)
   case ROCKSPEED:
     ROCK_SPEED = (int)value;
     break;
+  case RP_ANGLE:
+    COLLECTOR_ROCK = (int)value;
   case RP_KP:
-    beacon_kP = (int)value;
+    beacon_kP = value;
     break;
   case RP_KI:
-    beacon_kI = (int)value;
+    beacon_kI = value;
     break;
   case RP_KD:
-    beacon_kD = (int)value;
+    beacon_kD = value;
     break;
   default:
     break;
@@ -261,6 +269,8 @@ String GetSettingName(int settingAsInt)
     return "IR Thresh";
   case ROCKSPEED:
     return "Rock Speed";
+  case RP_ANGLE:
+    return "Rock Angle";
   case RP_KP:
     return "Beacon kP";
   case RP_KI:
@@ -315,6 +325,8 @@ double GetSettingValue(int settingAsInt)
     return IR_THRESHOLD;
   case ROCKSPEED:
     return ROCK_SPEED;
+  case RP_ANGLE:
+    return COLLECTOR_ROCK;
   case RP_KP:
     return beacon_kP;
   case RP_KI:

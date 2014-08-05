@@ -76,13 +76,14 @@ int COLLECTOR_START=(110);
 int COLLECTOR_DOWN=(120);
 int COLLECTOR_DROP=(130);
 int COLLECTOR_TOP=(17);
+int COLLECTOR_ROCK=(113);
 
 //IR detection
 int IR_THRESHOLD=(10);
 
 //zipline arm
 #define ZIPLINE_DOWN_DELAY (5)
-#define DEPLOY_SPEED -950
+#define DEPLOY_SPEED (-950)
 
 //LCD
 #define LCD_FREQ_DEFAULT (500);
@@ -91,8 +92,8 @@ unsigned long LCD_FREQ=LCD_FREQ_DEFAULT;
 #define LCD_STATE_DUR (LCD_FREQ*10)
 
 //Hardware
-#define KNOB6_MAX (959)
-#define KNOB7_MAX (959)
+#define KNOB6_MAX (1023)
+#define KNOB7_MAX (1023)
 
 //====================VARIABLES=======================
 
@@ -127,8 +128,8 @@ boolean passedHill = false;
 //ROCKPIT BEACON SENSING
 double leftIR = 0;
 double rightIR = 0;
-PID beaconAim(&leftIR, &rightIR, &steerOutput);
-double beacon_kP = 400;
+PID beaconAim(&rightIR, &leftIR, &steerOutput);
+double beacon_kP = 10;
 double beacon_kI = 0;
 double beacon_kD = 0;
 
@@ -203,11 +204,11 @@ void loop()
     {
       checkCollectorArm();
     }
-    if(!passedHill)
-    {
-      checkOnHill();
-    }
-    watchForEdge();
+//    if(!passedHill)
+//    {
+//      checkOnHill();
+//    }
+//    watchForEdge();
 
     if(currentStrat == FullCourse || currentStrat == OnlyIdolGround || currentStrat == OnlyIdolZip)
     {
@@ -317,9 +318,15 @@ void loop()
     }
     else
     {
-      sweep(ROCK_SPEED);
+      sweep(FLAT_SPEED);
     }
-    watchForEdge();
+//    watchForEdge();
+    
+    LCD.clear();
+    LCD.home();
+    rockpit_LCD();
+    delay(50);
+    
     break;
     //======================
   case DANGER:
@@ -368,8 +375,9 @@ void loop()
       ChangeToState(MENU);
     }
   }
-
+  
   printLCD();
+  
 }
 
 
