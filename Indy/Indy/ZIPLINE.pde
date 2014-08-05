@@ -67,10 +67,14 @@ void ziplineGo()
   delay(4000);
   digitalWrite(WINCH_PIN,LOW);
 
-     //while(digitalRead(4) == HIGH)
-     //{
-     // delay(15);
-     // }
+
+  //hit start to reset the servo holding the carabiner in (instead of resetting TINAH)
+  LCD.clear(); LCD.home();
+  LCD.print("Press start...");
+  while(!startbutton()){
+    delay(15);
+  }
+  RCServo2.write(170);
      
    ChangeToState(MENU);
 

@@ -50,7 +50,7 @@ Strategy currentStrat = FullCourse;
 #define ZIPLINE_MISS 1
 #define ZIPLINE_HIT 2
 #define WINCH_PIN 9
-#define ARM_STOP_PIN 4
+#define ARM_STOP_PIN 3
 #define ECHO 7
 #define TRIGGER 8
 
@@ -164,7 +164,7 @@ void setup()
   // initialize servo positions
   setRetrieverTo(RETRIEVER_WITHDRAWN);
   setCollectorTo(COLLECTOR_DOWN);
-  RCServo2.write(180);
+  RCServo2.write(170);
 
   // something that bryan's libraries need
   controller.attach_Kp_To(&kP);
