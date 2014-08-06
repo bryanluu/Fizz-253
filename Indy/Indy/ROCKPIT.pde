@@ -44,6 +44,11 @@ void driveTowardsBeacon()
 {
   beaconAim.Compute();
   
+  if(isCloseToIdol())
+  {
+    baseSpeed = ROCK_SPEED - 50;
+  }
+  
   steerOutput = constrain(steerOutput, -500, 500);
   
   rightSpeed = baseSpeed + steerOutput;
@@ -79,3 +84,7 @@ void rockpit_LCD()
   LCD.print((int)rightSpeed);
 }
 
+inline boolean isCloseToIdol()
+{
+  return leftIR > IR_SLOWDIST || rightIR > IR_SLOWDIST;
+}

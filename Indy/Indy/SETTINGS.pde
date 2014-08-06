@@ -3,7 +3,7 @@ boolean SETTINGS_init = false;
 enum Setting { 
   FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND,
   HILLSPEED, CH_ON_HILL, CH_OFF_HILL, SPINSPEED, SWEEP_DUR, SWEEP_OFF, 
-  RP_DURATION, IR_THRESH, ROCKSPEED, RP_ANGLE, RP_KP, RP_KI, RP_KD, CLEAR, NO_SETTING
+  RP_DURATION, IR_THRESH, IR_SLOW, ROCKSPEED, RP_ANGLE, RP_KP, RP_KI, RP_KD, CLEAR, NO_SETTING
 };
 Setting settingChoice = NO_SETTING;
 Setting currentSetting = NO_SETTING;
@@ -203,6 +203,9 @@ void SetSetting(int settingAsInt, double value)
   case IR_THRESH:
     IR_THRESHOLD = (int)value;
     break;
+  case IR_SLOW:
+    IR_SLOWDIST = (int)value;
+    break;
   case ROCKSPEED:
     ROCK_SPEED = (int)value;
     break;
@@ -261,6 +264,8 @@ String GetSettingName(int settingAsInt)
     return "RP Duration";
   case IR_THRESH:
     return "IR Thresh";
+  case IR_SLOW:
+    return "IR Slowdown";
   case ROCKSPEED:
     return "Rock Speed";
   case RP_ANGLE:
@@ -315,6 +320,8 @@ double GetSettingValue(int settingAsInt)
     return DURATION;
   case IR_THRESH:
     return IR_THRESHOLD;
+  case IR_SLOW:
+    return IR_SLOWDIST;
   case ROCKSPEED:
     return ROCK_SPEED;
   case RP_ANGLE:

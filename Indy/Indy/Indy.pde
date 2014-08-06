@@ -55,7 +55,7 @@ Strategy currentStrat = FullCourse;
 #define TRIGGER 8
 
 //====================SETTINGS========================
-int FLAT_SPEED=(400);
+int FLAT_SPEED=(350);
 int HILL_SPEED=(950);
 int ROCK_SPEED=(450);
 int SPIN_SPEED=(1023);
@@ -71,7 +71,7 @@ double OFF_HILL=(50); // off hill threshold
 int RETRIEVER_WITHDRAWN=(0);
 int RETRIEVER_EXTEND=(140);
 int COLLECTOR_START=(120);
-int COLLECTOR_DOWN=(120);
+int COLLECTOR_DOWN=(130);
 int COLLECTOR_DROP=(135);
 int COLLECTOR_TOP=(15);
 int COLLECTOR_ROCK=(120);
@@ -79,6 +79,7 @@ int COLLECTOR_ROCK=(120);
 //IR detection
 double DURATION=(2000); //ms
 int IR_THRESHOLD=(20);
+int IR_SLOWDIST=(400);
 
 //zipline arm
 #define ZIPLINE_DOWN_DELAY (5)
@@ -251,6 +252,7 @@ void loop()
     if(lastState == CLIMB_HILL && passedHill)
     {
       ChangeToState(FOLLOW_TAPE);
+      baseSpeed = 350;
       break;
     }
     
@@ -260,15 +262,21 @@ void loop()
       {
         unsigned long readyRockTime = millis();
         setCollectorTo(COLLECTOR_TOP);
-        baseSpeed = 700;
+        baseSpeed = FLAT_SPEED;
         do
         {
-          LCD.clear();
-          LCD.home();
-          LCD.print("ROCKPIT TIME!");
           readTape();
           followTape();
-        }while(millis()-readyRockTime<=DURATION);
+//        }while(millis()-readyRockTime<=DURATION);
+        }while(controller.error==0 && controller.lastError==0 && controller.lastError2==0 && controller.lastError3==0);
+        
+        
+        LCD.clear();
+        LCD.home();
+        LCD.print("ROCKPIT TIME!");
+        motor.speed(LEFT_MOTOR, 700);
+        motor.speed(RIGHT_MOTOR, 700);
+        delay(DURATION);
         
         ChangeToState(ROCKPIT);
         break;

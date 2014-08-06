@@ -1,11 +1,5 @@
-boolean FT_init = false;
-
 void FT_setup()
 {
-  if(!FT_init)
-  {
-    FT_init = true;
-
     //INITIALIZATION
     LCD_FREQ = 100;
     if(!goingHome)
@@ -43,7 +37,6 @@ void FT_setup()
 
 void FT_exit()
 {
-  FT_init = false;
   LCD_FREQ = LCD_FREQ_DEFAULT;
 }
 
