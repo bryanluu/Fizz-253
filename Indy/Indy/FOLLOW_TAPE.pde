@@ -32,7 +32,6 @@ void FT_setup()
     {
       baseSpeed = ROCK_SPEED;
     }
-  }
 }
 
 void FT_exit()
