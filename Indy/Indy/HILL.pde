@@ -60,10 +60,7 @@ void checkOffHill()
     LCD.home();
     LCD.print("OFF HILL!");
     
-    motor.stop(LEFT_MOTOR);
-    motor.stop(RIGHT_MOTOR);
-    collect();
-    ChangeToState(FOLLOW_TAPE);
+    ChangeToState(COLLECT_ITEM);
   }
 
 //  if(passedHill)

@@ -31,9 +31,19 @@ void collect()
   delay(10);
 
   setCollectorTo(COLLECTOR_DROP);
-  delay(2000);
+  delay(500);
   setCollectorTo(COLLECTOR_TOP);
-  delay(2000);
+  delay(500);
+  
+  for(int angle=RETRIEVER_EXTEND; angle>RETRIEVER_WITHDRAWN; angle--)
+  {
+    setRetrieverTo(angle);
+    delay(10);
+    if(angle < 30)
+    {
+      setCollectorTo(COLLECTOR_DOWN);
+    }
+  }
   setRetrieverTo(RETRIEVER_WITHDRAWN);
 
 
@@ -43,7 +53,7 @@ void collect()
   LCD.setCursor(0,1);
   LCD.print("Collected");
 
-  delay(1000);
+  delay(300);
   setCollectorTo(COLLECTOR_DOWN);
 }
 

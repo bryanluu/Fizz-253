@@ -69,15 +69,15 @@ double OFF_HILL=(50); // off hill threshold
 
 //collector arm
 int RETRIEVER_WITHDRAWN=(0);
-int RETRIEVER_EXTEND=(130);
-int COLLECTOR_START=(110);
-int COLLECTOR_DOWN=(110);
-int COLLECTOR_DROP=(122);
-int COLLECTOR_TOP=(17);
-int COLLECTOR_ROCK=(113);
+int RETRIEVER_EXTEND=(140);
+int COLLECTOR_START=(120);
+int COLLECTOR_DOWN=(120);
+int COLLECTOR_DROP=(135);
+int COLLECTOR_TOP=(15);
+int COLLECTOR_ROCK=(120);
 
 //IR detection
-double DURATION=(1000); //ms
+double DURATION=(2000); //ms
 int IR_THRESHOLD=(20);
 
 //zipline arm
@@ -243,21 +243,35 @@ void loop()
         readTape();
       }
       while(controller.offTape());
+      
+      ChangeToState(FOLLOW_TAPE);
+      break;
+    }
+    
+    if(lastState == CLIMB_HILL && passedHill)
+    {
+      ChangeToState(FOLLOW_TAPE);
+      break;
     }
     
     if(currentStrat == FullCourse || currentStrat == OnlyIdolGround || currentStrat == OnlyIdolZip)
     {
-      if(passedHill)
+      if(passedHill && lastState == FOLLOW_TAPE)
       {
         unsigned long readyRockTime = millis();
         setCollectorTo(COLLECTOR_TOP);
         baseSpeed = 700;
         do
         {
-        readTape();
-        followTape();
+          LCD.clear();
+          LCD.home();
+          LCD.print("ROCKPIT TIME!");
+          readTape();
+          followTape();
         }while(millis()-readyRockTime<=DURATION);
+        
         ChangeToState(ROCKPIT);
+        break;
       }
     }
 
@@ -303,6 +317,10 @@ void loop()
     else
     {
       ChangeToState(lastState);
+//      LCD.clear();
+//      LCD.home();
+//      LCD.print(GetStateName(lastState));
+//      delay(1000);
     }
 
     break;
