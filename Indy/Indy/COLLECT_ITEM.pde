@@ -19,13 +19,13 @@ void collect()
   LCD.setCursor(0,0); 
   LCD.print("Picking Up!");
 
-//  if(itemCount == 0)
-//  {
-//    motor.speed(LEFT_MOTOR, -300);
-//    motor.speed(RIGHT_MOTOR, -300);
-//    delay(300);
-//    motor.stop_all();
-//  }
+  if(!passedHill && itemCount == 0)
+  {
+    motor.speed(LEFT_MOTOR, -300);
+    motor.speed(RIGHT_MOTOR, -300);
+    delay(100);
+    motor.stop_all();
+  }
 
   setRetrieverTo(RETRIEVER_EXTEND);
   delay(10);
@@ -40,6 +40,12 @@ void collect()
   }
   
   setCollectorTo(COLLECTOR_TOP);
+  
+//  if(!passedHill && itemCount == 0)
+//  {
+//    return;
+//  }
+  
   delay(800);
   
 
@@ -51,19 +57,16 @@ void collect()
   }
   setRetrieverTo(RETRIEVER_WITHDRAWN);
   
-  delay(200);
-  setCollectorTo(COLLECTOR_DOWN);
-  
-
   LCD.clear(); 
   LCD.home();
   LCD.print(++itemCount);
   LCD.setCursor(0,1);
   LCD.print("Collected");
-
-  delay(300);
+  
+  delay(500);
   setCollectorTo(COLLECTOR_DOWN);
 }
+
 
 void setRetrieverTo(int angle)
 {

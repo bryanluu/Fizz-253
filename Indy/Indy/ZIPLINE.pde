@@ -96,7 +96,7 @@ void ziplineTryAgain()
   motor.speed(LEFT_MOTOR,-700);
   motor.speed(RIGHT_MOTOR,-700);
 
-  delay(200);
+  delay(300);
   
   motor.stop_all();
 }

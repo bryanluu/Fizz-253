@@ -76,7 +76,7 @@ int COLLECTOR_TOP=(0);
 int COLLECTOR_ROCK=(120);
 
 //IR detection
-double DURATION=(1100); //ms
+double DURATION=(1000); //ms
 int IR_THRESHOLD=(20);
 int IR_SLOWDIST=(400);
 
