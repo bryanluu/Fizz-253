@@ -41,14 +41,7 @@ void collect()
   
   setCollectorTo(COLLECTOR_TOP);
   
-//  if(!passedHill && itemCount == 0)
-//  {
-//    return;
-//  }
-  
   delay(800);
-  
-
   
   for(int angle=RETRIEVER_EXTEND; angle>RETRIEVER_WITHDRAWN; angle--)
   {
@@ -64,6 +57,13 @@ void collect()
   LCD.print("Collected");
   
   delay(500);
+  
+  if(currentStrat != FullCourse && !passedHill && itemCount == 1)
+  {
+    setCollectorTo(15);
+    return;
+  }
+  
   setCollectorTo(COLLECTOR_DOWN);
 }
 

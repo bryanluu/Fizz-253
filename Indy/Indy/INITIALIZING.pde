@@ -39,8 +39,8 @@ void INIT_update()
     delay(1000);
   }
 
-  choice = (Strategy)((int)(map(knob(6), 0, KNOB6_MAX, 0, OnlyIdolZip+1)));
-  choice = (Strategy)constrain(choice, 0, OnlyIdolZip);
+  choice = (Strategy)((int)(map(knob(6), 0, KNOB6_MAX, 0, ThreePoints+1)));
+  choice = (Strategy)constrain(choice, 0, ThreePoints);
   if(startbutton())
   {
     currentStrat = choice;
@@ -74,10 +74,6 @@ String GetStratString(int stratAsInt)
     return "2 Pts";
   case ThreePoints:
     return "3 Pts";
-  case OnlyIdolGround:
-    return "Idol via Gnd";
-  case OnlyIdolZip:
-    return "Idol via Zip";
   default:
     return "INVALID";
   }

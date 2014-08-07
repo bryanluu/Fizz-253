@@ -21,7 +21,7 @@ RobotState currentState = INITIALIZING;
 RobotState lastState = INITIALIZING;  
 
 enum Strategy { 
-  FullCourse, OnePoint, TwoPoints, ThreePoints, OnlyIdolGround, OnlyIdolZip
+  FullCourse, OnePoint, TwoPoints, ThreePoints
 };
 Strategy currentStrat = FullCourse;
 
@@ -204,10 +204,10 @@ void loop()
     if(!goingHome)
     {
       checkCollectorArm();
-    }
-    if(!passedHill)
-    {
-      checkOnHill();
+      if(!passedHill)
+      {
+        checkOnHill();
+      }
     }
 
     break;
@@ -260,7 +260,7 @@ void loop()
     }
     
     //ROCKPIT Transition
-    if(currentStrat == FullCourse || currentStrat == OnlyIdolGround || currentStrat == OnlyIdolZip)
+    if(currentStrat == FullCourse)
     {
       if(passedHill && lastState == FOLLOW_TAPE)
       {
@@ -308,42 +308,7 @@ void loop()
 
     if(lastState == ROCKPIT)
     {
-      if(currentStrat == OnlyIdolGround) //turn around on the rocks
-      {
-        LCD.clear(); 
-        LCD.home();
-        LCD.print("GOING HOME!");
-
-        goingHome = true;
-
-        turnAround(-1023);
-        delay(200);
-        do
-        {
-          lookForBeacon();
-        }
-        while(!beaconDetected());
-
-        do
-        {
-          lookForBeacon();
-          driveTowardsBeacon();
-        }
-        while(leftIR < 1000 && rightIR < 1000);
-
-        do
-        {
-          readTape();
-          sweep(FLAT_SPEED, 500);
-        }
-        while(controller.offTape());
-
-        ChangeToState(FOLLOW_TAPE);
-      }
-      else
-      {
-        ChangeToState(ZIPLINE);
-      }
+      ChangeToState(ZIPLINE);
       break;
     }
 
