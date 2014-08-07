@@ -31,7 +31,7 @@ void collect()
   delay(10);
 
   setCollectorTo(COLLECTOR_DROP);
-  delay(500);
+  delay(750);
   
   if(lastState==ROCKPIT) //Hold Idol While Ziplining
   {
@@ -75,4 +75,13 @@ void setCollectorTo(int angle)
   RCServo1.write(angle);
 }
 
-
+void delayFT(unsigned long delayTime)
+{
+  unsigned long delayStart = millis();
+  do
+  {
+    readTape();
+    followTape();
+    delay(50);
+  }while(millis()-delayStart < delayTime);
+}

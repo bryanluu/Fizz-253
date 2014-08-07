@@ -93,10 +93,10 @@ void ziplineTryAgain()
   motor.speed(DEPLOY_MOTOR,0);
 
   // reverse to get closer to zipline
-  motor.speed(LEFT_MOTOR,-600);
-  motor.speed(RIGHT_MOTOR,-600);
+  motor.speed(LEFT_MOTOR,-700);
+  motor.speed(RIGHT_MOTOR,-700);
 
-  delay(300);
+  delay(200);
   
   motor.stop_all();
 }

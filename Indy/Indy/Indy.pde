@@ -76,7 +76,7 @@ int COLLECTOR_TOP=(0);
 int COLLECTOR_ROCK=(120);
 
 //IR detection
-double DURATION=(1500); //ms
+double DURATION=(1100); //ms
 int IR_THRESHOLD=(20);
 int IR_SLOWDIST=(400);
 
@@ -130,7 +130,7 @@ boolean passedHill = false;
 double leftIR = 0;
 double rightIR = 0;
 PID beaconAim(&rightIR, &leftIR, &steerOutput);
-double beacon_kP = 2;
+double beacon_kP = 10;
 double beacon_kI = 0;
 double beacon_kD = 0;
 
@@ -285,21 +285,22 @@ void loop()
         LCD.clear();
         LCD.home();
         LCD.print("ROCKPIT TIME!");
-        motor.speed(LEFT_MOTOR, 900);
-        motor.speed(RIGHT_MOTOR, 900);
+        motor.speed(LEFT_MOTOR, 950);
+        motor.speed(RIGHT_MOTOR, 950);
         delay(DURATION);
         
-        motor.stop_all();
-        
-        delay(500);
-        
-        motor.speed(LEFT_MOTOR, ROCK_SPEED+100);
-        motor.speed(RIGHT_MOTOR, ROCK_SPEED+100);
-//        do
-//        {
-//          lookForBeacon();
-//        }while(!beaconDetected());
-        delay(1000);
+//        
+//        motor.speed(LEFT_MOTOR, ROCK_SPEED+50);
+//        motor.speed(RIGHT_MOTOR, ROCK_SPEED+50);
+//        delay(500);
+//        
+        motor.speed(LEFT_MOTOR, ROCK_SPEED);
+        motor.speed(RIGHT_MOTOR, ROCK_SPEED);
+        readyRockTime = millis();
+        do
+        {
+          lookForBeacon();
+        }while(!(beaconDetected() || millis() - readyRockTime >= 2000));
         ChangeToState(ROCKPIT);
         break;
       }
@@ -365,7 +366,9 @@ void loop()
     }
     else
     {
-      sweep(ROCK_SPEED, 550);
+//      sweep(ROCK_SPEED, 550);
+      motor.speed(LEFT_MOTOR, ROCK_SPEED);
+      motor.speed(RIGHT_MOTOR, ROCK_SPEED);
     }
     checkCollectorArm();
     

@@ -53,7 +53,7 @@ void checkOnHill()
 void checkOffHill()
 {
   senseHeight();
-  if(!passedHill && distance >= OFF_HILL && (millis()-startTime>2000)) //needs 2 seconds on the hill
+  if(!passedHill && distance >= OFF_HILL && (millis()-startTime>1000)) //needs 2 seconds on the hill
   {
     passedHill = true;   
     LCD.clear();
@@ -95,7 +95,8 @@ void senseHeight()
     delayMicroseconds(10);
 
     digitalWrite(TRIGGER,LOW);
-    duration = pulseIn(ECHO,HIGH);
+    //Time out of 3000 microseconds == 51 dist
+    duration = pulseInCapped(ECHO,HIGH,5000);
 
     pulseStartTime = millis();
 
@@ -128,6 +129,19 @@ void hill_LCD()
   LCD.print(minDist);
   LCD.setCursor(5,1);
   LCD.print(maxDist);
+}
+
+unsigned long pulseInCapped(int pinNum, int state, unsigned long capTime)
+{
+  if(state != LOW && state != HIGH)
+  {
+    return -1;
+  }
+  
+  while(digitalRead(pinNum) != state){}
+  unsigned long pulseStart = micros();
+  while(!(digitalRead(pinNum) != state || micros()-pulseStart > capTime)){} //caps out at a certain specified time
+  return micros()-pulseStart;
 }
 
 
