@@ -1,14 +1,14 @@
 unsigned long sweepStartTime = 0;
 int sweepDirection = 1;
 
-void sweep(int straightSpeed)
+void sweep(int straightSpeed, int offSet)
 {
   if(millis() - sweepStartTime >= SWEEP_DURATION)
   {
     sweepStartTime = millis();
     sweepDirection *= -1; //flip direction
-    leftSpeed = straightSpeed - sweepDirection*SWEEP_OFFSET;
-    rightSpeed = straightSpeed + sweepDirection*SWEEP_OFFSET;
+    leftSpeed = straightSpeed - sweepDirection*offSet;
+    rightSpeed = straightSpeed + sweepDirection*offSet;
 
     motor.speed(LEFT_MOTOR, leftSpeed);
     motor.speed(RIGHT_MOTOR, rightSpeed);

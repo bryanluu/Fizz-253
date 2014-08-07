@@ -10,6 +10,7 @@ void ZIP_setup()
   if(!ZIP_init)
   {
     ZIP_init = true;
+    setZiplineDeployTo(DEPLOY_HOLD);
   }
 }
 
@@ -44,15 +45,15 @@ void ziplineGo()
   motor.speed(DEPLOY_MOTOR,0);
 
   // retract servo, carabiner drops onto zipline
-  setZiplineDeployTo(90);
+  setZiplineDeployTo(DEPLOY_RETRACT);
   delay(500);
 
 
 
   //start winching
   digitalWrite(WINCH_PIN,HIGH);
-  
-  delay(3000);
+  //swag
+  delay(5000);
   // retract deployment arm
   motor.speed(DEPLOY_MOTOR,700);
 
@@ -68,16 +69,17 @@ void ziplineGo()
   digitalWrite(WINCH_PIN,LOW);
 
 
-  //hit start to reset the servo holding the carabiner in (instead of resetting TINAH)
-  LCD.clear(); LCD.home();
-  LCD.print("Press start...");
-  while(!startbutton()){
-    delay(15);
-  }
-  setZiplineDeployTo(170);
-     
-  ChangeToState(MENU);
-
+//  //hit start to reset the servo holding the carabiner in (instead of resetting TINAH)
+//  LCD.clear(); LCD.home();
+//  LCD.print("Press start...");
+//  while(!startbutton()){
+//    delay(15);
+//  }
+//  setZiplineDeployTo(DEPLOY_HOLD);
+//     
+//  ChangeToState(MENU);
+  
+  ChangeToState(FINISHED);
 }
 
 void ziplineTryAgain()
@@ -91,10 +93,12 @@ void ziplineTryAgain()
   motor.speed(DEPLOY_MOTOR,0);
 
   // reverse to get closer to zipline
-  // motor.speed(LEFT_MOTOR,-500);
-  // motor.speed(RIGHT_MOTOR,-500);
+  motor.speed(LEFT_MOTOR,-600);
+  motor.speed(RIGHT_MOTOR,-600);
 
-  delay(2000);
+  delay(300);
+  
+  motor.stop_all();
 }
 
 inline boolean ziplineHit()

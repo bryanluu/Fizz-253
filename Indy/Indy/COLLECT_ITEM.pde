@@ -19,33 +19,41 @@ void collect()
   LCD.setCursor(0,0); 
   LCD.print("Picking Up!");
 
-  if(itemCount == 0)
-  {
-    motor.speed(LEFT_MOTOR, -300);
-    motor.speed(RIGHT_MOTOR, -300);
-    delay(300);
-    motor.stop_all();
-  }
+//  if(itemCount == 0)
+//  {
+//    motor.speed(LEFT_MOTOR, -300);
+//    motor.speed(RIGHT_MOTOR, -300);
+//    delay(300);
+//    motor.stop_all();
+//  }
 
   setRetrieverTo(RETRIEVER_EXTEND);
   delay(10);
 
   setCollectorTo(COLLECTOR_DROP);
   delay(500);
+  
+  if(lastState==ROCKPIT) //Hold Idol While Ziplining
+  {
+    setCollectorTo(COLLECTOR_ROCK-15);
+    return;
+  }
+  
   setCollectorTo(COLLECTOR_TOP);
-  delay(500);
+  delay(800);
+  
+
   
   for(int angle=RETRIEVER_EXTEND; angle>RETRIEVER_WITHDRAWN; angle--)
   {
     setRetrieverTo(angle);
-    delay(10);
-    if(angle < 30)
-    {
-      setCollectorTo(COLLECTOR_DOWN);
-    }
+    delay(5);
   }
   setRetrieverTo(RETRIEVER_WITHDRAWN);
-
+  
+  delay(200);
+  setCollectorTo(COLLECTOR_DOWN);
+  
 
   LCD.clear(); 
   LCD.home();

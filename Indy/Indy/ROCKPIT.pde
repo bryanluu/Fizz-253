@@ -46,7 +46,7 @@ void driveTowardsBeacon()
   
   if(isCloseToIdol())
   {
-    baseSpeed = ROCK_SPEED - 50;
+    baseSpeed = ROCK_SPEED - 30;
   }
   
   steerOutput = constrain(steerOutput, -500, 500);

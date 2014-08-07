@@ -61,7 +61,6 @@ int ROCK_SPEED=(450);
 int SPIN_SPEED=(1023);
 
 int SWEEP_DURATION=(1000);
-int SWEEP_OFFSET=(500);
 
 //level sensor
 double ON_HILL=(25); // on hill threshold
@@ -72,18 +71,20 @@ int RETRIEVER_WITHDRAWN=(0);
 int RETRIEVER_EXTEND=(140);
 int COLLECTOR_START=(120);
 int COLLECTOR_DOWN=(130);
-int COLLECTOR_DROP=(135);
-int COLLECTOR_TOP=(15);
+int COLLECTOR_DROP=(140);
+int COLLECTOR_TOP=(0);
 int COLLECTOR_ROCK=(120);
 
 //IR detection
-double DURATION=(2000); //ms
+double DURATION=(1500); //ms
 int IR_THRESHOLD=(20);
 int IR_SLOWDIST=(400);
 
 //zipline arm
 #define ZIPLINE_DOWN_DELAY (5)
 #define DEPLOY_SPEED (-950)
+#define DEPLOY_RETRACT (90)
+#define DEPLOY_HOLD (170)
 
 //LCD
 #define LCD_FREQ_DEFAULT (500);
@@ -129,7 +130,7 @@ boolean passedHill = false;
 double leftIR = 0;
 double rightIR = 0;
 PID beaconAim(&rightIR, &leftIR, &steerOutput);
-double beacon_kP = 10;
+double beacon_kP = 2;
 double beacon_kI = 0;
 double beacon_kD = 0;
 
@@ -251,33 +252,54 @@ void loop()
     
     if(lastState == CLIMB_HILL && passedHill)
     {
+      controller.error = -1;
+      controller.lastError = -1;
       ChangeToState(FOLLOW_TAPE);
       baseSpeed = 350;
       break;
     }
     
+    //ROCKPIT Transition
     if(currentStrat == FullCourse || currentStrat == OnlyIdolGround || currentStrat == OnlyIdolZip)
     {
       if(passedHill && lastState == FOLLOW_TAPE)
       {
-        unsigned long readyRockTime = millis();
+//        do{}while(millis()-readyRockTime<1000);
         setCollectorTo(COLLECTOR_TOP);
         baseSpeed = FLAT_SPEED;
+        
+        controller.error = -1;
+        controller.lastError = -1;
+        unsigned long readyRockTime = millis();
         do
         {
+          LCD.clear(); LCD.home();
+          LCD.print(millis()-readyRockTime);
           readTape();
           followTape();
+          delay(50);
 //        }while(millis()-readyRockTime<=DURATION);
-        }while(controller.error==0 && controller.lastError==0 && controller.lastError2==0 && controller.lastError3==0);
+        }while(millis()-readyRockTime < 1000);
         
         
         LCD.clear();
         LCD.home();
         LCD.print("ROCKPIT TIME!");
-        motor.speed(LEFT_MOTOR, 700);
-        motor.speed(RIGHT_MOTOR, 700);
+        motor.speed(LEFT_MOTOR, 900);
+        motor.speed(RIGHT_MOTOR, 900);
         delay(DURATION);
         
+        motor.stop_all();
+        
+        delay(500);
+        
+        motor.speed(LEFT_MOTOR, ROCK_SPEED+100);
+        motor.speed(RIGHT_MOTOR, ROCK_SPEED+100);
+//        do
+//        {
+//          lookForBeacon();
+//        }while(!beaconDetected());
+        delay(1000);
         ChangeToState(ROCKPIT);
         break;
       }
@@ -311,7 +333,7 @@ void loop()
         do
         {
           readTape();
-          sweep(FLAT_SPEED);
+          sweep(FLAT_SPEED, 500);
         }
         while(controller.offTape());
 
@@ -321,16 +343,10 @@ void loop()
       {
         ChangeToState(ZIPLINE);
       }
-    }
-    else
-    {
-      ChangeToState(lastState);
-//      LCD.clear();
-//      LCD.home();
-//      LCD.print(GetStateName(lastState));
-//      delay(1000);
+      break;
     }
 
+    ChangeToState(lastState);
     break;
     //======================
   case CLIMB_HILL:
@@ -349,7 +365,7 @@ void loop()
     }
     else
     {
-      sweep(ROCK_SPEED);
+      sweep(ROCK_SPEED, 550);
     }
     checkCollectorArm();
     
@@ -366,6 +382,7 @@ void loop()
     break;
     //======================
   case FINISHED:
+    rollCredits();
     break;
     //======================
   case TEST:
@@ -472,6 +489,9 @@ void SetupState(int stateAsInt)
     break;
   case ROCKPIT:
     RP_setup();
+    break;
+  case FINISHED:
+    FIN_setup();
     break;
   case TEST:
     TEST_setup();

@@ -1,13 +1,16 @@
 /*This state is for testing TINAH and the general systems of INDY*/
 boolean TEST_init = false;
 enum TEST_KIND { 
-  MOTORS, COLLECTOR, SWEEP, WINCH, NONE
+  MOTORS, COLLECTOR, SERVO, QRD, ULS, IR, SWEEP, WINCH, NONE
 };
 TEST_KIND testChoice = NONE;
 TEST_KIND currentTest = NONE;
 int collectorAngle = 0;
 int retrieverAngle = 0;
 int sweepSpeed = 0;
+int sweepOff = 0;
+int servoNum = 0;
+int servoAngle = 0;
 
 void TEST_setup()
 {
@@ -20,6 +23,8 @@ void TEST_setup()
     collectorAngle = 0;
     retrieverAngle = 0;
     sweepSpeed = 0;
+    sweepOff = 0;
+    servoNum = 0;
     delay(200);
   }
 }
@@ -49,6 +54,18 @@ void updateTest()
     break;
   case COLLECTOR:
     testCollector();
+    break;
+  case SERVO:
+    testServos();
+    break;
+  case QRD:
+    testQRDs();
+    break;
+  case ULS:
+    testULS();
+    break;
+  case IR:
+    testIR();
     break;
   case SWEEP:
     testSweep();
@@ -83,19 +100,69 @@ void testMotors()
 
 void testCollector()
 {
-  collectorAngle = (int)map(knob(6), 0, KNOB6_MAX, 0, 180);  
-  retrieverAngle = (int)map(knob(7), 0, KNOB7_MAX, 0, 180);
+  setCollectorTo(COLLECTOR_DOWN);
+  setRetrieverTo(RETRIEVER_WITHDRAWN);
+  if (digitalRead(COLLECTOR_PIN) == LOW)
+  {
+    collect();
+  }
+}
 
-  setCollectorTo(collectorAngle);
-  setRetrieverTo(retrieverAngle);
+void testServos()
+{
+  servoAngle = (int)map(knob(6), 0, KNOB6_MAX, 0, 180);
+  
+  switch(servoNum)
+  {
+    case 0:
+      RCServo0.write(servoAngle);
+      break;
+    case 1:
+      RCServo1.write(servoAngle);
+      break;
+    case 2:
+      RCServo2.write(servoAngle);
+      break;
+  }
+  
+  if(startbutton())
+  {
+    if(servoNum==2)
+    {
+      servoNum=0;
+    }
+    else
+    {
+      servoNum++;
+    }
+    delay(500);
+  }
+}
+
+void testQRDs()
+{
+  readTape();
+}
+
+void testULS()
+{
+  senseHeight();
+}
+
+void testIR()
+{
+  leftIR = analogRead(LEFT_IR);
+  rightIR = analogRead(RIGHT_IR);
 }
 
 void testSweep()
 {
   sweepSpeed = (int)map(knob(6), 0, KNOB6_MAX, -1023, 1023);  
   sweepSpeed = constrain(sweepSpeed, -1023, 1023);
+  sweepOff = (int)map(knob(7), 0, KNOB7_MAX, -1023, 1023);  
+  sweepOff = constrain(sweepOff, -1023, 1023);
 
-  sweep(sweepSpeed);
+  sweep(sweepSpeed, sweepOff);
 }
 
 void testWinch()
@@ -129,6 +196,18 @@ void testLCD()
   case COLLECTOR:
     testCollectorLCD();
     break;
+  case SERVO:
+    testServosLCD();
+    break;
+  case QRD:
+    testQRDsLCD();
+    break;
+  case ULS:
+    testULSLCD();
+    break;
+  case IR:
+    testIRLCD();
+    break;
   case SWEEP:
     testSweepLCD();
     break;
@@ -151,13 +230,51 @@ void testMotorsLCD()
 
 void testCollectorLCD()
 {
-  LCD.print("Collector:");
-  LCD.setCursor(12,0);
-  LCD.print(collectorAngle);
+  LCD.print("Waiting for");
   LCD.setCursor(0,1);
-  LCD.print("Retriever:");
-  LCD.setCursor(12,1);
-  LCD.print(retrieverAngle);
+  LCD.print("Item...");
+}
+
+void testServosLCD()
+{
+  LCD.print("Servo "); LCD.print(servoNum);
+  LCD.setCursor(0,1);
+  LCD.print("Angle: ");
+  LCD.print(servoAngle);
+}
+
+void testQRDsLCD()
+{
+  LCD.print((int)leftQRD);
+  LCD.setCursor(5,0);
+  LCD.print((int)midQRD);
+  LCD.setCursor(11,0);
+  LCD.print((int)rightQRD);
+  LCD.setCursor(0,1);
+  LCD.print("Error:"); LCD.print((int)controller.GetError());
+}
+
+void testULSLCD()
+{
+  LCD.print("Distance:");
+  LCD.setCursor(0,1);
+  LCD.print(distance);
+}
+
+void testIRLCD()
+{
+  LCD.print("L:"); LCD.print(leftIR);
+  LCD.setCursor(8,0);
+  LCD.print("R:"); LCD.print(rightIR);
+  LCD.setCursor(0,1);
+  if(beaconDetected())
+  {
+    LCD.print("Beacon");
+  }
+  else
+  {
+    LCD.print("No Beacon");
+  }
 }
 
 void testSweepLCD()
@@ -190,6 +307,14 @@ String GetTestName(int testAsInt)
     return "MOTORS";
   case COLLECTOR:
     return "COLLECTOR";
+  case SERVO:
+    return "SERVOS";
+  case QRD:
+    return "QRDs";
+  case ULS:
+    return "ULS";
+  case IR:
+    return "IR";
   case SWEEP:
     return "SWEEP";
   case WINCH:

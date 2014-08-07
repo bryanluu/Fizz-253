@@ -45,6 +45,7 @@ void checkOnHill()
     //    LCD.print("HILL!");
     //    delay(500);
     ChangeToState(CLIMB_HILL);
+    startTime = millis(); 
     //    hillCount++;
   }
 }
@@ -52,13 +53,16 @@ void checkOnHill()
 void checkOffHill()
 {
   senseHeight();
-  if(!passedHill && distance >= OFF_HILL)
+  if(!passedHill && distance >= OFF_HILL && (millis()-startTime>2000)) //needs 2 seconds on the hill
   {
-    passedHill = true;
-    startTime = millis();    
+    passedHill = true;   
     LCD.clear();
     LCD.home();
     LCD.print("OFF HILL!");
+    
+    motor.speed(LEFT_MOTOR, -100);
+    motor.speed(RIGHT_MOTOR, -100);
+    delay(100);
     
     ChangeToState(COLLECT_ITEM);
   }

@@ -2,7 +2,7 @@
 boolean SETTINGS_init = false;
 enum Setting { 
   FLATSPEED, FT_KP, FT_KD, CI_C_START, CI_C_DOWN, CI_C_UP, CI_C_DROP, CI_R_WITHDRAWN, CI_R_EXTEND,
-  HILLSPEED, CH_ON_HILL, CH_OFF_HILL, SPINSPEED, SWEEP_DUR, SWEEP_OFF, 
+  HILLSPEED, CH_ON_HILL, CH_OFF_HILL, SPINSPEED, SWEEP_DUR, 
   RP_DURATION, IR_THRESH, IR_SLOW, ROCKSPEED, RP_ANGLE, RP_KP, RP_KI, RP_KD, CLEAR, NO_SETTING
 };
 Setting settingChoice = NO_SETTING;
@@ -77,10 +77,10 @@ void updateSettings()
       value = map(knob(6), 0, KNOB6_MAX, 0, 180);
       break;
     case CH_ON_HILL:
-      value = map(knob(6), 0, KNOB6_MAX, 0, 10.0);
+      value = map(knob(6), 0, KNOB6_MAX, 0, 100.0);
       break;
     case CH_OFF_HILL:
-      value = map(knob(6), 0, KNOB6_MAX, 0, 5000.0);
+      value = map(knob(6), 0, KNOB6_MAX, 0, 500.0);
       break;
     case RP_DURATION:
       value = map(knob(6), 0, KNOB6_MAX, 0, 5000.0);
@@ -194,9 +194,6 @@ void SetSetting(int settingAsInt, double value)
   case SWEEP_DUR:
     SWEEP_DURATION = (int)value;
     break;
-  case SWEEP_OFF:
-    SWEEP_OFFSET = (int)value;
-    break;
   case RP_DURATION:
     DURATION = value;
     break;
@@ -258,8 +255,6 @@ String GetSettingName(int settingAsInt)
     return "Spin Speed";
   case SWEEP_DUR:
     return "Sweep Dur";
-  case SWEEP_OFF:
-    return "Sweep Off";
   case RP_DURATION:
     return "RP Duration";
   case IR_THRESH:
@@ -314,8 +309,6 @@ double GetSettingValue(int settingAsInt)
     return SPIN_SPEED;
   case SWEEP_DUR:
     return SWEEP_DURATION;
-  case SWEEP_OFF:
-    return SWEEP_OFFSET;
   case RP_DURATION:
     return DURATION;
   case IR_THRESH:
