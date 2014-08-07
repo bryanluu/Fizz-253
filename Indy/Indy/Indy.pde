@@ -172,7 +172,7 @@ void setup()
   controller.attach_Kp_To(&kP);
   controller.attach_Kd_To(&kD);
   controller.SetThreshold(100);
-  controller.SetOffsets(0, 0, 0);
+  controller.SetOffsets(30, 0, 0);
 
   beaconAim.attach_Kp_To(&beacon_kP);
   beaconAim.attach_Ki_To(&beacon_kI);
