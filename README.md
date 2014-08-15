@@ -3,7 +3,7 @@ Fizz-253
 
 This is the repository for the ENPH 253 Project: with Kevin Multani, Conrad Ng, Ben Mattison, and Bryan Luu.
 
-Review the [Formal Design Proposal](https://docs.google.com/document/d/1q06k26zPwGevnf89LMePSkt6SWfdHpj5Fj2V4FfkRks/edit?usp=sharing) for extensive information about the design of our robot, nicknamed, **Indy**.
+Check out the [website](http://indyontherocks.wix.com/enph253) for our robot, named **Indy on the Rocks** (*Indy* for short).
 
 ##Overview
 The software running on Indy is based on a set of states, i.e. the entire challenge can be represented as a State Machine, as seen here:
@@ -21,6 +21,12 @@ The stages of the competition, and thus the main states of Indy's logic, are:
 Each of these represents a major goal for Indy throughout the competition. First, Indy must navigate the Temple of the Zipline by following tape and collecting artifacts. This includes a strenous hill climb to reach the level of the Idol. Next, Indy must brave the rockpit by aiming towards the *Eye of the Idol*, a 10kHz IR Beacon. Once Indy crosses the rockpit, he must then carefully retrieve the final Idol. Finally, Indy will pull out his lasso to zipline down and escape out of the Temple, to eternal glory and the continuation of a life of adventure.
 
 Indy is programmed with a [Wiring-based board, using a TINAH shield](http://projectlab.engphys.ubc.ca/enph253/tinah/#what-is-tinah). The programming is done in the [Wiring](http://wiring.org.co/) language.
+
+To see the State Machine in action, watch the Software Overview below:
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=utKZy96eivk
+" target="_blank"><img src="http://img.youtube.com/vi/utKZy96eivk/0.jpg" 
+alt="Indy on the Rocks - Software Overview" width="240" height="180" border="10" /></a>
 
 ###Folder Hierarchy
 For a large project like Indy, there is a lot of code. This code is organized as shown below:
