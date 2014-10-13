@@ -109,4 +109,4 @@ In order to verify the quality of Indy's code, Unit Testing was implemented on t
 ###Shorter Method (with Dropbox Access)
 1. The unit-testing framework was written in C++ with Visual Studio 2012. Ensure that Visual Studio 2012 (or later) is installed.
 2. [Download the cppunit library folder from Dropbox](https://www.dropbox.com/sh/sh66g9szxt1dg9a/AAB4zyQSjM2bCYX7pi2xoBpYa) (must have team permissions). This folder already has the compiled binaries required.
-3. Complete steps 9-end from the above section.
+3. Complete steps 6-end from the above section.
