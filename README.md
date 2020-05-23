@@ -5,7 +5,7 @@ This is the repository for the ENPH 253 Project: with Kevin Multani, Conrad Ng, 
 
 Check out the [website](http://indyontherocks.wix.com/enph253) for our robot, named **Indy on the Rocks** (*Indy* for short).
 
-##Overview
+## Overview
 The software running on Indy is based on a set of states, i.e. the entire challenge can be represented as a State Machine, as seen here:
 
 ![alt text](https://googledrive.com/host/0B7AZIgf2NkrZODh2TnRWcFcwam8/Overall Software State Diagram.png "Indy's State Diagram")
