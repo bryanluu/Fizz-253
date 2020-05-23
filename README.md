@@ -28,7 +28,7 @@ To see the State Machine in action, watch the Software Overview below:
 " target="_blank"><img src="http://img.youtube.com/vi/utKZy96eivk/0.jpg"
 alt="Indy on the Rocks - Software Overview" width="240" height="180" border="10" /></a>
 
-###Folder Hierarchy
+### Folder Hierarchy
 For a large project like Indy, there is a lot of code. This code is organized as shown below:
 - `lab`
   * This folder holds all the code for experimenting and testing.
@@ -41,15 +41,15 @@ For a large project like Indy, there is a lot of code. This code is organized as
   * `Tester`
     *   This contains the Unit Tests for the external libraries. See the Tests section for more info.
 
-###External Libraries
+### External Libraries
 Although most of the code will be written with the Wiring IDE, in the `Indy.pde` sketch, we have created some external classes and code to handle complex calculations. These external libraries are included in `Indy/libraries/Bibliotheque`. These include:
 - `IndyPID.cpp` - a PID controller implementation
 - `TapeFollower.cpp` - a PID-like controller with discrete errors for following tape.
 - `StandardCalc.cpp` - general calculations not included in the Wiring IDE.
 
 - - -
-##Running Indy
-###Setup
+## Running Indy
+### Setup
 To begin programming, follow these instructions:
  1. Ensure that the Wiring IDE, version 27, is installed. Links: [Windows](http://wiring.org.co/download/wiring-0027.zip), [Mac](http://wiring.org.co/download/wiring-0027.dmg), [Linux](http://wiring.org.co/download/wiring-0027.tgz).
  2. Clone this repository if you haven't already!
@@ -58,7 +58,7 @@ To begin programming, follow these instructions:
  3. Open Wiring, and change the sketchbook folder location to *Fizz-253/Indy/*.
  4. You can now open `Indy.pde` in *Fizz-253/Indy* to start programming!
 
-###Uploading
+### Uploading
 To upload the code onto Indy, follow these instructions:
  1. Power the TINAH board with the 16 V LiPo battery
  2. Open `Indy.pde` in *Fizz-253/Indy/* with the Wiring IDE.
@@ -69,19 +69,19 @@ To upload the code onto Indy, follow these instructions:
  7. Press the *RESET* button on TINAH.
  8. Once upload is finished, press *RESET* again.
 
-###Starting Indy
+### Starting Indy
 Finally, Indy can now be run. To run Indy, simply power on the TINAH board. It will wait for you to press start. Pressing the *START* button will make it go to the first state: `FOLLOW_TAPE`.
 
-####Switching States
+#### Switching States
 To switch states manually, simply press the *STOP* button to activate the menu. Use *knob 6* to scroll between the states. Press *START* to select the state.
 
-###Debugging
+### Debugging
 Indy displays information through *TINAH* via and LCD screen. A `SETTINGS` state allows the user to adjust various parameters on-the-go. Finally, a `TEST` state helps pinpoint certain problems with the motors or servos.
 
-####LCD Monitor
+#### LCD Monitor
 The LCD Monitor displays live data from Indy at a frequency controlled by the macro `LCD_FREQ`. It flashes the current state for a short duration `LCD_STATE_DUR` after a certain time `LCD_STATE_FREQ`. Otherwise, it will display the appropriate debug info for the current state.
 
-####Adjusting Settings
+#### Adjusting Settings
 1. To adjust settings, simply press *STOP* to activate the menu.
 2. Use *knob 6* to scroll to `SETTINGS`. Press *START* to select the `SETTINGS` state.
 3. Once in this state, navigate through different adjustable settings with *knob 6*. Press *START* to select the current setting.
@@ -89,10 +89,10 @@ The LCD Monitor displays live data from Indy at a frequency controlled by the ma
 5. Press *START* to save the setting at the selected value. It will return to the top of the `SETTINGS` state.
 
 - - -
-##Running Tests (optional)
+## Running Tests (optional)
 In order to verify the quality of Indy's code, Unit Testing was implemented on the external classes, `IndyPID.cpp` and `TapeFollower.cpp`. Unit Testing used CPPUNIT to run modularized tests, ensuring code correctness after every modification. NOTE: they are optional to the functioning of the robot, but it ensures there are no bugs in the external libraries. Below are the setup instructions to get the Tests running. It only needs to be done once.
 
-###Getting Started (from Scratch)
+### Getting Started (from Scratch)
 1. The unit-testing framework was written in C++ with Visual Studio 2012. Ensure that Visual Studio 2012 (or later) is installed.
 2. Check that the [cppunit library](http://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/) is installed on your computer. We are using version *1.12.1*. If not, install and extract using [*7-Zip*]().
 3. Navigate into the cppunit folder, to `cppunit-1.12.1\examples`, and open the `examples.sln` file with Visual Studio. Allow Visual Studio to convert files if necessary.
@@ -106,7 +106,7 @@ In order to verify the quality of Indy's code, Unit Testing was implemented on t
 8. Right click the `Tester` project, and *Set As Startup Project*.
 9. Build, and run the Tests!
 
-###Shorter Method (with Dropbox Access)
+### Shorter Method (with Dropbox Access)
 1. The unit-testing framework was written in C++ with Visual Studio 2012. Ensure that Visual Studio 2012 (or later) is installed.
 2. [Download the cppunit library folder from Dropbox](https://www.dropbox.com/sh/sh66g9szxt1dg9a/AAB4zyQSjM2bCYX7pi2xoBpYa) (must have team permissions). This folder already has the compiled binaries required.
 3. Complete steps 6-end from the above section.
