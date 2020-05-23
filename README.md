@@ -8,7 +8,7 @@ Check out the [website](http://indyontherocks.wix.com/enph253) for our robot, na
 ## Overview
 The software running on Indy is based on a set of states, i.e. the entire challenge can be represented as a State Machine, as seen here:
 
-![alt text](https://googledrive.com/host/0B7AZIgf2NkrZODh2TnRWcFcwam8/Overall Software State Diagram.png "Indy's State Diagram")
+![alt text](Overall%20Software%20State%20Diagram.png "Indy's State Diagram")
 
 The stages of the competition, and thus the main states of Indy's logic, are:
 
@@ -25,7 +25,7 @@ Indy is programmed with a [Wiring-based board, using a TINAH shield](http://proj
 To see the State Machine in action, watch the Software Overview below:
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=utKZy96eivk
-" target="_blank"><img src="http://img.youtube.com/vi/utKZy96eivk/0.jpg" 
+" target="_blank"><img src="http://img.youtube.com/vi/utKZy96eivk/0.jpg"
 alt="Indy on the Rocks - Software Overview" width="240" height="180" border="10" /></a>
 
 ###Folder Hierarchy
@@ -70,7 +70,7 @@ To upload the code onto Indy, follow these instructions:
  8. Once upload is finished, press *RESET* again.
 
 ###Starting Indy
-Finally, Indy can now be run. To run Indy, simply power on the TINAH board. It will wait for you to press start. Pressing the *START* button will make it go to the first state: `FOLLOW_TAPE`. 
+Finally, Indy can now be run. To run Indy, simply power on the TINAH board. It will wait for you to press start. Pressing the *START* button will make it go to the first state: `FOLLOW_TAPE`.
 
 ####Switching States
 To switch states manually, simply press the *STOP* button to activate the menu. Use *knob 6* to scroll between the states. Press *START* to select the state.
@@ -82,7 +82,7 @@ Indy displays information through *TINAH* via and LCD screen. A `SETTINGS` state
 The LCD Monitor displays live data from Indy at a frequency controlled by the macro `LCD_FREQ`. It flashes the current state for a short duration `LCD_STATE_DUR` after a certain time `LCD_STATE_FREQ`. Otherwise, it will display the appropriate debug info for the current state.
 
 ####Adjusting Settings
-1. To adjust settings, simply press *STOP* to activate the menu. 
+1. To adjust settings, simply press *STOP* to activate the menu.
 2. Use *knob 6* to scroll to `SETTINGS`. Press *START* to select the `SETTINGS` state.
 3. Once in this state, navigate through different adjustable settings with *knob 6*. Press *START* to select the current setting.
 4. Use *knob 6* to adjust the value of the selected setting.
@@ -96,7 +96,7 @@ In order to verify the quality of Indy's code, Unit Testing was implemented on t
 1. The unit-testing framework was written in C++ with Visual Studio 2012. Ensure that Visual Studio 2012 (or later) is installed.
 2. Check that the [cppunit library](http://sourceforge.net/projects/cppunit/files/cppunit/1.12.1/) is installed on your computer. We are using version *1.12.1*. If not, install and extract using [*7-Zip*]().
 3. Navigate into the cppunit folder, to `cppunit-1.12.1\examples`, and open the `examples.sln` file with Visual Studio. Allow Visual Studio to convert files if necessary.
-4. Right click the `cppunit` and `cppunit_dll` projects, select *Properties->Configuration Properties->Librarian->Output*, then remove the extra *d* from `cppunitd.lib` and `cppunitd_dll.lib` to `cppunit.lib` and `cppunit_dll.lib`. 
+4. Right click the `cppunit` and `cppunit_dll` projects, select *Properties->Configuration Properties->Librarian->Output*, then remove the extra *d* from `cppunitd.lib` and `cppunitd_dll.lib` to `cppunit.lib` and `cppunit_dll.lib`.
 5. Select *Build->Batch Build*, then select all, then unselect all the Template configurations. Build and ignore the errors.
 6. Next, go into project properties:
   1. *C/C++; General*: modify the ‘Additional Include Directories’ field by adding the path to the folder `cppunit-1.12.1\include`
