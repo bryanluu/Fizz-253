@@ -3,7 +3,7 @@ Fizz-253
 
 This is the repository for the ENPH 253 Project: with Kevin Multani, Conrad Ng, Ben Mattison, and Bryan Luu.
 
-Check out the [website](http://indyontherocks.wix.com/enph253) for our robot, named **Indy on the Rocks** (*Indy* for short).
+Check out the [website](https://indyontherocks.wixsite.com/enph253) for our robot, named **Indy on the Rocks** (*Indy* for short).
 
 ## Overview
 The software running on Indy is based on a set of states, i.e. the entire challenge can be represented as a State Machine, as seen here:
